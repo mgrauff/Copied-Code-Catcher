@@ -1,8 +1,4 @@
 
 public class test {
-	public static void main() {
-		System.out.println("Hello");
-		
-		
-	}
+	//this is a test class
 }
