@@ -15,7 +15,7 @@ public class FileProcessor {
         public String operator ="";
     }
 
-
+    //chen
     public FileProcessor() {
         //=, +, -, *, /, %, ++, --, +=, -=, *=, /=, %=, !, ==, !=, >, <, <=, >=, &&, ||, ~, <<, >>, >>>, &, ^, |
         operatorList = new Operators[numOperators];
