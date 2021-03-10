@@ -2,95 +2,51 @@ import java.io.BufferedInputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileProcessor {
     //definitely a more elegant way to do this, but this was quick
-    public Operators[] operatorList;
+    //public Operators[] operatorList;
+	Operators operators;
     public File processFile;
     //will manually change in source code if more operators are added
     public final int numOperators = 29; 
-    public class Operators{ 
-        public int occurences = 0;
-        public String operator ="";
-    }
+    Map<String,Integer> operatorMap; 
+    
+    //public class Operators{ 
+      //  public int occurences = 0;
+        //public String operator ="";
+    //}
 
 
-    public FileProcessor() {
+    public FileProcessor() throws FileNotFoundException {
         //=, +, -, *, /, %, ++, --, +=, -=, *=, /=, %=, !, ==, !=, >, <, <=, >=, &&, ||, ~, <<, >>, >>>, &, ^, |
-        operatorList = new Operators[numOperators];
-        for(int i = 0; i < numOperators; i++) {
-            operatorList[i] = new Operators();
-            operatorList[i].occurences = 0;
-        }
-        operatorList[0].operator = "=";
-        operatorList[1].operator = "+";
-        operatorList[2].operator = "-";
-        operatorList[3].operator = "*";
-        operatorList[4].operator = "/";
-        operatorList[5].operator = "%";
-        operatorList[6].operator = "++";
-        operatorList[7].operator = "--";
-        operatorList[8].operator = "+=";
-        operatorList[9].operator = "-=";
-        operatorList[10].operator = "*=";
-        operatorList[11].operator = "/=";
-        operatorList[12].operator = "%=";
-        operatorList[13].operator = "!=";
-        operatorList[14].operator = "==";
-        operatorList[15].operator = "!=";
-        operatorList[16].operator = ">";
-        operatorList[17].operator = "<";
-        operatorList[18].operator = "<=";
-        operatorList[19].operator = ">=";
-        operatorList[20].operator = "&&";
-        operatorList[21].operator = "||";
-        operatorList[22].operator = "~";
-        operatorList[23].operator = "<<";
-        operatorList[24].operator = ">>";
-        operatorList[25].operator = "<<<";
-        operatorList[26].operator = "&";
-        operatorList[27].operator = "^";
-        operatorList[28].operator = "|";
+    	operatorMap = new HashMap<String,Integer>();
+    	
+    	//It is probable we won't want multiple of these Operator classes
+    	//We should really just pass one as a reference to this
+    	operators = new Operators("OperatorsInJava.txt"); 
+    	for(String op: operators.operatorList) {
+    		operatorMap.put(op, 0);
+    	}
+    	
+    	
         processFile = new File("null");
     }//end default constructor
 
-    public FileProcessor(File sourceCode) {
+    public FileProcessor(File sourceCode, Operators operators) {
         processFile = sourceCode;
-        operatorList = new Operators[numOperators];
-        for(int i = 0; i < numOperators; i++) {
-            operatorList[i] = new Operators();
-            operatorList[i].occurences = 0;
-        }
-        operatorList[0].operator = "=";
-        operatorList[1].operator = "+";
-        operatorList[2].operator = "-";
-        operatorList[3].operator = "*";
-        operatorList[4].operator = "/";
-        operatorList[5].operator = "%";
-        operatorList[6].operator = "++";
-        operatorList[7].operator = "--";
-        operatorList[8].operator = "+=";
-        operatorList[9].operator = "-=";
-        operatorList[10].operator = "*=";
-        operatorList[11].operator = "/=";
-        operatorList[12].operator = "%=";
-        operatorList[13].operator = "!=";
-        operatorList[14].operator = "==";
-        operatorList[15].operator = "!=";
-        operatorList[16].operator = ">";
-        operatorList[17].operator = "<";
-        operatorList[18].operator = "<=";
-        operatorList[19].operator = ">=";
-        operatorList[20].operator = "&&";
-        operatorList[21].operator = "||";
-        operatorList[22].operator = "~";
-        operatorList[23].operator = "<<";
-        operatorList[24].operator = ">>";
-        operatorList[25].operator = "<<<";
-        operatorList[26].operator = "&";
-        operatorList[27].operator = "^";
-        operatorList[28].operator = "|";
+    	operatorMap = new HashMap<String,Integer>();
+    	
+    	//Passing operators as an argument will be better
+    	this.operators = operators;
+    	for(String op: operators.operatorList) {
+    		operatorMap.put(op, 0);
+    	}
         
     }//end parameterized constructor
 
@@ -108,7 +64,7 @@ public class FileProcessor {
                 try {
                     currChar = (char) reader.read(); 
                     if(currChar == '='){
-                        operatorList[0].occurences += 1;
+                       	operatorMap.put("=", operatorMap.get("=")+1);
                     } //add the rest of the operator conditions
                 } catch(EOFException e) {
                     done = true;
