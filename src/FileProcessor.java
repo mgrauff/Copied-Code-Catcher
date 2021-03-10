@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 public class FileProcessor {
     //definitely a more elegant way to do this, but this was quick
@@ -52,8 +53,6 @@ public class FileProcessor {
 
     public void read() {
         try {    
-            String processString = "";
-            boolean done = false;
             char currChar;
             BufferedInputStream reader = new BufferedInputStream(
                 new FileInputStream(processFile));
@@ -64,10 +63,9 @@ public class FileProcessor {
                 try {
                     currChar = (char) reader.read(); 
                     if(currChar == '='){
-                       	operatorMap.put("=", operatorMap.get("=")+1);
+                        operatorMap.put("=", operatorMap.get("=") + 1);
                     } //add the rest of the operator conditions
                 } catch(EOFException e) {
-                    done = true;
                 }
                 
             }
