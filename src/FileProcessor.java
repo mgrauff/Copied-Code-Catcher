@@ -1,15 +1,9 @@
-import java.io.BufferedInputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.io.*;
+import java.util.*;
+
 
 public class FileProcessor {
+
     //definitely a more elegant way to do this, but this was quick
     //public Operators[] operatorList;
 	Operators operators;
@@ -35,7 +29,7 @@ public class FileProcessor {
     		operatorMap.put(op, 0);
     	}
     	
-    	
+
         processFile = new File("null");
     }//end default constructor
 
