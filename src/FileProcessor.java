@@ -3,19 +3,13 @@ import java.util.*;
 
 
 public class FileProcessor {
-
-    //definitely a more elegant way to do this, but this was quick
-    //public Operators[] operatorList;
 	Operators operators;
     public File processFile;
-    //will manually change in source code if more operators are added
+    //Would be much nicer to read in operators from a .txt
+    //Removes need for repetitive hard coding
     public final int numOperators = 29; 
     private Map<String,Integer> operatorMap; 
     
-    //public class Operators{ 
-      //  public int occurences = 0;
-        //public String operator ="";
-    //}
 
 
     public FileProcessor() throws FileNotFoundException {
@@ -23,7 +17,7 @@ public class FileProcessor {
     	operatorMap = new HashMap<String,Integer>();
     	
     	//It is probable we won't want multiple of these Operator classes
-    	//We should really just pass one as a reference to this
+    	//But in our default constructor, we can do this
     	operators = new Operators("OperatorsInJava.txt"); 
     	for(String op: operators.operatorList) {
     		operatorMap.put(op, 0);
@@ -72,6 +66,8 @@ public class FileProcessor {
     }//end read
     
     
+    //Returns a value for a map
+    //#AbstractionForLife
     public int mapGet(String op) {
     	return operatorMap.get(op);
     }
