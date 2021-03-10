@@ -16,6 +16,7 @@ public class Compare {
 		double score = 0;
 		double ratio;
 		int num1,num2, sum;
+		int numOps = 0;
 		for(String op: operators.operatorList) {
 			num1 = f1.mapGet(op);
 			num2 = f2.mapGet(op);
@@ -27,10 +28,11 @@ public class Compare {
 				ratio = 1;
 			}
 			score += sum * ratio;
+			numOps++;
 			
 		}
 		
-		return score;
+		return score/numOps;
 	}
 	
 	/*
