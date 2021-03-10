@@ -70,4 +70,9 @@ public class FileProcessor {
         }
         
     }//end read
+    
+    
+    public int mapGet(String op) {
+    	return operatorMap.get(op);
+    }
 }

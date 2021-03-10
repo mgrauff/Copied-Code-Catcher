@@ -14,8 +14,20 @@ public class Compare {
 	
 	public double compareFiles() {
 		double score = 0;
+		double ratio;
+		int num1,num2, sum;
 		for(String op: operators.operatorList) {
-			//Do math
+			num1 = f1.mapGet(op);
+			num2 = f2.mapGet(op);
+			sum = num1+num2;
+			if(num2 != 0) {
+				ratio = num1/num2;
+			}
+			else {
+				ratio = 1;
+			}
+			score += sum * ratio;
+			
 		}
 		
 		return score;
