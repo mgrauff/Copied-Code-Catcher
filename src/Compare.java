@@ -3,7 +3,7 @@ import java.util.Map;
 public class Compare {
 	private FileProcessor f1;
 	private FileProcessor f2;
-	Operators operators;
+	private Operators operators;
 	
 	public Compare(FileProcessor file1, FileProcessor file2, Operators operators) {
 		f1 = file1;

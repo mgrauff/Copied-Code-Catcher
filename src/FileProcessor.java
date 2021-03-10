@@ -10,7 +10,7 @@ public class FileProcessor {
     public File processFile;
     //will manually change in source code if more operators are added
     public final int numOperators = 29; 
-    Map<String,Integer> operatorMap; 
+    private Map<String,Integer> operatorMap; 
     
     //public class Operators{ 
       //  public int occurences = 0;
