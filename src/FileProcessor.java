@@ -14,8 +14,8 @@ public class FileProcessor {
         GOT_OPERATOR,
         IN_LINE_COMMENT,
         IN_MULTI_LINE_COMMENT,
-        GOT_KEYWORD,
-        FINISHED
+        GOT_KEYWORD, //not currently used
+        FINISHED //not currently used
     }
     
 
@@ -56,9 +56,10 @@ public class FileProcessor {
             System.out.println("Error opening file");
         }
         while (sourceScanner.hasNext()) {
-            currChar = (char) sourceScanner.nextByte();
+            
             switch (control) {
                 case LOOKING:
+                currChar = (char) sourceScanner.nextByte();
                     if (currChar == '=' ||
                         currChar == '<' ||
                         currChar == '>' ||
@@ -80,6 +81,7 @@ public class FileProcessor {
                     }
                 break;
                 case GOT_OPERATOR:
+                currChar = (char) sourceScanner.nextByte();
                     if (currChar != ' ' ||
                         currChar != '\t' ||
                         currChar != '\n') { 
@@ -164,8 +166,21 @@ public class FileProcessor {
                 case GOT_KEYWORD:
                 break;
                 case IN_LINE_COMMENT:
+                //read the next line so the comment will be ignored
+                sourceScanner.nextLine(); 
+                control = state.LOOKING;
                 break;
                 case IN_MULTI_LINE_COMMENT:
+                currChar = (char) sourceScanner.nextByte();
+                if (prevChar == '*') {
+                    if (currChar == '/') { //ends multiline comment
+                        control = state.LOOKING;
+                    }
+                }
+                if(currChar == '*') { //potentially ends the comment
+                    prevChar = currChar; //save the * character
+                    control = state.IN_MULTI_LINE_COMMENT;
+                }
                 break;
                 case FINISHED:
                 break;
