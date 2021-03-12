@@ -48,18 +48,21 @@ public class FileProcessor {
 
     public void read() {
         Scanner sourceScanner = null; //scanner for reading file
+        System.out.println("check read");
         state control = state.LOOKING;
-        char currChar, prevChar = ' ';
+        char currChar = ' ', prevChar = ' ';
         try {
             sourceScanner = new Scanner(this.processFile);
+            sourceScanner.useDelimiter("");
         } catch (FileNotFoundException e) {
             System.out.println("Error opening file");
         }
+        
         while (sourceScanner.hasNext()) {
             
             switch (control) {
                 case LOOKING:
-                currChar = (char) sourceScanner.nextByte();
+                currChar = sourceScanner.next().charAt(0);
                     if (currChar == '=' ||
                         currChar == '<' ||
                         currChar == '>' ||
@@ -81,7 +84,7 @@ public class FileProcessor {
                     }
                 break;
                 case GOT_OPERATOR:
-                currChar = (char) sourceScanner.nextByte();
+                currChar = sourceScanner.next().charAt(0);
                     if (currChar != ' ' ||
                         currChar != '\t' ||
                         currChar != '\n') { 
@@ -89,76 +92,100 @@ public class FileProcessor {
                         if(prevChar == '=') {
                             if (currChar == '=') {
                                 operatorMap.put("==", operatorMap.get("==") + 1);
+                                control = state.LOOKING;
                             } else {
                             operatorMap.put("=", operatorMap.get("=") + 1);  
+                            control = state.LOOKING;
                             }
                         } else if (prevChar == '<') {
                             if (currChar == '=') {
                                 operatorMap.put("<=", operatorMap.get("<=") + 1);
+                                control = state.LOOKING;
                             } else if (currChar == '<') {
                                 operatorMap.put("<<", operatorMap.get("<<") + 1);  
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("<", operatorMap.get("<") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '>') {
                             if (currChar == '=') {
                                 operatorMap.put(">=", operatorMap.get(">=") + 1);
+                                control = state.LOOKING;
                             } else if (currChar == '>') {
                                 operatorMap.put(">>", operatorMap.get(">>") + 1);  
+                                control = state.LOOKING;
                             }else {
                                 operatorMap.put(">", operatorMap.get(">") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '*') {
                             if (currChar == '=') {
                                 operatorMap.put("*=", operatorMap.get("*=") + 1);
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("*", operatorMap.get("*") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '+') {
                             if (currChar == '=') {
                                 operatorMap.put("+=", operatorMap.get("+=") + 1);
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("+", operatorMap.get("+") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '-') {
                             if (currChar == '=') {
                                 operatorMap.put("-=", operatorMap.get("-=") + 1);
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("-", operatorMap.get("-") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '^') {
                             if (currChar == '=') {
                                 operatorMap.put("^=", operatorMap.get("^=") + 1);
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("^", operatorMap.get("^") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '%') {
                             if (currChar == '=') {
                                 operatorMap.put("%=", operatorMap.get("%=") + 1);
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("%", operatorMap.get("%") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '&') {
                             if (currChar == '&') {
                                 operatorMap.put("&&", operatorMap.get("&&") + 1);
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("&", operatorMap.get("&") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '|') {
                             if (currChar == '|') {
                                 operatorMap.put("||", operatorMap.get("||") + 1);
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("|", operatorMap.get("|") + 1);  
+                                control = state.LOOKING;
                             }
                         } else if (prevChar == '/') {
                             if (currChar == '=') {
                                 operatorMap.put("/=", operatorMap.get("/=") + 1);
+                                control = state.LOOKING;
                             } else if (currChar == '/') {
                                 control = state.IN_LINE_COMMENT;
                             } else if (currChar == '*') {
                                 control = state.IN_MULTI_LINE_COMMENT;
                             } else {
                                 operatorMap.put("/", operatorMap.get("/") + 1);  
+                                control = state.LOOKING;
                             }
                         }
                     }
@@ -171,7 +198,7 @@ public class FileProcessor {
                 control = state.LOOKING;
                 break;
                 case IN_MULTI_LINE_COMMENT:
-                currChar = (char) sourceScanner.nextByte();
+                currChar = sourceScanner.next().charAt(0);
                 if (prevChar == '*') {
                     if (currChar == '/') { //ends multiline comment
                         control = state.LOOKING;
@@ -181,36 +208,46 @@ public class FileProcessor {
                     prevChar = currChar; //save the * character
                     control = state.IN_MULTI_LINE_COMMENT;
                 }
+                
                 break;
                 case FINISHED:
                 break;
 
 
             }
-        }
+            // if(currChar == '\n')
+            // System.out.println();
+            // else
+            // System.out.print(currChar);
 
-        try {    
+        }
+        
+        for(String op: operators.operatorList) {
+    		System.out.println(op + " occurs: " + operatorMap.get(op));
+    	}
+
+        // try {    
             
-            BufferedInputStream reader = new BufferedInputStream(
-                new FileInputStream(processFile));
+        //     BufferedInputStream reader = new BufferedInputStream(
+        //         new FileInputStream(processFile));
                     
                 
 
-            while(reader.available()!= 0) {
-                try {
-                    currChar = (char) reader.read(); 
-                    if(currChar == '='){
-                        operatorMap.put("=", operatorMap.get("=") + 1);
-                    } //add the rest of the operator conditions
-                } catch(EOFException e) {
-                }
+        //     while(reader.available()!= 0) {
+        //         try {
+        //             currChar = (char) reader.read(); 
+        //             if(currChar == '='){
+        //                 operatorMap.put("=", operatorMap.get("=") + 1);
+        //             } //add the rest of the operator conditions
+        //         } catch(EOFException e) {
+        //         }
                 
-            }
+        //     }
 
-            reader.close();
-        } catch (IOException e) {
-            System.out.println("Error opening file: " + processFile.getAbsolutePath());
-        }
+        //     reader.close();
+        // } catch (IOException e) {
+        //     System.out.println("Error opening file: " + processFile.getAbsolutePath());
+        // }
         
     }//end read
     

@@ -15,6 +15,8 @@ public class main {
 
 	public static void main(String[] args) {
 
+		
+
 		String filePath; //Where all the files are coming from
 		ArrayList<File> files = new ArrayList<File>(); //ArrayList for our files
 
@@ -53,10 +55,16 @@ public class main {
 
 
 
+		// Paul was using this to test FileProcessor
+		// File myFile = new File("C:/Users/StaatsPD17/git/Copied-Code-Catcher/Copied-Code-Catcher/src/example.txt");
+		// try {
+		// 	System.out.println("check");
+		// FileProcessor myProcessor = new FileProcessor(myFile);
+		// myProcessor.read();
+		// } catch (Exception e) {
+		// 	System.out.println("Error");
 		
-		File myFile = new File("C:/Users/StaatsPD17/git/Copied-Code-Catcher/Copied-Code-Catcher/src/example.txt");
-		FileProcessor myProcessor = new FileProcessor(myFile);
-		myProcessor.read();
+		// }
 	}
 
 }
