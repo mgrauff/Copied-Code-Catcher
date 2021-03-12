@@ -11,8 +11,9 @@ public class Operators {
 	public Operators(String operatorsFileName) throws FileNotFoundException {
 		File file = new File(operatorsFileName);
 		Scanner scnr = new Scanner(file);
+		operatorList = new ArrayList<String>();
 		while(scnr.hasNext()) {
-			operatorList.add(scnr.next());
+			operatorList.add(scnr.nextLine());
 		}
 		scnr.close();
 	}
