@@ -21,14 +21,19 @@ public class Compare {
 			num1 = f1.mapGet(op);
 			num2 = f2.mapGet(op);
 			sum = num1+num2;
-			if(num2 != 0) {
-				ratio = num1/num2;
+			//If they're not used, we shouldn't include them in the avg
+			if(sum > 0) {
+				//if both numbers aren't used, who cares
+				if(num2 != 0 ) {
+					ratio = num1/num2;
+				}
+				else {
+					ratio = 1;
+				}
+				score+= sum*ratio;
+				numOps ++;
 			}
-			else {
-				ratio = 1;
-			}
-			score += sum * ratio;
-			numOps++;
+
 			
 		}
 		
