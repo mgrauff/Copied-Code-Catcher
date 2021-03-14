@@ -13,7 +13,7 @@ public class Compare {
 	
 	
 	public double compareFiles() {
-		//Calculate 1 - RMSE to find similarity
+		//Calculate 1 - RMSE to find similarity score
 		double scaleSum = 0.0;
 		int num1,num2, sum;
 		int numOps = 0;
