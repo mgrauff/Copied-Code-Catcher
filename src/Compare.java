@@ -29,7 +29,7 @@ public class Compare {
 			}
 		}
 		
-		//This shouldn't be possible
+		//This shouldn't be possible.
 		if(maxUse <= 0) {
 			System.out.println("ERROR: No operators detected");
 			return -1;
