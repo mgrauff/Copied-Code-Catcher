@@ -69,7 +69,7 @@ public class Compare {
 			ratio = num operartor in file1/ num operator in file 2
 			r1 = file1.map.get(operator)
 			sum = numOperator in file1+ numOperator in file 2
-			score += sum*ratio
+			score += sum*ratio 
 	 */
 }
 
