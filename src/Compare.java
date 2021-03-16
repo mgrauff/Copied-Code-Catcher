@@ -11,10 +11,10 @@ public class Compare {
 		this.operators = operators;
 	}
 	
-	double scaleSum = 0.0;	
+	
 	public double compareFiles() {
 		//Calculate 1 - RMSE to find similarity score
-
+		double scaleSum = 0.0;
 		int num1,num2, sum;
 		int numOps = 0;
 		int maxUse =0;
@@ -34,7 +34,7 @@ public class Compare {
 			System.out.println("ERROR: No operators detected");
 			return -1;
 		}
-		scaleSum = 0.0;		
+	
 		for(String op: operators.operatorList) {
 			num1 = f1.mapGet(op);
 			num2 = f2.mapGet(op);
