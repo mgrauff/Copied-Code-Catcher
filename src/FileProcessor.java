@@ -14,6 +14,7 @@ public class FileProcessor {
         GOT_OPERATOR,
         IN_LINE_COMMENT,
         IN_MULTI_LINE_COMMENT,
+        IN_STRING,
         GOT_KEYWORD, //not currently used
         FINISHED //not currently used
     }
@@ -50,7 +51,7 @@ public class FileProcessor {
         Scanner sourceScanner = null; //scanner for reading file
         System.out.println("check read");
         state control = state.LOOKING;
-        char currChar = ' ', prevChar = ' ';
+        char currChar = ' ', prevChar = ' ', backslash = ' ';;
         try {
             sourceScanner = new Scanner(this.processFile);
             sourceScanner.useDelimiter("");
@@ -81,6 +82,8 @@ public class FileProcessor {
                         control = state.GOT_OPERATOR;
                     } else if (currChar == '~') {
                         operatorMap.put("~", operatorMap.get("~") + 1);
+                    } else if (currChar == '"') {
+                        control = state.IN_STRING;
                     }
                 break;
                 case GOT_OPERATOR:
@@ -131,6 +134,9 @@ public class FileProcessor {
                             if (currChar == '=') {
                                 operatorMap.put("+=", operatorMap.get("+=") + 1);
                                 control = state.LOOKING;
+                            } else if (currChar == '+') {
+                                operatorMap.put("++", operatorMap.get("++") + 1);
+                                control = state.LOOKING;
                             } else {
                                 operatorMap.put("+", operatorMap.get("+") + 1);  
                                 control = state.LOOKING;
@@ -138,6 +144,9 @@ public class FileProcessor {
                         } else if (prevChar == '-') {
                             if (currChar == '=') {
                                 operatorMap.put("-=", operatorMap.get("-=") + 1);
+                                control = state.LOOKING;
+                            } else if (currChar == '-') {
+                                operatorMap.put("--", operatorMap.get("--") + 1);
                                 control = state.LOOKING;
                             } else {
                                 operatorMap.put("-", operatorMap.get("-") + 1);  
@@ -190,6 +199,19 @@ public class FileProcessor {
                         }
                     }
                 break;
+                case IN_STRING:
+                    currChar = sourceScanner.next().charAt(0);
+                    if (currChar == '\\') {
+                        backslash = '\\'; //store potential escape character
+                    } else {
+                        backslash = '1';
+                    }
+                    
+                    if (currChar == '"' && backslash == '\\') { 
+                        //only end the quotation if the '"' is the end of the quote
+                        control = state.LOOKING;
+                    }
+                break;
                 case GOT_KEYWORD:
                 break;
                 case IN_LINE_COMMENT:
@@ -199,6 +221,11 @@ public class FileProcessor {
                 break;
                 case IN_MULTI_LINE_COMMENT:
                 currChar = sourceScanner.next().charAt(0);
+                if (currChar == '\\') {
+                    backslash = '\\'; //store potential escape character
+                } else {
+                    backslash = '1';
+                }
                 if (prevChar == '*') {
                     if (currChar == '/') { //ends multiline comment
                         control = state.LOOKING;
@@ -207,7 +234,12 @@ public class FileProcessor {
                 if(currChar == '*') { //potentially ends the comment
                     prevChar = currChar; //save the * character
                     control = state.IN_MULTI_LINE_COMMENT;
+                } else {
+                    //only save the * character if it directly precedes the /
+                    prevChar = ' ';
                 }
+                 
+                
                 
                 break;
                 case FINISHED:
