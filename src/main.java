@@ -43,6 +43,9 @@ public class main {
 			else { //Put file in arraylist and process it
 
 				files.add(new File(filePath + "/" + input));
+
+				Operators opt = new Operators("OperatorsInJava.txt");
+
 				FileProcessor processor = new FileProcessor(files.get(files.size() - 1));
 
 				processor.read();
