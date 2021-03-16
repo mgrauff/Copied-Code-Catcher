@@ -58,11 +58,13 @@ public class main {
 
 
 
-		// Paul was using this to test FileProcessor
+		//Paul was using this to test FileProcessor
 		// File myFile = new File("C:/Users/StaatsPD17/git/Copied-Code-Catcher/Copied-Code-Catcher/src/example.txt");
 		// try {
+			
+		// 	Operators opt = new Operators("OperatorsInJava.txt");
 		// 	System.out.println("check");
-		// FileProcessor myProcessor = new FileProcessor(myFile);
+		// FileProcessor myProcessor = new FileProcessor(myFile, opt);
 		// myProcessor.read();
 		// } catch (Exception e) {
 		// 	System.out.println("Error");
