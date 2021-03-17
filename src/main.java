@@ -20,7 +20,7 @@ public class main {
 		
 
 		String filePath; //Where all the files are coming from
-		ArrayList<File> files = new ArrayList<File>(); //ArrayList for our files
+		ArrayList<FileProcessor> files = new ArrayList<FileProcessor>(); //ArrayList for our files
 
 		boolean done = false; //When user has no more files to give
 
@@ -32,6 +32,7 @@ public class main {
 		System.out.print("Please enter file path to read from: "); //Asking for file path
 
 		filePath = scany.next(); //Recieving file path
+		Operators opt = new Operators("OperatorsInJava.txt");
 
 		while (!done) { //While user has more files
 
@@ -47,18 +48,18 @@ public class main {
 				Unzipper zippy = new Unzipper(filePath + "/" + input);
 				zippy.unzipTo(filePath);
 
-				files.add(new File(filePath + "/" + input));
-
-				Operators opt = new Operators("OperatorsInJava.txt");
-
-				FileProcessor processor = new FileProcessor(files.get(files.size() - 1), opt);
-
-				processor.read();
-
-				
+				files.add(new FileProcessor(new File(filePath + "/" + input), opt));
 
 			}
 
+		}
+
+		for (int i =)
+
+		for (int i = 0; i < files.size()/2; i++) {
+			for (int j = 0; j < files.size(); j++) {
+				Compare compy = new Compare(files.get(i), files.get(j));
+			}
 		}
 
 		scany.close();
