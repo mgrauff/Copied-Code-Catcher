@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,7 +15,7 @@ import java.util.Scanner;
 
 public class main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		
 
@@ -42,13 +44,18 @@ public class main {
 
 			else { //Put file in arraylist and process it
 
+				Unzipper zippy = new Unzipper(filePath + "/" + input);
+				zippy.unzipTo(filePath);
+
 				files.add(new File(filePath + "/" + input));
 
 				Operators opt = new Operators("OperatorsInJava.txt");
 
-				FileProcessor processor = new FileProcessor(files.get(files.size() - 1));
+				FileProcessor processor = new FileProcessor(files.get(files.size() - 1), opt);
 
 				processor.read();
+
+				
 
 			}
 
@@ -58,13 +65,11 @@ public class main {
 
 
 
-		//Paul was using this to test FileProcessor
+		// Paul was using this to test FileProcessor
 		// File myFile = new File("C:/Users/StaatsPD17/git/Copied-Code-Catcher/Copied-Code-Catcher/src/example.txt");
 		// try {
-			
-		// 	Operators opt = new Operators("OperatorsInJava.txt");
 		// 	System.out.println("check");
-		// FileProcessor myProcessor = new FileProcessor(myFile, opt);
+		// FileProcessor myProcessor = new FileProcessor(myFile);
 		// myProcessor.read();
 		// } catch (Exception e) {
 		// 	System.out.println("Error");
