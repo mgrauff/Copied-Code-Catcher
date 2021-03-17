@@ -215,8 +215,10 @@ public class FileProcessor {
                 break;
                 case IN_LINE_COMMENT:
                 //read the next line so the comment will be ignored
-                sourceScanner.nextLine(); 
+                currChar = sourceScanner.next().charAt(0);
+                if(currChar == '\n') {
                 control = state.LOOKING;
+                }
                 break;
                 case IN_MULTI_LINE_COMMENT:
                 currChar = sourceScanner.next().charAt(0);
