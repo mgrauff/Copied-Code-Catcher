@@ -48,9 +48,18 @@ public class main {
 
 			else { //Put file in arraylist and process it
 
-				Unzipper zippy = new Unzipper(filePath + "/" + input);
-				zippy.unzipTo(filePath);
+				//Testing if zipped file and if so, unzip it
+				//FIXME we need to somehow reassign the new unzipped file back to input so we can continue
+				if (input.charAt(input.length() - 3) == 'z' 
+					&& input.charAt(input.length() - 2) == 'i' 
+					&& input.charAt(input.length() - 1) == 'p') {
 
+						Unzipper zippy = new Unzipper(filePath + "/" + input);
+						zippy.unzipTo(filePath);
+
+					}
+				
+				//Add new file to ArrayList
 				files.add(new FileProcessor(new File(filePath + "/" + input), opt));
 
 			}
@@ -60,6 +69,7 @@ public class main {
 		
 		scany.close();
 
+		//Process all files in the arraylist
 		for (int i = 0; i < files.size(); i++) {
 			files.get(i).read();
 		}
@@ -93,7 +103,7 @@ public class main {
 			System.out.print("\n");
 			System.out.print(i);
 
-			for (int j = 0; j < files.size(); i++) {
+			for (int j = 0; j < files.size(); j++) {
 				System.out.print("\t" + scoresTable[i][j]);
 
 			}
