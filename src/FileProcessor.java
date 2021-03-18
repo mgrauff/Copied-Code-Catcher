@@ -3,13 +3,10 @@ import java.util.*;
 
 
 public class FileProcessor {
-	Operators operators;
-    public File processFile;
-    //Would be much nicer to read in operators from a .txt
-    //Removes need for repetitive hard coding
-    public final int numOperators = 29; 
-    Map<String,Integer> operatorMap; 
-    enum state {
+	Operators operators; //operators to be found in file 
+    public File processFile; //file to be searched for operators
+    private Map<String,Integer> operatorMap; //stores the operators and number of instances
+    enum state { //states for controlling the FSM
         LOOKING,
         GOT_OPERATOR,
         IN_LINE_COMMENT,
@@ -17,14 +14,14 @@ public class FileProcessor {
         IN_STRING,
         GOT_KEYWORD, //not currently used
         FINISHED //not currently used
-    }
+    }//end state
     
-
+    /**
+     * Builds a basic FileProcessor 
+     * object with the default operators
+     */
     public FileProcessor() throws FileNotFoundException {
-        //=, +, -, *, /, %, ++, --, +=, -=, *=, /=, %=, !, ==, !=, >, <, <=, >=, &&, ||, ~, <<, >>, >>>, &, ^, |
     	operatorMap = new HashMap<String,Integer>();
-    	
-    	//It is probable we won't want multiple of these Operator classes
     	//But in our default constructor, we can do this
     	operators = new Operators("OperatorsInJava.txt"); 
     	for(String op: operators.operatorList) {
@@ -35,6 +32,12 @@ public class FileProcessor {
         processFile = new File("null");
     }//end default constructor
 
+    /**
+     * Creates the FileProcessor object with 
+     * file and operators passed as arguments
+     * @param soureCode: The file to be processed
+     * @param operators: The list of operators to be searched for in the file
+     */
     public FileProcessor(File sourceCode, Operators operators) {
         processFile = sourceCode;
     	operatorMap = new HashMap<String,Integer>();
@@ -47,21 +50,29 @@ public class FileProcessor {
         
     }//end parameterized constructor
 
+    /**
+     * Processes the file attribute of the FileProcessor and
+     * increments the operatorMaps operators when they are detected
+     * within the file.
+     */
     public void read() {
         Scanner sourceScanner = null; //scanner for reading file
-        state control = state.LOOKING;
-        char currChar = ' ', prevChar = ' ', backslash = ' ';;
-        try {
-            sourceScanner = new Scanner(this.processFile);
-            sourceScanner.useDelimiter("");
+        state control = state.LOOKING; //start out in the looking state
+        //hold characters of interest in the searching process
+        char currChar = ' ', prevChar = ' ', backslash = ' '; 
+        
+        try { //initialize sourceScanner
+            sourceScanner = new Scanner(this.processFile);    
         } catch (FileNotFoundException e) {
             System.out.println("Error opening file");
-        }
+        }//try catch
         
-        while (sourceScanner.hasNext()) {
+        sourceScanner.useDelimiter(""); //important for reading one char at a time
+        
+        while (sourceScanner.hasNext()) { //Finite State Machine
             
             switch (control) {
-                case LOOKING:
+                case LOOKING: //look for the start of a new operator
                 currChar = sourceScanner.next().charAt(0);
                     if (currChar == '=' ||
                         currChar == '<' ||
@@ -73,24 +84,31 @@ public class FileProcessor {
                         currChar == '-' ||
                         currChar == '&' ||
                         currChar == '|' ||
+                        currChar == '!' ||
                         currChar == '^') {
                         /*save the current char before next cycle
                         if the operator could be the beginning of a
                         multi-character operator*/
-                        prevChar = currChar; 
-                        control = state.GOT_OPERATOR;
-                    } else if (currChar == '~') {
+                        prevChar = currChar; //save the char for the next cycle
+                        control = state.GOT_OPERATOR; //go to the GOT_OPERATOR state                    
+                    //if the character is not the beginning of a multicharacter operator
+                    } else if (currChar == '~') { 
                         operatorMap.put("~", operatorMap.get("~") + 1);
+                    //a string is starting
                     } else if (currChar == '"') {
                         control = state.IN_STRING;
                     }
                 break;
+                //end LOOKING state
+
                 case GOT_OPERATOR:
                 currChar = sourceScanner.next().charAt(0);
+                    //disregard whitespace separating operator parts
                     if (currChar != ' ' ||
                         currChar != '\t' ||
                         currChar != '\n') { 
-                    //disregard whitespace separating operator parts
+                    /*proceed through first part of operators in the following order:
+                    =, <, >, *, +, -, ^, %, &, |, /, !*/
                         if(prevChar == '=') {
                             if (currChar == '=') {
                                 operatorMap.put("==", operatorMap.get("==") + 1);
@@ -98,7 +116,7 @@ public class FileProcessor {
                             } else {
                             operatorMap.put("=", operatorMap.get("=") + 1);  
                             control = state.LOOKING;
-                            }
+                            } // "="
                         } else if (prevChar == '<') {
                             if (currChar == '=') {
                                 operatorMap.put("<=", operatorMap.get("<=") + 1);
@@ -109,7 +127,7 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("<", operatorMap.get("<") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // "<"
                         } else if (prevChar == '>') {
                             if (currChar == '=') {
                                 operatorMap.put(">=", operatorMap.get(">=") + 1);
@@ -120,7 +138,7 @@ public class FileProcessor {
                             }else {
                                 operatorMap.put(">", operatorMap.get(">") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // ">"
                         } else if (prevChar == '*') {
                             if (currChar == '=') {
                                 operatorMap.put("*=", operatorMap.get("*=") + 1);
@@ -128,7 +146,7 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("*", operatorMap.get("*") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // "*"
                         } else if (prevChar == '+') {
                             if (currChar == '=') {
                                 operatorMap.put("+=", operatorMap.get("+=") + 1);
@@ -139,7 +157,7 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("+", operatorMap.get("+") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // "+"
                         } else if (prevChar == '-') {
                             if (currChar == '=') {
                                 operatorMap.put("-=", operatorMap.get("-=") + 1);
@@ -150,7 +168,7 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("-", operatorMap.get("-") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // "-"
                         } else if (prevChar == '^') {
                             if (currChar == '=') {
                                 operatorMap.put("^=", operatorMap.get("^=") + 1);
@@ -158,7 +176,7 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("^", operatorMap.get("^") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // "^"
                         } else if (prevChar == '%') {
                             if (currChar == '=') {
                                 operatorMap.put("%=", operatorMap.get("%=") + 1);
@@ -166,7 +184,7 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("%", operatorMap.get("%") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // "%"
                         } else if (prevChar == '&') {
                             if (currChar == '&') {
                                 operatorMap.put("&&", operatorMap.get("&&") + 1);
@@ -174,7 +192,7 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("&", operatorMap.get("&") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // "&"
                         } else if (prevChar == '|') {
                             if (currChar == '|') {
                                 operatorMap.put("||", operatorMap.get("||") + 1);
@@ -182,7 +200,7 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("|", operatorMap.get("|") + 1);  
                                 control = state.LOOKING;
-                            }
+                            } // "|"
                         } else if (prevChar == '/') {
                             if (currChar == '=') {
                                 operatorMap.put("/=", operatorMap.get("/=") + 1);
@@ -194,39 +212,51 @@ public class FileProcessor {
                             } else {
                                 operatorMap.put("/", operatorMap.get("/") + 1);  
                                 control = state.LOOKING;
-                            }
-                        }
-                    }
-                break;
+                            } // "/"
+                        } else if (prevChar == '!') {
+                            if (currChar == '=') {
+                                operatorMap.put("!=", operatorMap.get("!=") + 1);
+                                control = state.LOOKING;
+                            } else {
+                                operatorMap.put("!", operatorMap.get("!") + 1);
+                                control = state.LOOKING;
+                            } // "!"
+                        } //operator else ifs
+                    }//whitespace if
+                break; 
+                //end GOT_OPERATOR
+
                 case IN_STRING:
                     currChar = sourceScanner.next().charAt(0);
                     if (currChar == '\\') {
                         backslash = '\\'; //store potential escape character
                     } else {
-                        backslash = '1';
+                        backslash = '1'; //in case there are other escape characters before the end of the string
                     }
                     
-                    if (currChar == '"' && backslash == '\\') { 
-                        //only end the quotation if the '"' is the end of the quote
+                    if (currChar == '"' && backslash != '\\') { 
+                        //only end the quotation if the '"' is the end of the quote and not an escape sequence
                         control = state.LOOKING;
                     }
                 break;
+                //end IN_STRING
+
                 case GOT_KEYWORD:
+                //yet to be implemented
                 break;
+                //end GOT_KEYWORD
+
                 case IN_LINE_COMMENT:
-                //read the next line so the comment will be ignored
+                //read until a newline character
                 currChar = sourceScanner.next().charAt(0);
                 if(currChar == '\n') {
-                control = state.LOOKING;
+                    control = state.LOOKING; //back to looking for operators
                 }
                 break;
+                //end IN_LINE_COMMENT
+
                 case IN_MULTI_LINE_COMMENT:
                 currChar = sourceScanner.next().charAt(0);
-                if (currChar == '\\') {
-                    backslash = '\\'; //store potential escape character
-                } else {
-                    backslash = '1';
-                }
                 if (prevChar == '*') {
                     if (currChar == '/') { //ends multiline comment
                         control = state.LOOKING;
@@ -234,56 +264,29 @@ public class FileProcessor {
                 }
                 if(currChar == '*') { //potentially ends the comment
                     prevChar = currChar; //save the * character
-                    control = state.IN_MULTI_LINE_COMMENT;
                 } else {
                     //only save the * character if it directly precedes the /
                     prevChar = ' ';
                 }
-                 
-                
-                
                 break;
+                //end IN_MULTI_LINE_COMMENT
+                
                 case FINISHED:
+                //yet to be implemented
                 break;
+                //end FINISHED
 
+            }//end switch
 
-            }
-            // if(currChar == '\n')
-            // System.out.println();
-            // else
-            // System.out.print(currChar);
-
-        }
-        
-        for(String op: operators.operatorList) {
-            if(operatorMap.get(op) >  0) {
-    		    System.out.println(op + " occurs: " + operatorMap.get(op));
-            }
-    	}
-
-        // try {    
-            
-        //     BufferedInputStream reader = new BufferedInputStream(
-        //         new FileInputStream(processFile));
-                    
-                
-
-        //     while(reader.available()!= 0) {
-        //         try {
-        //             currChar = (char) reader.read(); 
-        //             if(currChar == '='){
-        //                 operatorMap.put("=", operatorMap.get("=") + 1);
-        //             } //add the rest of the operator conditions
-        //         } catch(EOFException e) {
-        //         }
-                
+        }//end while FSM
+ 
+        //Print any instances of operators
+        // for(String op: operators.operatorList) {
+        //     if(operatorMap.get(op) >  0) {
+    	// 	    System.out.println(op + " occurs: " + operatorMap.get(op));
         //     }
-
-        //     reader.close();
-        // } catch (IOException e) {
-        //     System.out.println("Error opening file: " + processFile.getAbsolutePath());
-        // }
-        
+    	// }
+   
     }//end read
     
     

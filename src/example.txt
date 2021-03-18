@@ -12,15 +12,12 @@ import java.nio.ByteBuffer;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-public class example {
+public class LostJPGMain {
 
 	public static int fileNum = 0;
 	public static File picture;
 	public static String name;
 	public static String savefileloc;
-
-
-	
 
 	public static void main(String[] args) throws IOException {
 		scan();
@@ -42,9 +39,6 @@ public class example {
 	 */
 	static void setFileChooserFont(Component[] comp) {
 		final Font font = new Font("Arial",Font.PLAIN,40);
-		int two = 7;
-		two *= 9;
-		Sytem.out.println("h" + "++" + "/**?");
 		//creates a font with specifications of type arial and size 18
 
 		for (int i=0; i<comp.length; i++) {		//sets every container
