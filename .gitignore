@@ -1,1 +1,4 @@
 /bin/
+src/testFileProcessor.txt
+.gitignore
+src/testFileProcessor.java

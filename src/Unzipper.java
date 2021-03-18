@@ -1,14 +1,38 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class Unzipper {
+	
+	public static boolean isZipped(File f) throws IOException {
+		boolean isZipped = false;
+		DataInputStream di = new DataInputStream(new FileInputStream(f));	
+		try {	
+			long zipKey = di.readInt();
+			
+			//all zip files start with one of three specific integers
+			if(zipKey == 0x504B0304 || zipKey == 0x504B0506 || zipKey == 0x504B0708) {
+				isZipped = true;
+			}
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			di.close();
+		}
+		
+		return isZipped;
+	}
+	public static boolean isZipped(String src) throws IOException {
+		return isZipped(new File(src));
+	}
 	
 	private String src;	//location of zipped folder
 	
@@ -16,13 +40,19 @@ public class Unzipper {
 	 * Creates an Unzipper object that allows a zipped folder to be extracted to a new location
 	 * 
 	 * @param src the relative or absolute path of the zipped folder to be extracted
-	 * @throws FileNotFoundException when the provided path does not exist
+	 * @throws IOException 
 	 */
-	public Unzipper(String src) throws FileNotFoundException {
+	public Unzipper(String src) throws IOException {
 		File f = new File(src);
 		if(!f.exists()) {	//check if provided file exists
 			throw new FileNotFoundException("The provided filepath does not exist");
 		}
+		
+		//verify that the source is zipped
+		if(!Unzipper.isZipped(f)) {
+			throw new IOException("The provided file is not zipped");
+		}
+		
 		this.src = src;
 	}//constructor 
 	
@@ -65,4 +95,5 @@ public class Unzipper {
 		zipStream.close();
 	}//unzipTo
 
+	
 }//Unzipper 

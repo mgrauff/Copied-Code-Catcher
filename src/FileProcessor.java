@@ -8,7 +8,7 @@ public class FileProcessor {
     //Would be much nicer to read in operators from a .txt
     //Removes need for repetitive hard coding
     public final int numOperators = 29; 
-    private Map<String,Integer> operatorMap; 
+    Map<String,Integer> operatorMap; 
     enum state {
         LOOKING,
         GOT_OPERATOR,
@@ -49,7 +49,6 @@ public class FileProcessor {
 
     public void read() {
         Scanner sourceScanner = null; //scanner for reading file
-        System.out.println("check read");
         state control = state.LOOKING;
         char currChar = ' ', prevChar = ' ', backslash = ' ';;
         try {
@@ -216,8 +215,10 @@ public class FileProcessor {
                 break;
                 case IN_LINE_COMMENT:
                 //read the next line so the comment will be ignored
-                sourceScanner.nextLine(); 
+                currChar = sourceScanner.next().charAt(0);
+                if(currChar == '\n') {
                 control = state.LOOKING;
+                }
                 break;
                 case IN_MULTI_LINE_COMMENT:
                 currChar = sourceScanner.next().charAt(0);
@@ -255,7 +256,9 @@ public class FileProcessor {
         }
         
         for(String op: operators.operatorList) {
-    		System.out.println(op + " occurs: " + operatorMap.get(op));
+            if(operatorMap.get(op) >  0) {
+    		    System.out.println(op + " occurs: " + operatorMap.get(op));
+            }
     	}
 
         // try {    

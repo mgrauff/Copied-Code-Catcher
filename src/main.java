@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,12 +15,12 @@ import java.util.Scanner;
 
 public class main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		
 
 		String filePath; //Where all the files are coming from
-		ArrayList<File> files = new ArrayList<File>(); //ArrayList for our files
+		ArrayList<FileProcessor> files = new ArrayList<FileProcessor>(); //ArrayList for our files
 
 		boolean done = false; //When user has no more files to give
 
@@ -30,6 +32,7 @@ public class main {
 		System.out.print("Please enter file path to read from: "); //Asking for file path
 
 		filePath = scany.next(); //Recieving file path
+		Operators opt = new Operators("OperatorsInJava.txt");
 
 		while (!done) { //While user has more files
 
@@ -42,29 +45,32 @@ public class main {
 
 			else { //Put file in arraylist and process it
 
-				files.add(new File(filePath + "/" + input));
+				Unzipper zippy = new Unzipper(filePath + "/" + input);
+				zippy.unzipTo(filePath);
 
-				Operators opt = new Operators("OperatorsInJava.txt");
-
-				FileProcessor processor = new FileProcessor(files.get(files.size() - 1));
-
-				processor.read();
+				files.add(new FileProcessor(new File(filePath + "/" + input), opt));
 
 			}
 
+		}
+
+		for (int i =)
+
+		for (int i = 0; i < files.size()/2; i++) {
+			for (int j = 0; j < files.size(); j++) {
+				Compare compy = new Compare(files.get(i), files.get(j));
+			}
 		}
 
 		scany.close();
 
 
 
-		//Paul was using this to test FileProcessor
+		// Paul was using this to test FileProcessor
 		// File myFile = new File("C:/Users/StaatsPD17/git/Copied-Code-Catcher/Copied-Code-Catcher/src/example.txt");
 		// try {
-			
-		// 	Operators opt = new Operators("OperatorsInJava.txt");
 		// 	System.out.println("check");
-		// FileProcessor myProcessor = new FileProcessor(myFile, opt);
+		// FileProcessor myProcessor = new FileProcessor(myFile);
 		// myProcessor.read();
 		// } catch (Exception e) {
 		// 	System.out.println("Error");
