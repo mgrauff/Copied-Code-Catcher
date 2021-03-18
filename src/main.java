@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,6 +21,10 @@ public class main {
 		String filePath; //Where all the files are coming from
 		ArrayList<FileProcessor> files = new ArrayList<FileProcessor>(); //ArrayList for our files
 
+		Operators opt = new Operators("OperatorsInJava.txt");
+		double myScore;
+		double[][] scoresTable;
+
 		boolean done = false; //When user has no more files to give
 
 		
@@ -32,7 +35,7 @@ public class main {
 		System.out.print("Please enter file path to read from: "); //Asking for file path
 
 		filePath = scany.next(); //Recieving file path
-		Operators opt = new Operators("OperatorsInJava.txt");
+		
 
 		while (!done) { //While user has more files
 
@@ -45,24 +48,67 @@ public class main {
 
 			else { //Put file in arraylist and process it
 
-				Unzipper zippy = new Unzipper(filePath + "/" + input);
-				zippy.unzipTo(filePath);
+				//Testing if zipped file and if so, unzip it
+				//FIXME we need to somehow reassign the new unzipped file back to input so we can continue
+				if (input.charAt(input.length() - 3) == 'z' 
+					&& input.charAt(input.length() - 2) == 'i' 
+					&& input.charAt(input.length() - 1) == 'p') {
 
+						Unzipper zippy = new Unzipper(filePath + "/" + input);
+						zippy.unzipTo(filePath);
+
+					}
+				
+				//Add new file to ArrayList
 				files.add(new FileProcessor(new File(filePath + "/" + input), opt));
 
 			}
 
 		}
 
-		for (int i =)
+		
+		scany.close();
 
-		for (int i = 0; i < files.size()/2; i++) {
+		//Process all files in the arraylist
+		for (int i = 0; i < files.size(); i++) {
+			files.get(i).read();
+		}
+
+		//2D array of files.size by files.size (aka 4 projects == a 2d array of 4x4)
+		scoresTable = new double[files.size()][files.size()]; //This is inefficient, more space than we really need but works for now
+
+		//This is hugely inefficient at the moment since it is still comparing projects to themselves
+		for (int i = 0; i < files.size()/2; i++) {//Nested loop comparing all projects together
+
 			for (int j = 0; j < files.size(); j++) {
-				Compare compy = new Compare(files.get(i), files.get(j));
+
+				Compare compy = new Compare(files.get(i), files.get(j), opt);
+				myScore = compy.compareFiles(); //Comparing them
+
+				scoresTable[i][j] = myScore; //Depositing them in a 2D array of the projects' indexes in the files arraylist
+
 			}
 		}
 
-		scany.close();
+
+		//Printing results
+		System.out.println("\n\nResults:");
+		
+		for (int i = 0; i < files.size(); i++) {
+			System.out.print("\t" + i);
+		}
+
+		for (int i = 0; i < files.size(); i++) {	
+
+			System.out.print("\n");
+			System.out.print(i);
+
+			for (int j = 0; j < files.size(); j++) {
+				System.out.print("\t" + scoresTable[i][j]);
+
+			}
+
+		}
 
 
 
