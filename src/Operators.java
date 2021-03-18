@@ -9,7 +9,7 @@ public class Operators {
 	//That could mean Operators is a bad name for the class... But are you gonna complain?
 	
 	public Operators(String operatorsFileName) throws FileNotFoundException {
-		File file = new File("src/"+operatorsFileName);
+		File file = new File(operatorsFileName);
 		Scanner scnr = new Scanner(file);
 		operatorList = new ArrayList<String>();
 		while(scnr.hasNext()) {
