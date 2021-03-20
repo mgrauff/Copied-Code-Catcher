@@ -50,6 +50,7 @@ public class main {
 
 				//Testing if zipped file and if so, unzip it
 				//FIXME we need to somehow reassign the new unzipped file back to input so we can continue
+				//UPDATE I forgot that the unzip could unzip to multiple files so I dont know how to implement this to main
 
 				if (Unzipper.isZipped(input)) {
 
