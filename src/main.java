@@ -50,9 +50,9 @@ public class main {
 
 				//Testing if zipped file and if so, unzip it
 				//FIXME we need to somehow reassign the new unzipped file back to input so we can continue
-				if (input.charAt(input.length() - 3) == 'z' 
-					&& input.charAt(input.length() - 2) == 'i' 
-					&& input.charAt(input.length() - 1) == 'p') {
+				//UPDATE I forgot that the unzip could unzip to multiple files so I dont know how to implement this to main
+
+				if (Unzipper.isZipped(input)) {
 
 						Unzipper zippy = new Unzipper(filePath + "/" + input);
 						zippy.unzipTo(filePath);
