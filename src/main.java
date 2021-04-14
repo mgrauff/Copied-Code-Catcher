@@ -2,13 +2,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-
 import java.awt.Container;
-
-
 import java.awt.Font;
 import java.awt.Component;
 
@@ -25,7 +21,7 @@ public class main {
 
 	public static void main(String[] args) throws IOException {
 
-		saveOutput();
+		//saveOutput();
 
 		String filePath; //Where all the files are coming from
 		ArrayList<FileProcessor> files = new ArrayList<FileProcessor>(); //ArrayList for our files
@@ -133,6 +129,13 @@ public class main {
 		// }
 	}//end public static void main
 
+	/**
+	 * saveOutput
+	 * Opens a gui for saving a file to a specific location
+	 * chosen by the user. Displays a cancle window if the
+	 * user decides to cancel the save process.
+	 * @return the file object chosen in the gui.
+	 */
 	public static File saveOutput() {
 		JFileChooser chooser = null;
 		File file, directory;
@@ -156,6 +159,11 @@ public class main {
 		return file;
 	}
 	
+	/**
+	 * Helper method for saveOutput to 
+	 * choose the font for the file chooser.
+	 * @param comp
+	 */
 	public static void setFileChooserFont(Component[] comp) {
 		final Font font = new Font("Arial",Font.PLAIN,18);
 		//creates a font with specifications of type arial and size 18

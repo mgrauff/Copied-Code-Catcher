@@ -51,6 +51,35 @@ public class FileProcessor {
     }//end parameterized constructor
 
     /**
+     * multiCharOperators iterates through the list of operators
+     * and detects operators that are two or more
+     * characters long.
+     * @return a HashSet of chars that are the start 
+     * of mutlichar operators
+     */
+    public HashSet multiCharOperators() {
+        HashSet <Character> mCharSet = new HashSet<Character>();
+        for(String op: operators.operatorList) {
+            if(op.length() >= 2)
+                mCharSet.add(op.charAt(0));
+        }
+        return mCharSet;
+    }
+
+    /**
+     * operatorEndings 
+     * @return
+     */
+    public HashSet operatorEndings() {
+        HashSet <String> laterCharSet = new HashSet<String>();
+        for(String op: operators.operatorList) {
+            if(op.length() >= 2)
+                laterCharSet.add(op.substring(1));
+        }
+        return laterCharSet;
+    }
+
+    /**
      * Processes the file attribute of the FileProcessor and
      * increments the operatorMaps operators when they are detected
      * within the file.
@@ -59,7 +88,9 @@ public class FileProcessor {
         Scanner sourceScanner = null; //scanner for reading file
         state control = state.LOOKING; //start out in the looking state
         //hold characters of interest in the searching process
-        char currChar = ' ', prevChar = ' ', backslash = ' '; 
+        char currChar = ' ', prevChar = ' ', backslash = ' ';
+        HashSet<Character> multiCSet = multiCharOperators(); 
+        HashSet<String> operatorEndings = operatorEndings();
         
         try { //initialize sourceScanner
             sourceScanner = new Scanner(this.processFile);    
@@ -74,18 +105,7 @@ public class FileProcessor {
             switch (control) {
                 case LOOKING: //look for the start of a new operator
                 currChar = sourceScanner.next().charAt(0);
-                    if (currChar == '=' ||
-                        currChar == '<' ||
-                        currChar == '>' ||
-                        currChar == '%' ||
-                        currChar == '/' ||
-                        currChar == '*' ||
-                        currChar == '+' ||
-                        currChar == '-' ||
-                        currChar == '&' ||
-                        currChar == '|' ||
-                        currChar == '!' ||
-                        currChar == '^') {
+                    if (multiCSet.contains(currChar)) {
                         /*save the current char before next cycle
                         if the operator could be the beginning of a
                         multi-character operator*/
@@ -103,125 +123,29 @@ public class FileProcessor {
 
                 case GOT_OPERATOR:
                 currChar = sourceScanner.next().charAt(0);
+                String totalOperator = "" + prevChar;
                     //disregard whitespace separating operator parts
                     if (currChar != ' ' ||
                         currChar != '\t' ||
                         currChar != '\n') { 
-                    /*proceed through first part of operators in the following order:
-                    =, <, >, *, +, -, ^, %, &, |, /, !*/
-                        if(prevChar == '=') {
-                            if (currChar == '=') {
-                                operatorMap.put("==", operatorMap.get("==") + 1);
-                                control = state.LOOKING;
-                            } else {
-                            operatorMap.put("=", operatorMap.get("=") + 1);  
-                            control = state.LOOKING;
-                            } // "="
-                        } else if (prevChar == '<') {
-                            if (currChar == '=') {
-                                operatorMap.put("<=", operatorMap.get("<=") + 1);
-                                control = state.LOOKING;
-                            } else if (currChar == '<') {
-                                operatorMap.put("<<", operatorMap.get("<<") + 1);  
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("<", operatorMap.get("<") + 1);  
-                                control = state.LOOKING;
-                            } // "<"
-                        } else if (prevChar == '>') {
-                            if (currChar == '=') {
-                                operatorMap.put(">=", operatorMap.get(">=") + 1);
-                                control = state.LOOKING;
-                            } else if (currChar == '>') {
-                                operatorMap.put(">>", operatorMap.get(">>") + 1);  
-                                control = state.LOOKING;
-                            }else {
-                                operatorMap.put(">", operatorMap.get(">") + 1);  
-                                control = state.LOOKING;
-                            } // ">"
-                        } else if (prevChar == '*') {
-                            if (currChar == '=') {
-                                operatorMap.put("*=", operatorMap.get("*=") + 1);
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("*", operatorMap.get("*") + 1);  
-                                control = state.LOOKING;
-                            } // "*"
-                        } else if (prevChar == '+') {
-                            if (currChar == '=') {
-                                operatorMap.put("+=", operatorMap.get("+=") + 1);
-                                control = state.LOOKING;
-                            } else if (currChar == '+') {
-                                operatorMap.put("++", operatorMap.get("++") + 1);
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("+", operatorMap.get("+") + 1);  
-                                control = state.LOOKING;
-                            } // "+"
-                        } else if (prevChar == '-') {
-                            if (currChar == '=') {
-                                operatorMap.put("-=", operatorMap.get("-=") + 1);
-                                control = state.LOOKING;
-                            } else if (currChar == '-') {
-                                operatorMap.put("--", operatorMap.get("--") + 1);
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("-", operatorMap.get("-") + 1);  
-                                control = state.LOOKING;
-                            } // "-"
-                        } else if (prevChar == '^') {
-                            if (currChar == '=') {
-                                operatorMap.put("^=", operatorMap.get("^=") + 1);
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("^", operatorMap.get("^") + 1);  
-                                control = state.LOOKING;
-                            } // "^"
-                        } else if (prevChar == '%') {
-                            if (currChar == '=') {
-                                operatorMap.put("%=", operatorMap.get("%=") + 1);
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("%", operatorMap.get("%") + 1);  
-                                control = state.LOOKING;
-                            } // "%"
-                        } else if (prevChar == '&') {
-                            if (currChar == '&') {
-                                operatorMap.put("&&", operatorMap.get("&&") + 1);
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("&", operatorMap.get("&") + 1);  
-                                control = state.LOOKING;
-                            } // "&"
-                        } else if (prevChar == '|') {
-                            if (currChar == '|') {
-                                operatorMap.put("||", operatorMap.get("||") + 1);
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("|", operatorMap.get("|") + 1);  
-                                control = state.LOOKING;
-                            } // "|"
-                        } else if (prevChar == '/') {
-                            if (currChar == '=') {
-                                operatorMap.put("/=", operatorMap.get("/=") + 1);
-                                control = state.LOOKING;
-                            } else if (currChar == '/') {
+                        //check for comments    
+                        if(prevChar == '/') {
+                            if(currChar == '/')
                                 control = state.IN_LINE_COMMENT;
-                            } else if (currChar == '*') {
+                            if(currChar =='*') 
                                 control = state.IN_MULTI_LINE_COMMENT;
+                        } else { //if not in comment                     
+                            if(operatorEndings.contains("" + currChar)) {
+                                /*keep track of the total operator if the
+                                current char is part of an operator ending*/
+                                totalOperator = totalOperator + currChar; 
+                                operatorMap.put(totalOperator, operatorMap.get(totalOperator) + 1);
+                                control = state.LOOKING;
                             } else {
-                                operatorMap.put("/", operatorMap.get("/") + 1);  
+                                operatorMap.put(totalOperator, operatorMap.get(totalOperator) + 1);
                                 control = state.LOOKING;
-                            } // "/"
-                        } else if (prevChar == '!') {
-                            if (currChar == '=') {
-                                operatorMap.put("!=", operatorMap.get("!=") + 1);
-                                control = state.LOOKING;
-                            } else {
-                                operatorMap.put("!", operatorMap.get("!") + 1);
-                                control = state.LOOKING;
-                            } // "!"
-                        } //operator else ifs
+                            }
+                        }//operator else ifs
                     }//whitespace if
                 break; 
                 //end GOT_OPERATOR
