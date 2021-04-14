@@ -234,6 +234,12 @@ public class FileProcessor {
     }
     
     
+    
+    /**
+     * Determines if a file is corrupt
+     * @param file
+     * @return boolean value
+     */
 	private boolean isFileCorrupt(File file) {
 		if(!file.canRead()) {
 			System.out.println("File was unreadable");
