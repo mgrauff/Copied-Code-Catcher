@@ -6,6 +6,7 @@ public class FileProcessor {
 	Operators operators; //operators to be found in file 
     public File processFile; //file to be searched for operators
     private Map<String,Integer> operatorMap; //stores the operators and number of instances
+    public boolean isCorrupt; //says whether file is corrupt or not
     enum state { //states for controlling the FSM
         LOOKING,
         GOT_OPERATOR,
@@ -40,6 +41,10 @@ public class FileProcessor {
      */
     public FileProcessor(File sourceCode, Operators operators) {
         processFile = sourceCode;
+        isCorrupt = isFileCorrupt(this.processFile);
+        if(isCorrupt) {
+        	System.out.println("Corrupted file: " + processFile.getName());
+        }
     	operatorMap = new HashMap<String,Integer>();
     	
     	//Passing operators as an argument will be better
@@ -97,6 +102,9 @@ public class FileProcessor {
         } catch (FileNotFoundException e) {
             System.out.println("Error opening file");
         }//try catch
+        
+
+        
         
         sourceScanner.useDelimiter(""); //important for reading one char at a time
         
@@ -219,4 +227,32 @@ public class FileProcessor {
     public int mapGet(String op) {
     	return operatorMap.get(op);
     }
+    
+    
+	private boolean isFileCorrupt(File file) {
+		if(!file.canRead()) {
+			System.out.println("File was unreadable");
+			return true;
+		}
+		
+		
+		if(file.length()<= 0) {
+			System.out.println("File was empty");
+			return true;
+		}
+
+		Scanner scnr;
+		try {
+			scnr = new Scanner(file);
+			scnr.next();
+			scnr.close();
+		} catch (Exception e) {
+			System.out.println("Scanner.next() did not exist");
+			return true;
+		}
+		
+		
+		
+		return false;
+	}
 }
