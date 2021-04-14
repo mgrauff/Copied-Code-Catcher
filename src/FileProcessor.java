@@ -90,6 +90,11 @@ public class FileProcessor {
      * within the file.
      */
     public void read() {
+    	if(isCorrupt) {
+    		System.out.println("Cannot read corrupt file: "+ processFile.getName());
+    		return;
+    	}
+    	
         Scanner sourceScanner = null; //scanner for reading file
         state control = state.LOOKING; //start out in the looking state
         //hold characters of interest in the searching process
