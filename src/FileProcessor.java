@@ -164,15 +164,7 @@ public class FileProcessor {
                 //end GOT_OPERATOR
 
                 case IN_STRING:
-                    currChar = sourceScanner.next().charAt(0);
-                    if (currChar == '\\') {
-                        backslash = '\\'; //store potential escape character
-                    } else {
-                        backslash = '1'; //in case there are other escape characters before the end of the string
-                    }
-                    
-                    if (currChar == '"' && backslash != '\\') { 
-                        //only end the quotation if the '"' is the end of the quote and not an escape sequence
+                    if(inString(sourceScanner)) {
                         control = state.LOOKING;
                     }
                 break;
@@ -193,17 +185,8 @@ public class FileProcessor {
                 //end IN_LINE_COMMENT
 
                 case IN_MULTI_LINE_COMMENT:
-                currChar = sourceScanner.next().charAt(0);
-                if (prevChar == '*') {
-                    if (currChar == '/') { //ends multiline comment
-                        control = state.LOOKING;
-                    }
-                }
-                if(currChar == '*') { //potentially ends the comment
-                    prevChar = currChar; //save the * character
-                } else {
-                    //only save the * character if it directly precedes the /
-                    prevChar = ' ';
+                if(multiLineComment(sourceScanner)) {
+                    control = state.LOOKING;
                 }
                 break;
                 //end IN_MULTI_LINE_COMMENT
@@ -216,15 +199,46 @@ public class FileProcessor {
             }//end switch
 
         }//end while FSM
- 
-        //Print any instances of operators
-        // for(String op: operators.operatorList) {
-        //     if(operatorMap.get(op) >  0) {
-    	// 	    System.out.println(op + " occurs: " + operatorMap.get(op));
-        //     }
-    	// }
-   
+
     }//end read
+
+    public boolean inString(Scanner s) {
+        char currChar = ' ', backslash = ' ';
+        boolean done = false; 
+
+        currChar = s.next().charAt(0);
+                    if (currChar == '\\') {
+                        backslash = '\\'; //store potential escape character
+                    } else {
+                        backslash = '1'; //in case there are other escape characters before the end of the string
+                    }
+                    
+                    if (currChar == '"' && backslash != '\\') { 
+                        //only end the quotation if the '"' is the end of the quote and not an escape sequence
+                        done = true;
+                    }
+
+        return done;
+    }
+
+    public boolean multiLineComment(Scanner s) {
+        char currChar = ' ', prevChar = ' ';
+        boolean done = false;
+        
+        currChar = s.next().charAt(0);
+        if (prevChar == '*') {
+            if (currChar == '/') { //ends multiline comment
+                done = true;
+            }
+        }
+        if(currChar == '*') { //potentially ends the comment
+            prevChar = currChar; //save the * character
+        } else {
+            //only save the * character if it directly precedes the /
+            prevChar = ' ';
+        }
+        return done;
+    }
     
     
     //Returns a value for a map
