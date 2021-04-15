@@ -14,17 +14,13 @@ public class Compare {
 	
 	public double compareFiles() {
 		//Calculate 1 - RMSE to find similarity score
-		double scaleSum = 0.0; 
+		double scaleSum = 0.0;
 		int num1,num2, sum;
 		int numOps = 0;
 		int maxUse =0;
-		
-		//Loop through operatorList to get to every operator
 		for(String op:operators.operatorList) {
-			num1 = f1.mapGet(op);//Get the value of op for f1
-			num2 = f2.mapGet(op);//Get the value of op for f2
-			
-			//compare the value with maxUse
+			num1 = f1.mapGet(op);
+			num2 = f2.mapGet(op);
 			if(num1> maxUse) {
 				maxUse = num1;
 			}
@@ -58,7 +54,7 @@ public class Compare {
 		}
 		
 		
-		return 1.0 - Math.sqrt(scaleSum/(numOps*1.0)); //return the final calculation
+		return 1.0 - Math.sqrt(scaleSum/(numOps*1.0));
 	}
 	
 	/*
@@ -69,7 +65,7 @@ public class Compare {
 			ratio = num operartor in file1/ num operator in file 2
 			r1 = file1.map.get(operator)
 			sum = numOperator in file1+ numOperator in file 2
-			score += sum*ratio 
+			score += sum*ratio
 	 */
 }
 
