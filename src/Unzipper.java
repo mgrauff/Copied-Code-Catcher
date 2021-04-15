@@ -13,6 +13,7 @@ public class Unzipper {
 	
 	public static boolean isZipped(File f) throws IOException {
 		boolean isZipped = false;
+		System.out.println(f.exists());
 		DataInputStream di = new DataInputStream(new FileInputStream(f));	
 		try {	
 			long zipKey = di.readInt();
