@@ -21,6 +21,12 @@ public class Compare {
 		for(String op:operators.operatorList) {
 			num1 = f1.mapGet(op);
 			num2 = f2.mapGet(op);
+			
+			if(num1 < 0 || num2< 0) {
+				System.out.println("ERROR: Num appearances less than 0");
+				return -1;
+			}
+			
 			if(num1> maxUse) {
 				maxUse = num1;
 			}
