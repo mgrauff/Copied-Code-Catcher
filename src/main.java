@@ -58,12 +58,8 @@ public class main {
 				//UPDATE I forgot that the unzip could unzip to multiple files so I dont know how to implement this to main
 
 				if (Unzipper.isZipped(input)) {
-						
+
 						Unzipper zippy = new Unzipper(filePath + "/" + input);
-						if(zippy.isCorrupt()) {
-							System.out.println("ZIPPED FILE: "+ filePath + " IS CORRUPT");
-							//FIXME we need to figure out what we want to do here
-						}
 						zippy.unzipTo(filePath);
 
 					}
