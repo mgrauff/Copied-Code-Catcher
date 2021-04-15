@@ -2,11 +2,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Component;
 
 
 //Alex Chen
@@ -21,7 +16,7 @@ public class main {
 
 	public static void main(String[] args) throws IOException {
 
-		//saveOutput();
+		
 
 		String filePath; //Where all the files are coming from
 		ArrayList<FileProcessor> files = new ArrayList<FileProcessor>(); //ArrayList for our files
@@ -127,58 +122,6 @@ public class main {
 		// 	System.out.println("Error");
 		
 		// }
-	}//end public static void main
-
-	/**
-	 * saveOutput
-	 * Opens a gui for saving a file to a specific location
-	 * chosen by the user. Displays a cancle window if the
-	 * user decides to cancel the save process.
-	 * @return the file object chosen in the gui.
-	 */
-	public static File saveOutput() {
-		JFileChooser chooser = null;
-		File file, directory;
-		int status;
-		chooser = new JFileChooser();
-		setFileChooserFont(chooser.getComponents());
-		status = chooser.showSaveDialog(null);
-
-		if (status == JFileChooser.APPROVE_OPTION) {
-			file = chooser.getSelectedFile();
-			directory = chooser.getCurrentDirectory();
-			System.out.println("Directory: " +directory.getName());
-			System.out.println("File Selected to Open: "+file.getName());
-			System.out.println("Full path name: "+file.getAbsolutePath());
-		}	//brings up a menu to select a file to copy
-		else {
-			JOptionPane.showMessageDialog(null,"Open File Dialog canceled");
-			file = null;
-		}	//deals with problem if chosen file is not compatable	
-		
-		return file;
 	}
-	
-	/**
-	 * Helper method for saveOutput to 
-	 * choose the font for the file chooser.
-	 * @param comp
-	 */
-	public static void setFileChooserFont(Component[] comp) {
-		final Font font = new Font("Arial",Font.PLAIN,18);
-		//creates a font with specifications of type arial and size 18
 
-		for (int i=0; i<comp.length; i++) {		//sets every container
-			//to have a font according to the specifications
-			if (comp[i] instanceof Container) {
-				setFileChooserFont(((Container)comp[i]).getComponents());
-			}
-			try {comp[i].setFont(font);}	//checks if component has
-			catch (Exception e) {}		//the correct font
-
-		}//for i
-	}//set FC font
-	
-
-
-}//end class
+}
