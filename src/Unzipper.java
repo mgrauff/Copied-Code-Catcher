@@ -7,9 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class Unzipper {
+	private boolean isCorrupt;
 	
 	public static boolean isZipped(File f) throws IOException {
 		boolean isZipped = false;
@@ -51,6 +53,13 @@ public class Unzipper {
 		//verify that the source is zipped
 		if(!Unzipper.isZipped(f)) {
 			throw new IOException("The provided file is not zipped");
+		}
+		
+		isCorrupt = isZipCorrupt(f);
+		if(isCorrupt) {
+			
+			//FIXME we will need to catch this error
+			throw new IOException("The provided zip is corrupt");
 		}
 		
 		this.src = src;
@@ -95,6 +104,31 @@ public class Unzipper {
 		zipStream.close();
 		
 	}//unzipTo
+	
+	public boolean isCorrupt() {
+		return this.isCorrupt;
+	}
+	
+	/**
+	 * Determines if zipped file is corrupted or not
+	 * @param zipped file
+	 * @return boolean value
+	 */
+	 private boolean isZipCorrupt(File file) {
+		    ZipFile zFile;
+		    try {
+		        zFile = new ZipFile(file);
+		        zFile.close();
+		        return false;
+		        
+		        
+		    } catch (Exception e) {
+		    	System.out.println(file.getName() + " was corrupt");
+		    	
+		        return true;
+		    }
+
+		}
 
 	
 }//Unzipper 
