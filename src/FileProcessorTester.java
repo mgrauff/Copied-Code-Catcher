@@ -16,7 +16,8 @@ class FileProcessorTester {
 	@Test
 	public void testBlankFile() throws IOException {
 		try {
-            o = new Operators("OperatorsInJava.txt");
+            //o = new Operators("OperatorsInJava.txt");
+            o = new Operators();
             w = new FileWriter(myFile);
         } catch (Exception e) {}
 		FileProcessor f = new FileProcessor(myFile, o);
@@ -32,7 +33,8 @@ class FileProcessorTester {
 	@Test
 	public void addOperator() throws IOException {
         try {
-            o = new Operators("OperatorsInJava.txt");
+            //o = new Operators("OperatorsInJava.txt");
+        	o = new Operators();
             w = new FileWriter(myFile);
         } catch (Exception e) {}
 		FileProcessor f = new FileProcessor(myFile, o);
@@ -49,7 +51,8 @@ class FileProcessorTester {
 	@Test
 	public void addMultiCharOperator() throws IOException {
         try {
-            o = new Operators("OperatorsInJava.txt");
+            //o = new Operators("OperatorsInJava.txt");
+        	o = new Operators();
             w = new FileWriter(myFile);
         } catch (Exception e) {}
 		FileProcessor f = new FileProcessor(myFile, o);
@@ -66,7 +69,8 @@ class FileProcessorTester {
 	@Test
 	public void singleLineCommentOperator() throws IOException {
         try {
-            o = new Operators("OperatorsInJava.txt");
+            //o = new Operators("OperatorsInJava.txt");
+        	o = new Operators();
             w = new FileWriter(myFile);
         } catch (Exception e) {}
 		FileProcessor f = new FileProcessor(myFile, o);
@@ -83,7 +87,8 @@ class FileProcessorTester {
 	@Test
 	public void multiLineCommentOperator() throws IOException {
         try {
-            o = new Operators("OperatorsInJava.txt");
+            //o = new Operators("OperatorsInJava.txt");
+        	o = new Operators();
             w = new FileWriter(myFile);
         } catch (Exception e) {}
 		FileProcessor f = new FileProcessor(myFile, o);
@@ -101,7 +106,8 @@ class FileProcessorTester {
 	@Test
 	public void singleQuoteOperator() throws IOException {
         try {
-            o = new Operators("OperatorsInJava.txt");
+            //o = new Operators("OperatorsInJava.txt");
+        	o = new Operators();
             w = new FileWriter(myFile);
         } catch (Exception e) {}
 		FileProcessor f = new FileProcessor(myFile, o);
