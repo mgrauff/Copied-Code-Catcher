@@ -26,7 +26,8 @@ public class main {
 		String filePath; //Where all the files are coming from
 		ArrayList<FileProcessor> files = new ArrayList<FileProcessor>(); //ArrayList for our files
 
-		Operators opt = new Operators("OperatorsInJava.txt");
+		//Operators opt = new Operators("OperatorsInJava.txt");
+		Operators opt = new Operators();
 		double myScore;
 		double[][] scoresTable;
 

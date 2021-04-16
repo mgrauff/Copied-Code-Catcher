@@ -25,7 +25,8 @@ public class FileProcessor {
     public FileProcessor() throws FileNotFoundException {
     	operatorMap = new HashMap<String,Integer>();
     	//But in our default constructor, we can do this
-    	operators = new Operators("OperatorsInJava.txt"); 
+    	//operators = new Operators("OperatorsInJava.txt"); 
+    	operators = new Operators(); 
     	for(String op: operators.operatorList) {
     		operatorMap.put(op, 0);
     	}
