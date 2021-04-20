@@ -15,6 +15,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.chart.*;
+import javafx.scene.chart.XYChart.Data;
 
 public class ResultsScene extends Scene {
 
@@ -46,7 +48,53 @@ public class ResultsScene extends Scene {
 		
 		root.getChildren().add(worstScores());
 		root.getChildren().add(toggleButton());
+		root.getChildren().add(resultsGraph(scores));
+		
 	}
+	
+	private BarChart resultsGraph(double [][] scores) {
+		CategoryAxis xAxis = new CategoryAxis();
+		NumberAxis yAxis = new NumberAxis();
+		BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+		barChart.setTitle("Analysis results");
+		double percentGreen = 0, percentYellow = 0, percentRed = 0, total = 0;
+		
+		
+		XYChart.Series<String, Number> series1 = new XYChart.Series<>(), 
+				series2 = new XYChart.Series<>(), 
+				series3 = new XYChart.Series<>();
+		
+		xAxis.setLabel("Plagiarized Categories");
+		yAxis.setLabel("Percent Plagiarized");
+		
+		
+		for(int i = 0; i < scores.length; i++) {
+			for(int j = 0; j < scores[i].length; j++) {
+				if(scores[i][j] < YELLOW_THRESHOLD) {
+					percentGreen++;
+				} else if (scores[i][j] < RED_THRESHOLD) {
+					percentYellow++;
+				} else if (scores[i][j] >= RED_THRESHOLD) {
+					percentRed++;
+				}
+			}
+		}
+		
+		total = percentGreen + percentYellow + percentRed;
+		percentGreen /= total;
+		percentYellow /= total;
+		percentRed /= total;
+		
+		series1.getData().add(new XYChart.Data<>("Over 80%", percentRed));
+		series2.getData().add(new XYChart.Data<>("Over 60%", percentYellow));
+		series3.getData().add(new XYChart.Data<>("Under 60%", percentGreen));
+		
+		barChart.getData().addAll(series1, series2, series3);
+		
+		
+		return barChart;
+	}//end resultsGraph
+	
 	public ResultsScene(double width, double height, double[][] scores, String[] names) {
 		this(new VBox(), width, height, scores, names);
 	}
@@ -172,4 +220,9 @@ public class ResultsScene extends Scene {
 		s.getChildren().add(new Text("ERROR: " + msg));
 		return s;
 	}
+	
+	
+	
+	
+	
 }

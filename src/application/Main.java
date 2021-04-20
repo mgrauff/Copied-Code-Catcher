@@ -15,6 +15,7 @@ public class Main extends Application {
 			{.5, .8, .1, .2,  1}};
         String[]  names = {"Matt", "Luke", "Paul", "Enoch", "Alex"};
         primaryStage.setScene(new ResultsScene(500, 400, scores, names));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 	
