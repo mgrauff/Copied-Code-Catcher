@@ -19,7 +19,7 @@ public class ChooseFileMain extends Application implements EventHandler<ActionEv
 	ChooseFile fc = new ChooseFile();
 	
 	public void start(Stage primaryStage) {
-		
+		//
 		/*
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/application/ChooseFile.fxml"));

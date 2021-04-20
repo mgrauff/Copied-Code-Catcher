@@ -12,8 +12,7 @@ public class ChooseFile {
 	String fileToUnzipPath;
 	String unzipToThisFilePath;
 	List<File> selectedFiles;
-	int i;
-	
+	//
 	public ChooseFile() {
 		
 		unzipToThisFilePath = null;
