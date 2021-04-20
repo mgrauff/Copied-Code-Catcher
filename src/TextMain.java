@@ -130,7 +130,7 @@ public class TextMain {
 		// }
 	}
 
-		/**
+	/**
 	 * saveOutput
 	 * Opens a gui for saving a file to a specific location
 	 * chosen by the user. Displays a cancle window if the
@@ -142,14 +142,14 @@ public class TextMain {
 		File file, directory;
 		int status;
 		chooser = new JFileChooser();
-		setFileChooserFont(chooser.getComponents());
+		setFileChooserFont(chooser.getComponents(), 18);
 		status = chooser.showSaveDialog(null);
 
 		if (status == JFileChooser.APPROVE_OPTION) {
 			file = chooser.getSelectedFile();
 			directory = chooser.getCurrentDirectory();
 			System.out.println("Directory: " +directory.getName());
-			System.out.println("File Selected to Open: "+file.getName());
+			System.out.println("File Selected to Open: "+ file.getName());
 			System.out.println("Full path name: "+file.getAbsolutePath());
 		}	//brings up a menu to select a file to copy
 		else {
@@ -158,21 +158,21 @@ public class TextMain {
 		}	//deals with problem if chosen file is not compatable	
 
 		return file;
-	}
+	}//end saveOutput
 
 	/**
 	 * Helper method for saveOutput to 
 	 * choose the font for the file chooser.
 	 * @param comp
 	 */
-	public static void setFileChooserFont(Component[] comp) {
-		final Font font = new Font("Arial",Font.PLAIN,18);
+	public static void setFileChooserFont(Component[] comp, int fontSize) {
+		final Font font = new Font("Arial",Font.PLAIN, fontSize);
 		//creates a font with specifications of type arial and size 18
 
 		for (int i=0; i<comp.length; i++) {		//sets every container
 			//to have a font according to the specifications
 			if (comp[i] instanceof Container) {
-				setFileChooserFont(((Container)comp[i]).getComponents());
+				setFileChooserFont(((Container)comp[i]).getComponents(), fontSize);
 			}
 			try {comp[i].setFont(font);}	//checks if component has
 			catch (Exception e) {}		//the correct font

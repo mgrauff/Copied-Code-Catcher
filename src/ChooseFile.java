@@ -3,6 +3,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
 
@@ -15,7 +18,7 @@ public class ChooseFile {
 	//
 	public ChooseFile() {
 		
-		unzipToThisFilePath = null;
+		unzipToThisFilePath = getChosenDirectory().getAbsolutePath();
 		try {
 			uz = new Unzipper(unzipToThisFilePath);
 		} catch (IOException e) {
@@ -31,7 +34,7 @@ public class ChooseFile {
 	
 	public List<File> StartButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
-		fc.setInitialDirectory(new File("C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350"));
+		fc.setInitialDirectory(fc.getInitialDirectory());
 		selectedFiles = fc.showOpenMultipleDialog(null);
 		
 		if(selectedFiles != null) {
@@ -68,6 +71,33 @@ public class ChooseFile {
 			}
 		}
 	}
+	
+	/**
+	 * getChosenDirectory
+	 * Opens a gui for saving a file to a specific location
+	 * chosen by the user. Displays a cancle window if the
+	 * user decides to cancel the save process.
+	 * @return the file object chosen in the gui.
+	 */
+	public static File getChosenDirectory() {
+		JFileChooser chooser = null;
+		File directory;
+		int status;
+		chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		TextMain.setFileChooserFont(chooser.getComponents(), 30);
+		status = chooser.showOpenDialog(null);
+
+		if (status == JFileChooser.APPROVE_OPTION) {
+			directory = chooser.getSelectedFile();
+		}	//brings up a menu to select a file to copy
+		else {
+			JOptionPane.showMessageDialog(null,"Open File Dialog canceled");
+			directory = null;
+		}	//deals with problem if chosen file is not compatable	
+
+		return directory;
+	}//end getChosenDirectory
 	
 	
 }
