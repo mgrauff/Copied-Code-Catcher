@@ -54,47 +54,59 @@ public class ResultsScene extends Scene {
 		
 	}
 	
+	/**
+	 * resultsGraph generates a stacked bar chart what percent of submission
+	 * fall into which category of similarity to other submissions 
+	 * @param scores
+	 * @return barChart - a StackedBarChart object that is the results graph
+	 */
 	private StackedBarChart resultsGraph(double [][] scores) {
+		//Variable Dictionary
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
 		StackedBarChart<String, Number> barChart = new StackedBarChart<>(xAxis, yAxis);
+		double percentGreen = 0, //stores the number of comparisons that are below the yellow threshold
+				percentYellow = 0, //stores the number of comparisons that are above the yellow threshold
+				percentRed = 0, //stores the number of comparisons that are above the red threshold
+				total = 0;	//stores the total number of comparison scores so that percentages may be calculated	
+		XYChart.Series<String, Number> percentRedSeries = new XYChart.Series<>(), //series that correpsond to the double percent scores 
+				percentYellowSeries = new XYChart.Series<>(),  
+				percentGreenSeries = new XYChart.Series<>();
+		
+		//Set title of chart and axes
 		barChart.setTitle("Analysis results");
-		double percentGreen = 0, percentYellow = 0, percentRed = 0, total = 0;
-		
-		
-		XYChart.Series<String, Number> series1 = new XYChart.Series<>(), 
-				series2 = new XYChart.Series<>(), 
-				series3 = new XYChart.Series<>();
-		
 		xAxis.setLabel("Plagiarized Categories");
 		yAxis.setLabel("Percent Plagiarized");
 		
-		for(int i = 0; i < scores.length; i++) {
-			for(int j = 0; j < scores[i].length; j++) {
-				if(scores[i][j] <= YELLOW_THRESHOLD) {
-					percentGreen ++;
-				} else if (scores[i][j] <= RED_THRESHOLD) {
-					percentYellow ++;
-				} else if (scores[i][j] < 1) {
-					percentRed ++;
+		//Get the number of comparison scores for each category
+		for(int row = 0; row < scores.length; row++) {
+			for(int col = 0; col < scores[row].length; col++) {
+				if(scores[row][col] <= YELLOW_THRESHOLD) {
+					percentGreen++;
+				} else if (scores[row][col] <= RED_THRESHOLD) {
+					percentYellow++;
+				} else if (scores[row][col] < 1) {
+					percentRed++;
 				}
-			}
-		}
+			}//end for col
+		}//end for row
 		
+		//Calculate percentages for the chart
 		total = percentGreen + percentYellow + percentRed;
 		percentGreen /= total;
 		percentYellow /= total;
 		percentRed /= total;
 		
+		//Add the percentages to the chart
 		final XYChart.Data<String, Number> overEighty = new XYChart.Data("Over 80%", percentRed);
 		final XYChart.Data<String, Number> overSixty = new XYChart.Data<>("Over 60%", percentYellow);
 		final XYChart.Data<String, Number> underSixty = new XYChart.Data<>("Under 60%", percentGreen);
+		percentRedSeries.getData().add(overEighty);
+		percentYellowSeries.getData().add(overSixty);
+		percentGreenSeries.getData().add(underSixty);
+		barChart.getData().addAll(percentRedSeries, percentYellowSeries, percentGreenSeries);
 		
-		series1.getData().add(overEighty);
-		series2.getData().add(overSixty);
-		series3.getData().add(underSixty);
-		
-		barChart.getData().addAll(series1, series2, series3);
+		//Graphical settings for the chart
 		barChart.lookupAll(".default-color0.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: red;"));
 		barChart.lookupAll(".default-color1.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: yellow;"));
 		barChart.lookupAll(".default-color2.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: green;"));
