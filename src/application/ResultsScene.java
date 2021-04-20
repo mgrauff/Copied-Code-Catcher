@@ -1,8 +1,10 @@
 package application;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
@@ -52,10 +54,10 @@ public class ResultsScene extends Scene {
 		
 	}
 	
-	private BarChart resultsGraph(double [][] scores) {
+	private StackedBarChart resultsGraph(double [][] scores) {
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
-		BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+		StackedBarChart<String, Number> barChart = new StackedBarChart<>(xAxis, yAxis);
 		barChart.setTitle("Analysis results");
 		double percentGreen = 0, percentYellow = 0, percentRed = 0, total = 0;
 		
@@ -67,15 +69,14 @@ public class ResultsScene extends Scene {
 		xAxis.setLabel("Plagiarized Categories");
 		yAxis.setLabel("Percent Plagiarized");
 		
-		
 		for(int i = 0; i < scores.length; i++) {
 			for(int j = 0; j < scores[i].length; j++) {
-				if(scores[i][j] < YELLOW_THRESHOLD) {
-					percentGreen++;
-				} else if (scores[i][j] < RED_THRESHOLD) {
-					percentYellow++;
-				} else if (scores[i][j] >= RED_THRESHOLD) {
-					percentRed++;
+				if(scores[i][j] <= YELLOW_THRESHOLD) {
+					percentGreen ++;
+				} else if (scores[i][j] <= RED_THRESHOLD) {
+					percentYellow ++;
+				} else if (scores[i][j] < 1) {
+					percentRed ++;
 				}
 			}
 		}
@@ -85,15 +86,25 @@ public class ResultsScene extends Scene {
 		percentYellow /= total;
 		percentRed /= total;
 		
-		series1.getData().add(new XYChart.Data<>("Over 80%", percentRed));
-		series2.getData().add(new XYChart.Data<>("Over 60%", percentYellow));
-		series3.getData().add(new XYChart.Data<>("Under 60%", percentGreen));
+		final XYChart.Data<String, Number> overEighty = new XYChart.Data("Over 80%", percentRed);
+		final XYChart.Data<String, Number> overSixty = new XYChart.Data<>("Over 60%", percentYellow);
+		final XYChart.Data<String, Number> underSixty = new XYChart.Data<>("Under 60%", percentGreen);
+		
+		series1.getData().add(overEighty);
+		series2.getData().add(overSixty);
+		series3.getData().add(underSixty);
 		
 		barChart.getData().addAll(series1, series2, series3);
-		
+		barChart.lookupAll(".default-color0.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: red;"));
+		barChart.lookupAll(".default-color1.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: yellow;"));
+		barChart.lookupAll(".default-color2.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: green;"));
+		barChart.setLegendVisible(false);
+		barChart.setMaxWidth(800);
 		
 		return barChart;
 	}//end resultsGraph
+	
+
 	
 	public ResultsScene(double width, double height, double[][] scores, String[] names) {
 		this(new VBox(), width, height, scores, names);
