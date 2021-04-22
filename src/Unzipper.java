@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -60,8 +61,11 @@ public class Unzipper {
 	 * 
 	 * @param destDir the directory to which all files should be copied
 	 * @throws IOException 
+	 * @returns ArrayList of Unzipped files
 	 */
-	public void unzipTo(String destDir) throws IOException {
+	public ArrayList<File> unzipTo(String destDir) throws IOException {
+		
+		ArrayList<File> entryListOut = new ArrayList<File>(); //create list for returning files
 		
 		//make sure the directory path ends with a / or \
 		char finalChar = destDir.charAt(destDir.length() - 1);
@@ -88,10 +92,14 @@ public class Unzipper {
 			
 			outStream.close();
 			
+			entryListOut.add(new File(destDir + entry.getName())); //Add file to list
+			
 			entry = zipStream.getNextEntry();	//progress to next entry
 		}
 		zipStream.closeEntry();
 		zipStream.close();
+		
+		return entryListOut;
 		
 	}//unzipTo
 
