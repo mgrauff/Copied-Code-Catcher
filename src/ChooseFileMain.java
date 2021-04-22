@@ -72,6 +72,7 @@ public class ChooseFileMain extends Application implements EventHandler<ActionEv
 			fc.StartButtonAction(event);
 		}
 		
+		
 		if(event.getSource() == selectUnzipToFileButton) {
 			try {
 				fc.UnzipToSelectedFileAction(event);

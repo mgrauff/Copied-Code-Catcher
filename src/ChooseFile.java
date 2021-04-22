@@ -16,12 +16,6 @@ public class ChooseFile {
 	public ChooseFile() {
 		
 		unzipToThisFilePath = null;
-		try {
-			uz = new Unzipper(unzipToThisFilePath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		selectedFiles = new ArrayList<File>();
 		fileToUnzipPath = null;
 		
@@ -46,8 +40,11 @@ public class ChooseFile {
 		else {
 			System.out.println("file is not valid");
 		}
+		
 		return null;
 	}
+	
+	
 	
 	public void UnzipToSelectedFileAction(ActionEvent event) throws IOException {
 		
@@ -55,19 +52,17 @@ public class ChooseFile {
 		fc.setInitialDirectory(new File("C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350"));
 		File selectedFile = fc.showOpenDialog(null);
 		unzipToThisFilePath = selectedFile.getAbsolutePath();
-		
-		
+		//unzipToThisFilePath = "C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350\\SectA_OrigUnzippedToThisFile";
 		for(int i = 0; i < selectedFiles.size(); i++) {
-			//System.out. println(selectedFiles.get(i).getAbsolutePath());
 			
 			fileToUnzipPath = selectedFiles.get(i).getAbsolutePath();
+			
+			uz = new Unzipper(fileToUnzipPath);
 			
 			if(Unzipper.isZipped(fileToUnzipPath)) {
 				
 				uz.unzipTo(unzipToThisFilePath);
-			}
+			}		
 		}
 	}
-	
-	
 }
