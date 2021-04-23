@@ -16,7 +16,7 @@ public class ChooseFileMain extends Application implements EventHandler<ActionEv
 	Stage window;
 	Button startButton;
 	Button selectUnzipToFileButton;
-	ChooseFile fc = null;//new ChooseFile();
+	ChooseFile fc = new ChooseFile();
 	
 	public void start(Stage primaryStage) {
 		//
@@ -69,12 +69,12 @@ public class ChooseFileMain extends Application implements EventHandler<ActionEv
 		// TODO Auto-generated method stub
 		if(event.getSource()== startButton) {
 			
-			//fc.StartButtonAction(event);
+			fc.StartButtonAction(event);
 		}
+		
 		
 		if(event.getSource() == selectUnzipToFileButton) {
 			try {
-				fc = new ChooseFile();
 				fc.UnzipToSelectedFileAction(event);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

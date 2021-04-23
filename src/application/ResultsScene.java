@@ -1,11 +1,13 @@
 package application;
 
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -17,8 +19,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.chart.*;
-import javafx.scene.chart.XYChart.Data;
 
 public class ResultsScene extends Scene {
 
@@ -317,9 +317,4 @@ public class ResultsScene extends Scene {
 		s.getChildren().add(new Text("ERROR: " + msg));
 		return s;
 	}
-	
-	
-	
-	
-	
 }
