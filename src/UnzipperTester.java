@@ -188,6 +188,9 @@ class UnzipperTester {
         unzedFile1.delete();
         unzedFile2.delete();
         unzedFile3.delete();
+        
+        File zipFile = new File("MyZipM.zip");
+        zipFile.delete();
 
         
 		//Test that text has not changed
