@@ -1,6 +1,8 @@
 package application;
 	
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -14,7 +16,18 @@ public class Main extends Application {
 			{.4, .7, .9,  1, .2}, 
 			{.5, .8, .1, .2,  1}};
         String[]  names = {"Matt", "Luke", "Paul", "Enoch", "Alex"};
-        primaryStage.setScene(new ResultsScene(500, 400, scores, names));
+        
+        IntroScene intro = new IntroScene(500, 400);   
+        intro.addAdvanceEvent(new EventHandler<ActionEvent>() {
+        	@Override
+        	public void handle(ActionEvent event) {
+        		primaryStage.setScene(new ResultsScene(intro.getWidth(), intro.getHeight(), scores, names));
+        	}
+        });
+        
+        primaryStage.setScene(intro);
+        
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 	

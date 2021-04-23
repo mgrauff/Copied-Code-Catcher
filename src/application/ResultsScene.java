@@ -4,6 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -21,14 +25,33 @@ public class ResultsScene extends Scene {
 	final static double YELLOW_THRESHOLD = 0.6;
 	final static double RED_THRESHOLD = 0.8;
 	
-	private VBox root;
+	private HBox root;
+	private VBox leftHalf;
 	
 	private double[][] scores;
 	private String[] names;
 	
 	private boolean showAllScores;
 	
-	private ResultsScene(VBox root, double width, double height, double[][] scores, String[] names) {
+	/**
+	 * Constructs a Results scene that graphically displays scores and names provided
+	 * @param width - width of the scene
+	 * @param height - height of the scene
+	 * @param scores - 2D array of similarity scores. Width and height must be equal
+	 * @param names - array of names to match to scores. Length must equal size of scores
+	 */
+	public ResultsScene(double width, double height, double[][] scores, String[] names) {
+		this(new HBox(), width, height, scores, names);
+	}
+	/**
+	 * Internal constructor used to keep reference to root node
+	 * @param root
+	 * @param width
+	 * @param height
+	 * @param scores
+	 * @param names
+	 */
+	private ResultsScene(HBox root, double width, double height, double[][] scores, String[] names) {
 		super(root, width, height);
 		
 		this.root = root;
@@ -44,18 +67,102 @@ public class ResultsScene extends Scene {
 		root.setSpacing(50);
 		root.setAlignment(Pos.CENTER);
 		
-		root.getChildren().add(worstScores());
-		root.getChildren().add(toggleButton());
-	}
-	public ResultsScene(double width, double height, double[][] scores, String[] names) {
-		this(new VBox(), width, height, scores, names);
+		/*
+		 * Left Half of screen contains: 
+		 * 		Table of worst scores
+		 * 		(Toggleable) Grid showing all scores
+		 * 		Button to toggle grid
+		 */
+		leftHalf = new VBox();
+		leftHalf.setAlignment(Pos.CENTER);
+		leftHalf.setSpacing(50);
+		leftHalf.getChildren().add(worstScores());
+		leftHalf.getChildren().add(toggleButton());
+		
+		root.getChildren().add(leftHalf);
+		root.getChildren().add(resultsGraph(scores));
+		
 	}
 	
+	/**
+	 * resultsGraph generates a stacked bar chart what percent of submission
+	 * fall into which category of similarity to other submissions 
+	 * @param scores
+	 * @return barChart - a StackedBarChart object that is the results graph
+	 */
+	private StackedBarChart resultsGraph(double [][] scores) {
+		//Variable Dictionary
+		CategoryAxis xAxis = new CategoryAxis();
+		NumberAxis yAxis = new NumberAxis();
+		StackedBarChart<String, Number> barChart = new StackedBarChart<>(xAxis, yAxis);
+		double percentGreen = 0, //stores the number of comparisons that are below the yellow threshold
+				percentYellow = 0, //stores the number of comparisons that are above the yellow threshold
+				percentRed = 0, //stores the number of comparisons that are above the red threshold
+				total = 0;	//stores the total number of comparison scores so that percentages may be calculated	
+		XYChart.Series<String, Number> percentRedSeries = new XYChart.Series<>(), //series that correpsond to the double percent scores 
+				percentYellowSeries = new XYChart.Series<>(),  
+				percentGreenSeries = new XYChart.Series<>();
+		
+		//Set title of chart and axes
+		barChart.setTitle("Analysis results");
+		xAxis.setLabel("Plagiarized Categories");
+		yAxis.setLabel("Percent Plagiarized");
+		
+		//Get the number of comparison scores for each category
+		for(int row = 0; row < scores.length; row++) {
+			for(int col = 0; col < scores[row].length; col++) {
+				if(scores[row][col] <= YELLOW_THRESHOLD) {
+					percentGreen++;
+				} else if (scores[row][col] <= RED_THRESHOLD) {
+					percentYellow++;
+				} else if (scores[row][col] < 1) {
+					percentRed++;
+				}
+			}//end for col
+		}//end for row
+		
+		//Calculate percentages for the chart
+		total = percentGreen + percentYellow + percentRed;
+		percentGreen /= total;
+		percentYellow /= total;
+		percentRed /= total;
+		
+		//Add the percentages to the chart
+		final XYChart.Data<String, Number> overEighty = new XYChart.Data("Over 80%", percentRed);
+		final XYChart.Data<String, Number> overSixty = new XYChart.Data<>("Over 60%", percentYellow);
+		final XYChart.Data<String, Number> underSixty = new XYChart.Data<>("Under 60%", percentGreen);
+		percentRedSeries.getData().add(overEighty);
+		percentYellowSeries.getData().add(overSixty);
+		percentGreenSeries.getData().add(underSixty);
+		barChart.getData().addAll(percentRedSeries, percentYellowSeries, percentGreenSeries);
+		
+		//Graphical settings for the chart
+		barChart.lookupAll(".default-color0.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: red;"));
+		barChart.lookupAll(".default-color1.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: yellow;"));
+		barChart.lookupAll(".default-color2.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: green;"));
+		barChart.setLegendVisible(false);
+		barChart.setMaxWidth(800);
+		
+		return barChart;
+	}//end resultsGraph
+
+	/**
+	 * validateParams verifies that the parameters are all of the correct form. 
+	 * Scores array must be square, and names must match the length of scores
+	 * 
+	 * @param scores - An array of doubles representing similarity. Rows and columns must be equal 
+	 * @param names - An array of strings. Length must be equal to rows and columns of scores
+	 * @return
+	 */
 	private boolean validateParams(double[][] scores, String[] names) {
 		int length = names.length;
+		
+		//check 1st dimension of scores against length of names
 		if(scores.length != length) {
 			return false;
 		}
+		
+		//check 2nd dimension of scores against length of 1st dimension 
 		for(int i = 0; i < scores.length; i++) {
 			if(scores[i].length != length) {
 				return false;
@@ -64,14 +171,21 @@ public class ResultsScene extends Scene {
 		return true;
 	}
 
+	/**
+	 * Constructs a graphical grid displaying every student, their highest similarity score, 
+	 * and the name of the student they were most similar to
+	 * @return
+	 */
 	private GridPane worstScores() {
 		GridPane worstScores = new GridPane();
+		
+		//default size of columns, first name should be noticeably bigger than other columns
 		worstScores.getColumnConstraints().add(new ColumnConstraints(70)); 
 		worstScores.getColumnConstraints().add(new ColumnConstraints(30)); 
 		worstScores.setAlignment(Pos.CENTER);
 		
 		for(int i = 0; i < scores.length; i++) {
-			
+			//p0-p3 hold each cell of current row 
 			HBox p0 = new HBox();	
 			HBox p1 = new HBox();	
 			HBox p2 = new HBox();
@@ -82,8 +196,10 @@ public class ResultsScene extends Scene {
 			
 			int maxScoreIndex = (i+1) % scores.length;
 			
+			//add name of current student to left column of current row
 			p0.getChildren().add(new Text(names[i]));
 			
+			//find highest similarity score for current student
 			for(int j = 0; j < scores.length; j++) {
 				if(i != j && scores[i][j] > scores[i][maxScoreIndex]) {
 					maxScoreIndex = j;
@@ -92,6 +208,7 @@ public class ResultsScene extends Scene {
 			
 			double maxScore = scores[i][maxScoreIndex];
 			
+			//assign color of grid cell based on what the highest score was
 			Color col = Color.GREEN;
 			if(maxScore > RED_THRESHOLD) {
 				col = Color.RED;
@@ -100,17 +217,26 @@ public class ResultsScene extends Scene {
 				col = Color.YELLOW;
 			}
 			
+			//set background of entire row to indicator color
 			p0.setBackground(new Background(new BackgroundFill(col, null, null)));
 			p1.setBackground(new Background(new BackgroundFill(col, null, null)));
 			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
 			
+			//display worst score in middle column of current row
 			p1.getChildren().add(new Text("" + maxScore));
+			
+			//display most similar student's name in right column of current row
 			p2.getChildren().add(new Text(names[maxScoreIndex]));
 		}
 		
 		return worstScores;
 	}
 
+	/**
+	 * Constructs a graphical grid displaying every student on each axis, 
+	 * and the corresponding similarity scores in the middle cells. 
+	 * @return
+	 */
 	private GridPane allScores() {
 		GridPane allScores = new GridPane();
 		
@@ -118,17 +244,23 @@ public class ResultsScene extends Scene {
 		allScores.setHgap(5);
 		allScores.setAlignment(Pos.CENTER);
 		
+		//add names to top row and left column
 		for(int i = 0; i < scores.length; i++) {
 			allScores.add(new Text(names[i]), 0, i+1);
 			allScores.add(new Text(names[i]), i+1, 0);
 		}
 		
+		//iterate through entire array
 		for(int c = 0; c < scores.length; c++) {
 			for(int r = 0; r < scores.length; r++) {
-				Pane p = new StackPane();
+				//add a pane to grid cell
+				StackPane p = new StackPane();
 				allScores.add(p, c+1, r+1);
+				
+				//add corresponding score to cell
 				p.getChildren().add(new Text("" + scores[r][c]));
 				
+				//get indicator color based on score, or black if comparing to self
 				Color col = Color.GREEN;
 				if(r == c) {
 					col = Color.BLACK;
@@ -147,18 +279,26 @@ public class ResultsScene extends Scene {
 		return allScores;
 	}
 
+	/**
+	 * Constructs a button to toggle visibility of grid showing all scores
+	 * @return
+	 */
 	private Button toggleButton() {
 		Button b = new Button("Show All Scores");
 		b.setOnAction(new EventHandler<ActionEvent>() {	 
             @Override
             public void handle(ActionEvent event) {
+            	//when clicked
+            	//toggle showAllScores
             	showAllScores = !showAllScores;
             	if(showAllScores) {
-            		root.getChildren().add(1, allScores());
+            		//add allScores grid above this button and change button text
+            		leftHalf.getChildren().add(1, allScores());
             		b.setText("Collapse All Scores");
             	}
             	else {
-            		root.getChildren().remove(1);
+            		//delete allScores grid and change button text
+            		leftHalf.getChildren().remove(1);
             		b.setText("Show All Scores");
             	}
             }
@@ -166,7 +306,12 @@ public class ResultsScene extends Scene {
 		
 		return b;
 	}
-	
+
+	/**
+	 * Simple Pane containing an error message
+	 * @param msg
+	 * @return
+	 */
 	private StackPane errorBox(String msg) {
 		StackPane s = new StackPane();
 		s.getChildren().add(new Text("ERROR: " + msg));
