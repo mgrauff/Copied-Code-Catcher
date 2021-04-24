@@ -55,18 +55,21 @@ public class TextMain {
 			else { //Put file in arraylist and process it
 
 				//Testing if zipped file and if so, unzip it
-				//FIXME we need to somehow reassign the new unzipped file back to input so we can continue
-				//UPDATE I forgot that the unzip could unzip to multiple files so I dont know how to implement this to main
-
-				if (Unzipper.isZipped(input)) {
+				//Add new file(s) to ArrayList
+				if (Unzipper.isZipped(input)) { //Is a zip
 
 						Unzipper zippy = new Unzipper(filePath + "/" + input);
-						zippy.unzipTo(filePath);
-
+						ArrayList<File> unzipped = zippy.unzipTo(filePath);
+						
+						for (int i = 0; i < unzipped.size(); i++) {
+							files.add(new FileProcessor(unzipped.get(i), opt));
+						}
 					}
+				else { //Is not a zip
 
-				//Add new file to ArrayList
-				files.add(new FileProcessor(new File(filePath + "/" + input), opt));
+					files.add(new FileProcessor(new File(filePath + "/" + input), opt));
+				}
+				
 
 			}
 
