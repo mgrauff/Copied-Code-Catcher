@@ -1,14 +1,23 @@
 package application;
 
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
@@ -19,6 +28,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class ResultsScene extends Scene {
 
@@ -78,6 +89,7 @@ public class ResultsScene extends Scene {
 		leftHalf.setSpacing(50);
 		leftHalf.getChildren().add(worstScores());
 		leftHalf.getChildren().add(toggleButton());
+		leftHalf.getChildren().add(saveButton());
 		
 		root.getChildren().add(leftHalf);
 		root.getChildren().add(resultsGraph(scores));
@@ -306,6 +318,18 @@ public class ResultsScene extends Scene {
 		
 		return b;
 	}
+	
+	private Button saveButton() {
+		Button b = new Button("Save as PNG");
+		b.setOnAction(new EventHandler<ActionEvent>() {	 
+            @Override
+            public void handle(ActionEvent event) {
+            	saveImg();
+            }
+        });
+		
+		return b;
+	}
 
 	/**
 	 * Simple Pane containing an error message
@@ -316,5 +340,30 @@ public class ResultsScene extends Scene {
 		StackPane s = new StackPane();
 		s.getChildren().add(new Text("ERROR: " + msg));
 		return s;
+	}
+	
+	public void saveImg() {		
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters().add(new ExtensionFilter("png images", "*.png"));
+		
+		File destFile = fc.showSaveDialog(null);
+		
+		if(destFile != null) {
+			WritableImage wi = new WritableImage((int)this.getWidth(), (int)this.getHeight());
+			this.snapshot(wi);	
+			
+			RenderedImage img = SwingFXUtils.fromFXImage(wi, null);
+			
+			try {
+				ImageIO.write(img, "png", destFile);
+			} catch (IOException e) {
+				System.out.println("Error saving file");
+				this.root.getChildren().add(errorBox("Error saving file"));
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		Main.main(args);
 	}
 }
