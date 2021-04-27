@@ -14,8 +14,8 @@ import javafx.event.EventHandler;
 public class ChooseFileMain extends Application implements EventHandler<ActionEvent>{
 	
 	Stage window;
-	Button startButton;
-	Button selectUnzipToFileButton;
+	Button selectFilesButton;
+	Button unzipToDestFileButton;
 	ChooseFile fc = new ChooseFile();
 	
 	public void start(Stage primaryStage) {
@@ -41,18 +41,18 @@ public class ChooseFileMain extends Application implements EventHandler<ActionEv
 		grid.setVgap(8);
 		grid.setHgap(10);
 		
-		startButton = new Button("Start");
-		selectUnzipToFileButton = new Button("Select Unzip to File");
+		selectFilesButton = new Button("Select Files");
+		unzipToDestFileButton = new Button("Unzip to dest File");
 		
 		
-		startButton.setOnAction(this);
-		GridPane.setConstraints(startButton, 1, 2);
+		selectFilesButton.setOnAction(this);
+		GridPane.setConstraints(selectFilesButton, 1, 2);
 		
-		selectUnzipToFileButton.setOnAction(this);
-		GridPane.setConstraints(selectUnzipToFileButton, 2, 3);
+		unzipToDestFileButton.setOnAction(this);
+		GridPane.setConstraints(unzipToDestFileButton, 2, 3);
 		
 		
-		grid.getChildren().addAll(startButton, selectUnzipToFileButton);
+		grid.getChildren().addAll(selectFilesButton, unzipToDestFileButton);
 		
 		Scene scene = new Scene(grid, 500, 500);
 		window.setScene(scene);
@@ -67,15 +67,15 @@ public class ChooseFileMain extends Application implements EventHandler<ActionEv
 	@Override
 	public void handle(ActionEvent event) {
 		// TODO Auto-generated method stub
-		if(event.getSource()== startButton) {
+		if(event.getSource()== selectFilesButton) {
 			
 			fc.StartButtonAction(event);
 		}
 		
 		
-		if(event.getSource() == selectUnzipToFileButton) {
+		if(event.getSource() == unzipToDestFileButton) {
 			try {
-				fc.UnzipToSelectedFileAction(event);
+				fc.UnzipToDestFileAction(event);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

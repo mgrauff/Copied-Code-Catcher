@@ -46,13 +46,11 @@ public class ChooseFile {
 	
 	
 	//This function does not select the dest file, instead it opens it, which is very weird
-	public void UnzipToSelectedFileAction(ActionEvent event) throws IOException {
+	public void UnzipToDestFileAction(ActionEvent event) throws IOException {
 	
-		FileChooser fc = new FileChooser();
-		fc.setInitialDirectory(new File("C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350"));
-		File selectedFile = fc.showOpenDialog(null);
-		unzipToThisFilePath = selectedFile.getAbsolutePath();
-		//unzipToThisFilePath = "C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350\\SectA_OrigUnzippedToThisFile";
+		
+		unzipToThisFilePath = "C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350\\SectA_OrigUnzippedToThisFile";
+		
 		for(int i = 0; i < selectedFiles.size(); i++) {
 			
 			fileToUnzipPath = selectedFiles.get(i).getAbsolutePath();
