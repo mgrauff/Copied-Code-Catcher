@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class Unzipper {
@@ -56,6 +57,9 @@ public class Unzipper {
 		this.src = src;
 	}//constructor 
 	
+	
+	
+	
 	/**
 	 * Extracts all files from the zipped folder and copies them to the provided directory 
 	 * 
@@ -102,6 +106,27 @@ public class Unzipper {
 		return entryListOut;
 		
 	}//unzipTo
+	
+	/**
+	 * 
+	 * @param file to check if corrupt
+	 * @return true if corrupt
+	 */
+	 public boolean isZipCorrupt(final File file) {
+		    ZipFile zFile;
+		    try {
+		        zFile = new ZipFile(file);
+		        zFile.close();
+		        return false;
+		        
+		        
+		    } catch (Exception e) {
+		    	System.out.println(file.getName() + " was corrupt");
+		    	
+		        return true;
+		    }
+
+		}
 
 	
 }//Unzipper 
