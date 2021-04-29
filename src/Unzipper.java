@@ -12,9 +12,12 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class Unzipper {
+	boolean error = false; //IF error exists in zipped folder
 	
 	public static boolean isZipped(File f) throws IOException {
 		boolean isZipped = false;
+
+		
 		DataInputStream di = new DataInputStream(new FileInputStream(f));	
 		try {	
 			long zipKey = di.readInt();
@@ -43,20 +46,28 @@ public class Unzipper {
 	 * @param src the relative or absolute path of the zipped folder to be extracted
 	 * @throws IOException 
 	 */
-	public Unzipper(String src) throws IOException {
+	public Unzipper(String src) {
 		File f = new File(src);
-		if(!f.exists()) {	//check if provided file exists
-			throw new FileNotFoundException("The provided filepath does not exist");
+		try {
+			if(!f.exists()) {	//check if provided file exists
+				throw new FileNotFoundException("The provided filepath does not exist");
+			}
+			
+			//verify that the source is zipped
+			if(!Unzipper.isZipped(f)) {
+				throw new IOException("The provided file is not zipped");
+			}
+			
+			//Verify that the source is not corrupted
+			if(isZipCorrupt(f)) {
+				throw new IOException("The provided file is corrupt");
+			}
 		}
-		
-		//verify that the source is zipped
-		if(!Unzipper.isZipped(f)) {
-			throw new IOException("The provided file is not zipped");
-		}
-		
-		//Verify that the source is not corrupted
-		if(isZipCorrupt(f)) {
-			throw new IOException("The provided file is corrupt");
+		catch(Exception E) {
+			//NOTE: WE CANNOT USE THIS ZIPPED FOLDER
+			//TODO: Notify user of issue
+			error = true;
+			System.err.println(E);
 		}
 		
 		this.src = src;
