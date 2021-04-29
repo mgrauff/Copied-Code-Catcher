@@ -92,6 +92,8 @@ public class FileProcessor {
      * within the file.
      */
     public void read() {
+    	
+    	//We'll want to flag this to the user
     	if(isCorrupt) {
     		System.out.println("Cannot read corrupt file: "+ processFile.getName());
     		return;

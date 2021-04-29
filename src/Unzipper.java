@@ -54,6 +54,11 @@ public class Unzipper {
 			throw new IOException("The provided file is not zipped");
 		}
 		
+		//Verify that the source is not corrupted
+		if(isZipCorrupt(f)) {
+			throw new IOException("The provided file is corrupt");
+		}
+		
 		this.src = src;
 	}//constructor 
 	
