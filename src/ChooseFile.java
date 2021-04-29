@@ -1,9 +1,18 @@
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 public class ChooseFile {
@@ -21,12 +30,31 @@ public class ChooseFile {
 		
 	}
 	
+	public ArrayList<File> fileDirectory(ActionEvent event) {
+		ArrayList<File> projectList = new ArrayList<File>();
+		DirectoryChooser dc = new DirectoryChooser();
+		File directory = dc.showDialog(null);
+		
+		File[] files = directory.listFiles();
+		if(directory.isDirectory()) {
+			for(int fileNum = 0; fileNum < files.length; fileNum++) {
+				if(files[fileNum].isFile()) {
+					projectList.add(files[fileNum]);
+					selectedFiles.add(files[fileNum]);
+				}
+			}
+		}
+		
+		
+		return projectList;
+	}
 	
 	
 	public List<File> StartButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
-		fc.setInitialDirectory(new File("C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350"));
-		selectedFiles = fc.showOpenMultipleDialog(null);
+		//fc.setInitialDirectory(chooseDirectory());
+		//fc.setInitialDirectory(new File("C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350"));
+		selectedFiles.addAll(fc.showOpenMultipleDialog(null));
 		
 		if(selectedFiles != null) {
 			
@@ -48,8 +76,10 @@ public class ChooseFile {
 	//This function does not select the dest file, instead it opens it, which is very weird
 	public void UnzipToDestFileAction(ActionEvent event) throws IOException {
 	
+		DirectoryChooser dc = new DirectoryChooser();
+		//unzipToThisFilePath = "C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350\\SectA_OrigUnzippedToThisFile";
 		
-		unzipToThisFilePath = "C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350\\SectA_OrigUnzippedToThisFile";
+		unzipToThisFilePath = dc.showDialog(null).getAbsolutePath();
 		
 		for(int i = 0; i < selectedFiles.size(); i++) {
 			
@@ -63,4 +93,15 @@ public class ChooseFile {
 			}		
 		}
 	}
+	
+	public void removeFileButton(ActionEvent event, ObservableList<String> myFiles) {
+		for(String fileName: myFiles) {
+			selectedFiles.remove(fileName);
+		}
+	}
+	
+	
+
+
+	
 }
