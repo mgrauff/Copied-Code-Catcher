@@ -1,3 +1,4 @@
+package base;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
@@ -121,11 +122,11 @@ class FileProcessorTester {
     	}
 	}//singleQuoteOperator
 
-	@Test
-	public void testState() {
-		FileProcessor f = new FileProcessor(myFile, o);
-		
-	}
+//	@Test
+//	public void testState() {
+//		FileProcessor f = new FileProcessor(myFile, o);
+//		
+//	}
 
 }
 
