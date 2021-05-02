@@ -37,16 +37,17 @@ public class ChooseFile {
 		DirectoryChooser dc = new DirectoryChooser();
 		File directory = dc.showDialog(null);
 		
-		File[] files = directory.listFiles();
-		if(directory.isDirectory()) {
-			for(int fileNum = 0; fileNum < files.length; fileNum++) {
-				if(files[fileNum].isFile()) {
-					projectList.add(files[fileNum]);
-					selectedFiles.add(files[fileNum]);
+		if(directory != null) {
+			File[] files = directory.listFiles();
+			if(directory.isDirectory()) {
+				for(int fileNum = 0; fileNum < files.length; fileNum++) {
+					if(files[fileNum].isFile()) {
+						projectList.add(files[fileNum]);
+						selectedFiles.add(files[fileNum]);
+					}
 				}
 			}
 		}
-		
 		
 		return projectList;
 	}
@@ -56,10 +57,10 @@ public class ChooseFile {
 		FileChooser fc = new FileChooser();
 		//fc.setInitialDirectory(chooseDirectory());
 		//fc.setInitialDirectory(new File("C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350"));
-		selectedFiles.addAll(fc.showOpenMultipleDialog(null));
-		
-		if(selectedFiles != null) {
-			
+		List<File> files = fc.showOpenMultipleDialog(null);
+		if(selectedFiles != null && files != null) {
+			 
+			selectedFiles.addAll(files);
 			return selectedFiles;
 			
 			//for(int i = 0; i < selectedFiles.size(); i++) {

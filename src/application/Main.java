@@ -18,10 +18,10 @@ public class Main extends Application {
         String[]  names = {"Matt", "Luke", "Paul", "Enoch", "Alex"};
         
         IntroScene intro = new IntroScene(500, 400);   
-        intro.addAdvanceEvent(new EventHandler<ActionEvent>() {
+        intro.begin.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent event) {
-        		primaryStage.setScene(new ResultsScene(intro.getWidth(), intro.getHeight(), scores, names));
+        		primaryStage.setScene(new ChooseFileScene(intro.getWidth(), intro.getHeight()));
         	}
         });
         

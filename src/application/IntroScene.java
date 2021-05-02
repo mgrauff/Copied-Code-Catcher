@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 public class IntroScene extends Scene {
 
 	private VBox root;
-	private Button advance;
+	public Button begin;
 	
 	public IntroScene(double width, double height) {
 		this(new VBox(), width, height);
@@ -25,11 +25,7 @@ public class IntroScene extends Scene {
 		Text welcomeText = new Text("Welcome to Team Robin's Copied Code Catcher");
 		root.getChildren().add(welcomeText);
 		
-		advance = new Button("Show example results");
-		root.getChildren().add(advance);
-	}
-	
-	public void addAdvanceEvent(EventHandler<ActionEvent> eh) {
-		advance.setOnAction(eh);
+		begin = new Button("Begin");
+		root.getChildren().add(begin);
 	}
 }
