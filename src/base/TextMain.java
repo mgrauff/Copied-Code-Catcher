@@ -120,18 +120,6 @@ public class TextMain {
 
 		}
 
-
-
-		// Paul was using this to test FileProcessor
-		// File myFile = new File("C:/Users/StaatsPD17/git/Copied-Code-Catcher/Copied-Code-Catcher/src/example.txt");
-		// try {
-		// 	System.out.println("check");
-		// FileProcessor myProcessor = new FileProcessor(myFile);
-		// myProcessor.read();
-		// } catch (Exception e) {
-		// 	System.out.println("Error");
-
-		// }
 	}
 
 	/**
