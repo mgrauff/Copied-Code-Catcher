@@ -13,16 +13,32 @@ import base.Operators;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 	
 	IntroScene intro;
 	ChooseFileScene fileChoose;
+	final public static Color BEIGE = Color.web("0xf3f4ed");
+	final public static String BEIGE_COLOR = "f3f4ed";
+	final public static Color GRAYISH_CYAN = Color.web("0x536162");
+	final public static String GRAYSIH_CYAN_COLOR = "f3f4ed";
+	final public static Color DARK_GREY = Color.web("0x424642");
+	final public static String DARK_GREY_COLOR = "f3f4ed";
+	final public static Color ORANGE = Color.web("0xc06014");
+	final public static String ORANGE_COLOR = "f3f4ed";
+	
+	
 	
 	@Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Scene Test");
+        primaryStage.setTitle("Copied Code Catcher");
         double[][] scores = 
            {{ 1, .2, .3, .4, .5},
 			{.2,  1, .6, .7, .8},
@@ -89,8 +105,24 @@ public class Main extends Application {
 
         primaryStage.setScene(intro);
         primaryStage.setMaximized(true);
+        primaryStage.getIcons().add(new Image("file:src/Robin.png"));
         primaryStage.show();
     }
+	
+	public static void setRobinButtonStyle(Button button) {
+		
+		DropShadow shadow = new DropShadow();
+		button.setStyle("-fx-background-color: #" + Main.BEIGE_COLOR + "; -fx-border-width: 5px;");
+		//Adding the shadow when the mouse cursor is on
+		button.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		    button.setEffect(shadow);
+		});
+		
+		//Removing the shadow when the mouse cursor is off
+		button.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		    button.setEffect(null);
+		});
+	}
 	
 	public static void main(String[] args) {
 		launch(args);
