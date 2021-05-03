@@ -3,6 +3,7 @@ package application;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 
@@ -72,9 +73,10 @@ public class ResultsScene extends Scene {
 		
 		if(!validateParams(scores, names)) {
 			root.getChildren().add(errorBox("The dimensions of the provided scores and names do not match"));
+			System.out.println("ERROR");
 			return;
 		}
-		
+		System.out.println("Success");
 		root.setSpacing(50);
 		root.setAlignment(Pos.CENTER);
 		
@@ -190,6 +192,7 @@ public class ResultsScene extends Scene {
 	 */
 	private GridPane worstScores() {
 		GridPane worstScores = new GridPane();
+		DecimalFormat df = new DecimalFormat("0.000");
 		
 		//default size of columns, first name should be noticeably bigger than other columns
 		worstScores.getColumnConstraints().add(new ColumnConstraints(70)); 
@@ -209,6 +212,7 @@ public class ResultsScene extends Scene {
 			int maxScoreIndex = (i+1) % scores.length;
 			
 			//add name of current student to left column of current row
+
 			p0.getChildren().add(new Text(names[i]));
 			
 			//find highest similarity score for current student
@@ -235,7 +239,7 @@ public class ResultsScene extends Scene {
 			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
 			
 			//display worst score in middle column of current row
-			p1.getChildren().add(new Text("" + maxScore));
+			p1.getChildren().add(new Text("" + df.format(maxScore)));
 			
 			//display most similar student's name in right column of current row
 			p2.getChildren().add(new Text(names[maxScoreIndex]));
@@ -251,6 +255,7 @@ public class ResultsScene extends Scene {
 	 */
 	private GridPane allScores() {
 		GridPane allScores = new GridPane();
+		DecimalFormat df = new DecimalFormat("0.000");
 		
 		allScores.setVgap(5);
 		allScores.setHgap(5);
@@ -270,7 +275,7 @@ public class ResultsScene extends Scene {
 				allScores.add(p, c+1, r+1);
 				
 				//add corresponding score to cell
-				p.getChildren().add(new Text("" + scores[r][c]));
+				p.getChildren().add(new Text("" + df.format(scores[r][c])));
 				
 				//get indicator color based on score, or black if comparing to self
 				Color col = Color.GREEN;

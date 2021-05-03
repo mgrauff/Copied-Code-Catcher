@@ -58,10 +58,13 @@ public class ChooseFile {
 		//fc.setInitialDirectory(chooseDirectory());
 		//fc.setInitialDirectory(new File("C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350"));
 		List<File> files = fc.showOpenMultipleDialog(null);
+		
 		if(selectedFiles != null && files != null) {
 			 
 			selectedFiles.addAll(files);
-			return selectedFiles;
+			
+//			return selectedFiles;
+			return files;
 			
 			//for(int i = 0; i < selectedFiles.size(); i++) {
 				

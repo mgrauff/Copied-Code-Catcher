@@ -29,6 +29,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	Button unzipToDestFileButton;
 	Button addDirectoryButton; //adds all the files in a given directory to the fileList
 	Button removeFileButton; //button for removing files from the fileList
+	Button startComparisonButton;
 	ListView<String> fileList; //text area displaying all files in the ChooseFile object's selectedFile list
 	ObservableList<String> data = FXCollections.observableArrayList(); //stores the items in fileList
 	ChooseFile fc = new ChooseFile();
@@ -66,6 +67,10 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		removeFileButton.setOnAction(this);
 		GridPane.setConstraints(removeFileButton, 4, 5);
 		
+		//compare files button
+		startComparisonButton = new Button("Start Comparison");
+		
+		
 		fileList = new ListView<String>();
 		fileList.setItems(data); //populate the fileList
 		fileList.setEditable(false);//we don't want the user messing with the list
@@ -87,7 +92,8 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	    fileListLabel.setFont(font);
 	    
 		//Set up the window visually
-	    VBox ncf = new VBox(fileListLabel, fileList, selectFilesButton, unzipToDestFileButton, addDirectoryButton, removeFileButton);
+//	    VBox ncf = new VBox(fileListLabel, fileList, selectFilesButton, unzipToDestFileButton, addDirectoryButton, removeFileButton);
+	    VBox ncf = new VBox(fileListLabel, fileList, selectFilesButton, addDirectoryButton, removeFileButton, startComparisonButton);
 	    ncf.setSpacing(20);
 		ncf.setPadding(new Insets(20, 50, 50, 60));
 		grid.getChildren().addAll(ncf);
@@ -101,7 +107,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 			if(files != null) {
 				String fileName = files.toString();
 				fileName = fileName.substring(1, fileName.length()-1);
-				data.add(fileName);	
+				data.add(fileName);
 			}
 		}
 		
@@ -132,4 +138,8 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 			} catch (Exception e) {}
 		}
 	}//end handle
+	
+	public List<File> selectedFiles() {
+		return fc.selectedFiles;
+	}
 }
