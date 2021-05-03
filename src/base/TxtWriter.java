@@ -1,4 +1,4 @@
-package application;
+package base;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -12,16 +12,23 @@ import java.io.InputStreamReader;
 
 public class TxtWriter {
 	 private String fileName;
-	 private String text;
-	 private int fileNumber;
 	 
 	 
+	 /**
+	  * 
+	  * @param fileName - name of output file
+	  * @param fileNumber - number it should be given
+	  */
 	 public TxtWriter(String fileName, int fileNumber) {
 		 //Create filename in format of: fileName#.txt
 		 String fileCombo =fileName.concat( String.valueOf(fileNumber)).concat(".txt") ;
 		 this.fileName = fileCombo;
 	 }
  
+	 /**
+	  * Will write text to file
+	  * @param text - text to be written to file
+	  */
 	 public void writeFile(String text)   {
 		 //Scan through text line by line
 		 Scanner scnr = new Scanner(text);

@@ -3,6 +3,7 @@
 
 package application;
 	
+import base.TxtWriter;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
@@ -29,7 +30,8 @@ public class StackOverFlowScene extends Application {
 		
 		window = primaryStage;
 		window.setTitle("Testing");
-		//Form
+		
+		//Button that when pressed will pass input to be written
 		TextArea textInput = new TextArea();
 		button = new Button("Enter");
 		button.setOnAction( e -> enterText(textInput));
@@ -65,7 +67,4 @@ public class StackOverFlowScene extends Application {
 		
 	}
 	
-//	public static void main(String[] args) {
-//		launch(args);
-//	}
 }

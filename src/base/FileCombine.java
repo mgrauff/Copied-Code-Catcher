@@ -20,6 +20,7 @@ public class FileCombine {
 	
 	/**
 	 * will combine the files fed to output file named outfilename
+	 * saves files as txt
 	 */
 	public void combineFiles() {
 		try {
@@ -33,6 +34,7 @@ public class FileCombine {
 					//We'll want to handle this better
 				}
 				else {
+					//We scan through file and print to output as we go
 					Scanner scnr = new Scanner(f);
 					while(scnr.hasNextLine()) {
 						writer.println(scnr.nextLine());
@@ -45,6 +47,7 @@ public class FileCombine {
 			writer.close();
 		}
 		catch (Exception e) {
+			//TODO: We'll want to handle this better. Perhaps just an error box pop-up, but we'll need something.
 			System.err.println(e);
 		}
 	}
