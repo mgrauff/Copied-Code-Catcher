@@ -1,17 +1,9 @@
 package application;
-import java.awt.Component;
+
 import base.Unzipper;
-import java.awt.Container;
-import java.awt.Font;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.stage.DirectoryChooser;
@@ -23,7 +15,7 @@ public class ChooseFile {
 	String fileToUnzipPath;
 	String unzipToThisFilePath;
 	List<File> selectedFiles;
-	//
+
 	public ChooseFile() {
 		
 		unzipToThisFilePath = null;
@@ -52,62 +44,27 @@ public class ChooseFile {
 		return projectList;
 	}
 	
-	
-	public List<File> StartButtonAction(ActionEvent event) {
+	/**
+	 * AddFileButtonAction handles the user clicking the Add File(s) button 
+	 * @param event: the user clicked the Add file(s) button
+	 * @return the list of files selected by the user
+	 */
+	public List<File> AddFileButtonAction(ActionEvent event) {
 		FileChooser fc = new FileChooser();
-		//fc.setInitialDirectory(chooseDirectory());
-		//fc.setInitialDirectory(new File("C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350"));
 		List<File> files = fc.showOpenMultipleDialog(null);
 		
 		if(selectedFiles != null && files != null) {
-			 
 			selectedFiles.addAll(files);
-			
-//			return selectedFiles;
-			return files;
-			
-			//for(int i = 0; i < selectedFiles.size(); i++) {
-				
-				//System.out. println(selectedFiles.get(i).getAbsolutePath());
-			//}
-		} 
-		else {
-			System.out.println("file is not valid");
+			return files; //return the files to the user
 		}
 		
-		return null;
-	}
-	
-	
-	//This function does not select the dest file, instead it opens it, which is very weird
-	public void UnzipToDestFileAction(ActionEvent event) throws IOException {
-	
-		DirectoryChooser dc = new DirectoryChooser();
-		//unzipToThisFilePath = "C:\\Users\\chenat18\\Documents\\2021Spring\\COMP350\\SectA_OrigUnzippedToThisFile";
-		
-		unzipToThisFilePath = dc.showDialog(null).getAbsolutePath();
-		
-		for(int i = 0; i < selectedFiles.size(); i++) {
-			
-			fileToUnzipPath = selectedFiles.get(i).getAbsolutePath();
-			
-			uz = new Unzipper(fileToUnzipPath);
-			
-			if(Unzipper.isZipped(fileToUnzipPath)) {
-				
-				uz.unzipTo(unzipToThisFilePath);
-			}		
-		}
-	}
+		return null; //don't return anything if nothing was selected
+	}//end AddFileButtonAction
 	
 	public void removeFileButton(ActionEvent event, ObservableList<String> myFiles) {
 		for(String fileName: myFiles) {
 			selectedFiles.remove(fileName);
 		}
 	}
-	
-	
-
-
 	
 }

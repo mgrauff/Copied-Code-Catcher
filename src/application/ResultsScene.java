@@ -71,6 +71,9 @@ public class ResultsScene extends Scene {
 		this.names = names;
 		this.showAllScores = false;
 		
+		Background myBackground = new Background(new BackgroundFill(Main.BEIGE, null, null));
+		root.setBackground(myBackground);
+		
 		if(!validateParams(scores, names)) {
 			root.getChildren().add(errorBox("The dimensions of the provided scores and names do not match"));
 			System.out.println("ERROR");
