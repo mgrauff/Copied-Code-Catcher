@@ -38,6 +38,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	Button addDirectoryButton; //adds all the files in a given directory to the fileList
 	Button removeFileButton; //button for removing files from the fileList
 	Button startComparisonButton; //Start comparing the current filelist.
+	Button stackOverflowButton;
 	ListView<String> fileList; //text area displaying all files in the ChooseFile object's selectedFile list
 	ObservableList<String> data = FXCollections.observableArrayList(); //stores the items in fileList
 	ChooseFile fc = new ChooseFile(); //ChooseFile object
@@ -85,6 +86,10 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		startComparisonButton = new Button("Start Comparison");
 		Main.setRobinButtonStyle(startComparisonButton);
 		
+		stackOverflowButton = new Button("Add StackOverFlow Code");
+		Main.setRobinButtonStyle(stackOverflowButton);
+		GridPane.setConstraints(stackOverflowButton, 4, 0);
+		
 		fileList = new ListView<String>();
 		fileList.setItems(data); //populate the fileList
 		fileList.setEditable(false);//we don't want the user messing with the list
@@ -111,6 +116,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	    		selectFilesButton, 
 	    		addDirectoryButton, 
 	    		removeFileButton, 
+	    		stackOverflowButton,
 	    		startComparisonButton);
 	    ncf.setSpacing(20);
 		ncf.setPadding(new Insets(20, 50, 50, 60));
@@ -148,6 +154,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				}
 			} catch (Exception e) {}
 		}
+
 	}//end handle
 	
 	/**

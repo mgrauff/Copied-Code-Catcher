@@ -101,6 +101,23 @@ public class Main extends Application {
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
+        		
+        	}
+        });
+        fileChoose.stackOverflowButton.setOnAction(new EventHandler<ActionEvent>() {
+        	@Override
+        	public void handle(ActionEvent event) {
+        		try {
+        			File myFile;
+        			StackOverFlowScene SOFS = new StackOverFlowScene(intro.getWidth(), intro.getHeight());
+	        		primaryStage.setScene(SOFS);
+	        		myFile = new File(SOFS.lastText);
+	        		//fileChoose.data.add(arg0)''
+	        		
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+        		
         	}
         });
 
