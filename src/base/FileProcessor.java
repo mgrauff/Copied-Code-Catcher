@@ -285,4 +285,12 @@ public class FileProcessor {
 		
 		return false;
 	}
+	
+	//TODO make this give the name of the student
+	public String getName() { //Get the name of the file
+		
+		String name = processFile.getName();
+		
+		return name;
+	}
 }
