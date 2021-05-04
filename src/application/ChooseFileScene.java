@@ -16,8 +16,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -26,13 +35,12 @@ import javafx.scene.text.FontWeight;
 public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> {
 	
 	Button selectFilesButton;
-	Button unzipToDestFileButton;
 	Button addDirectoryButton; //adds all the files in a given directory to the fileList
 	Button removeFileButton; //button for removing files from the fileList
-	Button startComparisonButton;
+	Button startComparisonButton; //Start comparing the current filelist.
 	ListView<String> fileList; //text area displaying all files in the ChooseFile object's selectedFile list
 	ObservableList<String> data = FXCollections.observableArrayList(); //stores the items in fileList
-	ChooseFile fc = new ChooseFile();
+	ChooseFile fc = new ChooseFile(); //ChooseFile object
 
 	public ChooseFileScene(double width, double height) {
 		this(new GridPane(), width, height);
@@ -41,35 +49,41 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		super(grid, width, height);
 		
 		grid.setPadding(new Insets(10,10,10,10));
+		//grid.setSpacing(10.0);
 		grid.setVgap(8);
 		grid.setHgap(10);
+		Background myBackground = new Background(new BackgroundImage(
+				new Image("file:src/HoodRobinRobin.png"), 
+				BackgroundRepeat.NO_REPEAT, 
+				BackgroundRepeat.NO_REPEAT, 
+				BackgroundPosition.DEFAULT, 
+				new BackgroundSize(1.0,1.0, true, true, false, false)));
+		grid.setBackground(myBackground);
 		
 		//selectFilesButton
 		//TODO fix formatting if multiple files are selected
 		selectFilesButton = new Button("Add File(s)");
 		selectFilesButton.setOnAction(this);
-		GridPane.setConstraints(selectFilesButton, 1, 2);
-		
-		//unziptoDestFileButton
-		unzipToDestFileButton = new Button("Unzip to dest File");
-		unzipToDestFileButton.setOnAction(this);
-		GridPane.setConstraints(unzipToDestFileButton, 2, 3);
+		Main.setRobinButtonStyle(selectFilesButton);
+		//GridPane.setConstraints(selectFilesButton, 1, 0);
 		
 		//addDirectoryButton
 		//TODO fix no files selected exception handling
 		addDirectoryButton = new Button("Add Directory");
 		addDirectoryButton.setOnAction(this);
-		GridPane.setConstraints(addDirectoryButton, 3, 4);
+		Main.setRobinButtonStyle(addDirectoryButton);
+		GridPane.setConstraints(addDirectoryButton, 3, 0);
 		
 		//removeFileButton
 		removeFileButton = new Button("Remove File(s)");
 		removeFileButton.setDisable(true);
 		removeFileButton.setOnAction(this);
-		GridPane.setConstraints(removeFileButton, 4, 5);
+		Main.setRobinButtonStyle(removeFileButton);
+		GridPane.setConstraints(removeFileButton, 4, 0);
 		
 		//compare files button
 		startComparisonButton = new Button("Start Comparison");
-		
+		Main.setRobinButtonStyle(startComparisonButton);
 		
 		fileList = new ListView<String>();
 		fileList.setItems(data); //populate the fileList
@@ -83,8 +97,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				removeFileButton.setDisable(false);
 			}//handle
 			
-		});//end fileList eventHandler
-		
+		});//end fileList eventHandler		
 		
 		//Label the fileList area
 		Label fileListLabel = new Label("File List");
@@ -92,8 +105,13 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	    fileListLabel.setFont(font);
 	    
 		//Set up the window visually
-//	    VBox ncf = new VBox(fileListLabel, fileList, selectFilesButton, unzipToDestFileButton, addDirectoryButton, removeFileButton);
-	    VBox ncf = new VBox(fileListLabel, fileList, selectFilesButton, addDirectoryButton, removeFileButton, startComparisonButton);
+	    VBox ncf = new VBox(
+	    		fileListLabel, 
+	    		fileList, 
+	    		selectFilesButton, 
+	    		addDirectoryButton, 
+	    		removeFileButton, 
+	    		startComparisonButton);
 	    ncf.setSpacing(20);
 		ncf.setPadding(new Insets(20, 50, 50, 60));
 		grid.getChildren().addAll(ncf);
@@ -101,9 +119,9 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	
 	@Override
 	public void handle(ActionEvent event) {
-		// TODO Auto-generated method stub
+
 		if(event.getSource()== selectFilesButton) {
-			List<File> files = fc.StartButtonAction(event);
+			List<File> files = fc.AddFileButtonAction(event);
 			if(files != null) {
 				String fileName = files.toString();
 				fileName = fileName.substring(1, fileName.length()-1);
@@ -112,19 +130,12 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		}
 		
 		if(event.getSource() == addDirectoryButton) {
-			ArrayList<File> files = fc.fileDirectory(event);
-			for(File name: files) {
-				data.add(name.toString() + "\n");
-			}
-		}
-		
-		
-		if(event.getSource() == unzipToDestFileButton) {
-			try {
-				fc.UnzipToDestFileAction(event);
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Error unzipping file(s)");
-			}
+			try{
+				ArrayList<File> files = fc.fileDirectory(event);
+				for(File name: files) {
+					data.add(name.toString() + "\n");
+				}
+			} catch (Exception e) {}
 		}
 		
 		if(event.getSource() == removeFileButton) {
@@ -139,7 +150,11 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		}
 	}//end handle
 	
+	/**
+	 * gets selectedFiles from fc
+	 * @return
+	 */
 	public List<File> selectedFiles() {
 		return fc.selectedFiles;
-	}
+	}//selected Files
 }

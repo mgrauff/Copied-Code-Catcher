@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -28,11 +29,11 @@ public class Main extends Application {
 	final public static Color BEIGE = Color.web("0xf3f4ed");
 	final public static String BEIGE_COLOR = "f3f4ed";
 	final public static Color GRAYISH_CYAN = Color.web("0x536162");
-	final public static String GRAYSIH_CYAN_COLOR = "f3f4ed";
+	final public static String GRAYISH_CYAN_COLOR = "536162";
 	final public static Color DARK_GREY = Color.web("0x424642");
-	final public static String DARK_GREY_COLOR = "f3f4ed";
+	final public static String DARK_GREY_COLOR = "424642";
 	final public static Color ORANGE = Color.web("0xc06014");
-	final public static String ORANGE_COLOR = "f3f4ed";
+	final public static String ORANGE_COLOR = "c06014";
 	
 	
 	
@@ -55,7 +56,7 @@ public class Main extends Application {
         	}
         });
         
-        fileChoose = new ChooseFileScene(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+        fileChoose = new ChooseFileScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight());
         fileChoose.startComparisonButton.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent event) {
@@ -105,18 +106,19 @@ public class Main extends Application {
 
         primaryStage.setScene(intro);
         primaryStage.setMaximized(true);
-        primaryStage.getIcons().add(new Image("file:src/Robin.png"));
+        primaryStage.getIcons().add(new Image("file:src/HoodRobinRobin.png"));
         primaryStage.show();
     }
 	
 	public static void setRobinButtonStyle(Button button) {
 		
 		DropShadow shadow = new DropShadow();
-		button.setStyle("-fx-background-color: #" + Main.BEIGE_COLOR + "; -fx-border-width: 5px;");
+		button.setStyle("-fx-background-color: #" + Main.GRAYISH_CYAN_COLOR + "; -fx-border-width: 5px; -fx-text-fill: #" + Main.BEIGE_COLOR + ";");
 		//Adding the shadow when the mouse cursor is on
 		button.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 		    button.setEffect(shadow);
 		});
+		
 		
 		//Removing the shadow when the mouse cursor is off
 		button.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
