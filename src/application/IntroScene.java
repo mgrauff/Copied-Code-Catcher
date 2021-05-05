@@ -41,7 +41,7 @@ public class IntroScene extends Scene {
 		
 		//Background customization
 		Background myBackground = new Background(new BackgroundImage(
-				new Image("file:src/HoodRobinFullLogo.png"), 
+				new Image("file:src/Background.png"), 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundPosition.DEFAULT, 
