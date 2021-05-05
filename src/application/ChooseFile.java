@@ -13,7 +13,7 @@ import javafx.stage.FileChooser;
 
 public class ChooseFile {
 	
-	//Variable Library
+	//Variable Dictionary
 	Unzipper uz; //Unzipper class
 	String fileToUnzipPath;	//Path to file that will be unzipped
 	String unzipToThisFilePath; //Path to where the file should be unzipped to
