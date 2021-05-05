@@ -1,11 +1,13 @@
 package application;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import base.Unzipper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -129,9 +131,9 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		if(event.getSource()== selectFilesButton) {
 			List<File> files = fc.AddFileButtonAction(event);
 			if(files != null) {
-				String fileName = files.toString();
-				fileName = fileName.substring(1, fileName.length()-1);
-				data.add(fileName);
+				for(File f : files) {
+					data.add(f.toString());
+				}
 			}
 		}
 		
@@ -148,6 +150,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 			try {
 				ObservableList<Integer> selectedIndeces = fileList.getSelectionModel().getSelectedIndices();
 				ObservableList<String> myFiles = fileList.getSelectionModel().getSelectedItems();
+				
 				fc.removeFileButton(event, myFiles);
 				for(int index: selectedIndeces) {
 					fileList.getItems().remove(index);
@@ -164,4 +167,8 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	public List<File> selectedFiles() {
 		return fc.selectedFiles;
 	}//selected Files
+	
+	public static void main(String[] args) {
+		Main.main(args);
+	}
 }

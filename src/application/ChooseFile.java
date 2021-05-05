@@ -2,6 +2,7 @@ package application;
 
 import base.Unzipper;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
@@ -54,17 +55,51 @@ public class ChooseFile {
 		List<File> files = fc.showOpenMultipleDialog(null);
 		
 		if(selectedFiles != null && files != null) {
-			selectedFiles.addAll(files);
-			return files; //return the files to the user
+			ArrayList<File> allFiles = new ArrayList<File>();
+			
+			for(File f : files) {
+				try {
+					if(Unzipper.isZipped(f)) {
+						Unzipper u = new Unzipper(f);
+						ArrayList<File> unzippedFiles = u.unzipTo("src/files/");
+						for(File unzFile : unzippedFiles) {
+							selectedFiles.add(unzFile);
+							allFiles.add(unzFile);
+						}
+					}
+					else {
+						selectedFiles.add(f);
+						allFiles.add(f);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			return allFiles; //return the files to the user
 		}
 		
 		return null; //don't return anything if nothing was selected
 	}//end AddFileButtonAction
 	
 	public void removeFileButton(ActionEvent event, ObservableList<String> myFiles) {
-		for(String fileName: myFiles) {
-			selectedFiles.remove(fileName);
+		ArrayList<File> removedFiles = new ArrayList<File>();
+		
+		for(String s : myFiles) {
+			for(int i = 0; i < selectedFiles.size(); i++) {
+				File f = selectedFiles.get(i);
+				if(f.getPath() == s) {
+					removedFiles.add(f);
+				}
+			}
 		}
+		
+		for(File f : removedFiles) {
+			selectedFiles.remove(f);
+		}
+//		for(String fileName: myFiles) {
+//			selectedFiles.remove(fileName);
+//		}
 	}
 	
 }

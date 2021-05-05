@@ -50,7 +50,7 @@ public class Main extends Application {
         
         
         
-        intro = new IntroScene(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());   
+        intro = new IntroScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50);   
         intro.begin.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent event) {
@@ -58,7 +58,7 @@ public class Main extends Application {
         	}
         });
         
-        fileChoose = new ChooseFileScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight());
+        fileChoose = new ChooseFileScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50);
         fileChoose.startComparisonButton.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent event) {
@@ -99,7 +99,7 @@ public class Main extends Application {
 						System.out.println("");
 					}
 					
-					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight(), scores, names);
+					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50, scores, names);
 	        		primaryStage.setScene(results);
 	        		
 	        		results.backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -128,7 +128,7 @@ public class Main extends Application {
         	}
         });
         
-        pasteCode = new StackOverFlowScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight());
+        pasteCode = new StackOverFlowScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50);
         pasteCode.backButton.setOnAction(new EventHandler<ActionEvent>() {
         	
         	@Override 

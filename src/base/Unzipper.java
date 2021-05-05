@@ -48,7 +48,9 @@ public class Unzipper {
 	 * @throws IOException 
 	 */
 	public Unzipper(String src) {
-		File f = new File(src);
+		this(new File(src));
+	}//constructor 
+	public Unzipper(File f) {
 		try {
 			if(!f.exists()) {	//check if provided file exists
 				throw new FileNotFoundException("The provided filepath does not exist");
@@ -71,9 +73,8 @@ public class Unzipper {
 			System.err.println(E);
 		}
 		
-		this.src = src;
-	}//constructor 
-	
+		this.src = f.getPath();
+	}
 	
 	
 	
@@ -93,28 +94,31 @@ public class Unzipper {
 		if(finalChar != '/' && finalChar != '\\') {	
 			destDir += '\\';
 		}
-		
 		ZipInputStream zipStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(src)));
 		byte[] buffer = new byte[8192];	//buffers data between IO streams
 		
 		ZipEntry entry = zipStream.getNextEntry();
 		while(entry != null) {	//iterate through all entries
 			File f = new File(destDir + entry.getName());	//desired file to be added
-			f.getParentFile().mkdirs();	//create all missing directories
-			f.createNewFile();			//create file
-			
-			BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(f));
-			
-			int bytesRead = zipStream.read(buffer);	//returns bytes read or -1
-			while(bytesRead > 0) {
-				outStream.write(buffer, 0, bytesRead);	//write data to new file
-				bytesRead = zipStream.read(buffer);
+			if(!entry.isDirectory()) {
+				f.getParentFile().mkdirs();	//create all missing directories
+				f.createNewFile();			//create file
+				
+				BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(f));
+				
+				int bytesRead = zipStream.read(buffer);	//returns bytes read or -1
+				while(bytesRead > 0) {
+					outStream.write(buffer, 0, bytesRead);	//write data to new file
+					bytesRead = zipStream.read(buffer);
+				}
+				
+				outStream.close();
+				
+				entryListOut.add(new File(destDir + entry.getName())); //Add file to list
 			}
-			
-			outStream.close();
-			
-			entryListOut.add(new File(destDir + entry.getName())); //Add file to list
-			
+			else {
+				f.getParentFile().mkdirs();
+			}
 			entry = zipStream.getNextEntry();	//progress to next entry
 		}
 		zipStream.closeEntry();
