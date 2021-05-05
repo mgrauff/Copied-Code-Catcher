@@ -10,6 +10,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -17,27 +18,28 @@ import javafx.scene.text.Text;
 
 public class IntroScene extends Scene {
 
-	public Button begin;
+	public Button begin; //button for starting the program
 	
+	/**
+	 * Public constructor
+	 * @param width
+	 * @param height
+	 */
 	public IntroScene(double width, double height) {
 		
 		this(new Pane(), width, height);
 		
-	}//default constructor
+	}//end public constructor
 	
+	/**
+	 * Private constructor
+	 * @param root - root node
+	 * @param width - width of the screen
+	 * @param height - height of the screen
+	 */
 	private IntroScene(Pane root, double width, double height) {
 		
 		super(root, width, height);
-		
-		//Welcome Text customization
-		Text welcomeText = new Text("Welcome to Team Robin's Copied Code Catcher");
-		Font font = Font.font("verdana", FontWeight.NORMAL, FontPosture.ITALIC, 12);
-		welcomeText.setFill(Main.DARK_GREY);
-		welcomeText.setScaleX(3.0);
-		welcomeText.setScaleY(5.0);
-		welcomeText.setStroke(Main.DARK_GREY);		
-		welcomeText.setFont(font);
-		welcomeText.setLayoutY(height);
 		
 		//Background customization
 		Background myBackground = new Background(new BackgroundImage(
@@ -51,16 +53,15 @@ public class IntroScene extends Scene {
 		//Begin button customization
 		begin = new Button("Begin");
 		Main.setRobinButtonStyle(begin);
-		begin.setScaleX(4.0);
+		begin.setMaxWidth(60.0); //size
+		begin.setMinWidth(60.0);
+		begin.setScaleX(4.0);	
 		begin.setScaleY(3.0);
-//		begin.setLayoutX(width/6.4);
-//		begin.setLayoutY(height/3.6);
-		begin.setLayoutX(600.0);
-		begin.setLayoutY(600.0);
-		begin.setTextFill(Main.DARK_GREY);
-		begin.setAlignment(Pos.BOTTOM_CENTER);
+		//Set the position based on the screen size
+		begin.setLayoutX(width/2.0 - begin.getMaxWidth()/2.0); //position
+		begin.setLayoutY(height/1.125);
 		
-		//Add everything in
+		//Add everything in	
 		root.getChildren().add(begin);
 		
 	}//end private constructor
