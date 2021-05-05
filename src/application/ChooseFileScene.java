@@ -131,7 +131,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 			if(files != null) {
 				for(int i = 0; i < files.size(); i++) {
 					String fileName = files.get(i).getAbsolutePath();
-					fileName = fileName.substring(1, fileName.length()-1);
+					//fileName = fileName.substring(1, fileName.length()-1);
 					data.add(fileName);
 				}
 				
@@ -153,12 +153,16 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				ObservableList<String> myFiles = fileList.getSelectionModel().getSelectedItems();
 				
 				
+				System.out.println(selectedIndeces.toString());
 				fc.removeFileButton(event, selectedIndeces);
 				//fileList.getItems().removeAll(myFiles);
-//				for(int index: selectedIndeces) {
-//					fileList.getItems().remove(index);
+				for(int index: selectedIndeces) {
+					fileList.getItems().remove(index);
+				}
+//				for(String i: myFiles) {
+//					fileList.getItems().remove(i);
 //				}
-				data.removeAll(myFiles);
+				//data.removeAll(myFiles);
 				fileList.getSelectionModel().clearSelection();
 			} catch (Exception e) {
 				e.printStackTrace();
