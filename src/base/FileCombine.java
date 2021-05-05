@@ -62,7 +62,7 @@ public class FileCombine {
 			for(File f: filesToCombine) {
 				
 				//Handle if the file is corrupt
-				if(isFileCorrupt(f)) {
+				if(isFileCorrupt(f) || isInvalid(f)) {
 					System.out.println("FILE " + f.getName() + " Was corrupt");
 					//We'll want to handle this better
 				}
@@ -115,6 +115,15 @@ public class FileCombine {
 		}
 		
 		
+		
+		return false;
+	}
+	
+	private boolean isInvalid(File file) {
+		if(!file.getName().endsWith(".txt") || !file.getName().endsWith(".java")) {
+			System.out.println("Can't open non txt or java: " + file.getName());
+			return true;
+		}
 		
 		return false;
 	}

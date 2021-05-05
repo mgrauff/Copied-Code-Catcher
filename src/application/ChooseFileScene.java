@@ -3,6 +3,14 @@ package application;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
+=======
+
+import javax.swing.JOptionPane;
+
+import base.FileProcessor;
+import base.Unzipper;
+>>>>>>> 2de45035447bf26de3634afd80586b8897bcb2fc
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,6 +19,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -142,6 +152,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		if(event.getSource()== selectFilesButton) {
 			List<File> files = fc.AddFileButtonAction(event);
 			if(files != null) {
+<<<<<<< HEAD
 				for(int i = 0; i < files.size(); i++) {
 					//String fileName = files.get(i).getName();
 					String fileName = files.get(i).getAbsolutePath();
@@ -152,6 +163,26 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 					}
 					//fileName = fileName.substring(1, fileName.length()-1);
 					//data.add(fileName);
+=======
+				
+				ArrayList<String> corruptFiles = new ArrayList<String>();
+				
+				for(File f : files) {
+					
+					if(!FileProcessor.isFileCorrupt(f)) {
+						data.add(f.toString());	
+					}
+					else {
+						corruptFiles.add(f.toString());
+					}
+				}
+				
+				if(corruptFiles.size() > 0) {
+					Alert a = new Alert(AlertType.WARNING);
+					a.setHeaderText("We encountered issues with the following files (they may be corrupt or empty):");
+					a.setContentText(corruptFiles.toString());
+					a.show();
+>>>>>>> 2de45035447bf26de3634afd80586b8897bcb2fc
 				}
 
 			}
