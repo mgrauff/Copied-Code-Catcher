@@ -398,7 +398,7 @@ public class ResultsScene extends Scene {
 	}
 	
 	/**
-	 * Helper function setting names
+	 * Helper function setting names.
 	 * @param passedNames
 	 */
 	public void setNames(String[] passedNames) {
