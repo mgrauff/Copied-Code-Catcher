@@ -58,7 +58,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		grid.setVgap(8);
 		grid.setHgap(10);
 		Background myBackground = new Background(new BackgroundImage(
-				new Image("file:src/HoodRobinRobin.png"), 
+				new Image("file:src/FileSelectionBackground.png"), 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundPosition.DEFAULT, 

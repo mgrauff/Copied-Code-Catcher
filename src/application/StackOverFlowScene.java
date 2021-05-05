@@ -38,28 +38,39 @@ public class StackOverFlowScene extends Scene {
 		
 		//Form
 		TextArea textInput = new TextArea();
+		textInput.setLayoutX(width/2.0);
+
+		
 		textInput.setMaxHeight(600.0);
 		textInput.setMinHeight(500.0);
 		textInput.setMinWidth(500.0);
 		textInput.setMaxWidth(700.0);
+		double middle = (width/2.0) + (textInput.getWidth() / 2.0);
+		//I want textInput to be in the center of the screen
+		textInput.setTranslateX(middle);
+		textInput.setTranslateY((height/8.0));
 		
 		//Enter Button
 		button = new Button("Enter");
 		button.setOnAction( e -> enterText(textInput));
 		Main.setRobinButtonStyle(button);
-		button.setScaleX(1.6);
+		button.setScaleX(2);
 		button.setScaleY(1.6);
+		button.setTranslateX(width/2.0);
+		button.setTranslateY((height/8.0) + 20);
 
 		//Back Button
 		backButton = new Button("Back");
 		Main.setRobinButtonStyle(backButton);
-		backButton.setScaleX(1.6);
+		backButton.setScaleX(2);
 		backButton.setScaleY(1.6);	
+		backButton.setTranslateX(width/2.0);
+		backButton.setTranslateY((height/8.0) + 40);
 
 		//Background
 		Background myBackground = new Background(new BackgroundFill(Main.BEIGE, null, null));
 		myBackground = new Background(new BackgroundImage(
-				new Image("file:src/HoodRobinRobin.png"), 
+				new Image("file:src/PasteCodeBackground.png"), 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundPosition.DEFAULT, 
