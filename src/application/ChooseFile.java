@@ -90,10 +90,8 @@ public class ChooseFile {
 	}//end AddFileButtonAction
 
 	public void removeFileButton(ActionEvent event, ObservableList<Integer> myFiles) {
-		System.out.println(myFiles.size());
 		if(myFiles.size() > 0) {
 			for(int fileName: myFiles) {
-				System.out.println("Removed: " + fileName);
 				selectedFiles.remove(fileName);
 			}
 		}

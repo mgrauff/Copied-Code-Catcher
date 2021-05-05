@@ -141,10 +141,18 @@ public class Main extends Application {
         primaryStage.show();
     }
 	
+	/**
+	 * Takes a button paramater and changes that button according to the style
+	 * choices contained in the function.
+	 * @param button
+	 */
 	public static void setRobinButtonStyle(Button button) {
 		
+		//Set the textFill and background colors
+		button.setStyle("-fx-background-color: #" + Main.GRAYISH_CYAN_COLOR + 
+				"; -fx-border-width: 5px; -fx-text-fill: #" + Main.BEIGE_COLOR + ";");
 		DropShadow shadow = new DropShadow();
-		button.setStyle("-fx-background-color: #" + Main.GRAYISH_CYAN_COLOR + "; -fx-border-width: 5px; -fx-text-fill: #" + Main.BEIGE_COLOR + ";");
+		
 		//Adding the shadow when the mouse cursor is on
 		button.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 		    button.setEffect(shadow);
@@ -154,7 +162,8 @@ public class Main extends Application {
 		button.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 		    button.setEffect(null);
 		});
-	}
+
+	}//end setRobinButtonStyle
 	
 	//This method is used to clear our files folder in src
 	//Note this is an incredibly dangerous method and can ONLY BE USED ON SRC/FILES
