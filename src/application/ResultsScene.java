@@ -332,13 +332,17 @@ public class ResultsScene extends Scene {
 		return b;
 	}
 	
+	/**
+	 * Function saving the results as a png
+	 * @return Save as PNG button
+	 */
 	private Button saveButton() {
 		Button b = new Button("Save as PNG");
 		Main.setRobinButtonStyle(b);
 		b.setOnAction(new EventHandler<ActionEvent>() {	 
             @Override
             public void handle(ActionEvent event) {
-            	saveImg();
+            	saveImg(); //Calling save image helper function
             }
         });
 		
@@ -356,27 +360,34 @@ public class ResultsScene extends Scene {
 		return s;
 	}
 	
+	/**
+	 * Save image helper function
+	 */
 	public void saveImg() {		
-		FileChooser fc = new FileChooser();
+		FileChooser fc = new FileChooser(); //For choosing destination folder
 		fc.getExtensionFilters().add(new ExtensionFilter("png images", "*.png"));
 		
-		File destFile = fc.showSaveDialog(null);
+		File destFile = fc.showSaveDialog(null); //Destination folder
 		
-		if(destFile != null) {
+		if(destFile != null) { //If it exists send PNG to file
 			WritableImage wi = new WritableImage((int)this.getWidth(), (int)this.getHeight());
 			this.snapshot(wi);	
 			
 			RenderedImage img = SwingFXUtils.fromFXImage(wi, null);
 			
-			try {
+			try { //Write PNG to dest file within try catch block
 				ImageIO.write(img, "png", destFile);
-			} catch (IOException e) {
+			} catch (IOException e) {//Catch any errors
 				System.out.println("Error saving file");
 				this.root.getChildren().add(errorBox("Error saving file"));
 			}
 		}
 	}
 	
+	/**
+	 * Helper function setting scores
+	 * @param passedScores
+	 */
 	public void setScores(double[][] passedScores) {
 		
 		for(int row = 0; row < passedScores.length; row++) {
@@ -385,6 +396,11 @@ public class ResultsScene extends Scene {
 			}
 		}	
 	}
+	
+	/**
+	 * Helper function setting names
+	 * @param passedNames
+	 */
 	public void setNames(String[] passedNames) {
 		
 		for(int index = 0; index < passedNames.length; index++) {
