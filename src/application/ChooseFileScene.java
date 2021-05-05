@@ -38,7 +38,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	Button removeFileButton; //button for removing files from the fileList
 	Button startComparisonButton; //Start comparing the current filelist.
 	Button stackOverflowButton;
-	ListView<String> fileList; //text area displaying all files in the ChooseFile object's selectedFile list
+	static ListView<String> fileList; //text area displaying all files in the ChooseFile object's selectedFile list
 	ObservableList<String> data = FXCollections.observableArrayList(); //stores the items in fileList
 	ChooseFile fc = new ChooseFile(); //ChooseFile object
 

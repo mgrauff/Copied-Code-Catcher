@@ -3,6 +3,8 @@
 
 package application;
 
+import java.io.File;
+
 import base.TxtWriter;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -81,7 +83,14 @@ public class StackOverFlowScene extends Scene {
 				TxtWriter write = new TxtWriter(fileName, count);
 				count ++;
 				lastText = text;
-				write.writeFile(text);
+				String name = write.writeFile(text);
+	
+				if(!name.equals("")) {
+					File f = new File(name);
+					ChooseFile.selectedFiles.add(f);
+					ChooseFileScene.fileList.getItems().add(name);
+					//We need to add file to list
+				}
 				textInput.clear();
 			}
 			else {

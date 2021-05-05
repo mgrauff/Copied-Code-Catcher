@@ -14,7 +14,7 @@ public class ChooseFile {
 	Unzipper uz;
 	String fileToUnzipPath;
 	String unzipToThisFilePath;
-	List<File> selectedFiles;
+	static List<File> selectedFiles;
 
 	public ChooseFile() {
 
