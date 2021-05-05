@@ -63,8 +63,9 @@ public class ChooseFile {
 
 	public void removeFileButton(ActionEvent event, ObservableList<Integer> myFiles) {
 		if(myFiles.size() > 0) {
-			for(int fileNum: myFiles) {
-				selectedFiles.remove(fileNum);
+			for(int fileName: myFiles) {
+				System.out.println("Removed: " + fileName);
+				selectedFiles.remove(fileName);
 			}
 		}
 	}
