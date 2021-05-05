@@ -26,6 +26,8 @@ public class Main extends Application {
 	
 	IntroScene intro;
 	ChooseFileScene fileChoose;
+	StackOverFlowScene pasteCode;
+	//ResultsScene results;
 	final public static Color BEIGE = Color.web("0xf3f4ed");
 	final public static String BEIGE_COLOR = "f3f4ed";
 	final public static Color GRAYISH_CYAN = Color.web("0x536162");
@@ -34,8 +36,6 @@ public class Main extends Application {
 	final public static String DARK_GREY_COLOR = "424642";
 	final public static Color ORANGE = Color.web("0xc06014");
 	final public static String ORANGE_COLOR = "c06014";
-	
-	
 	
 	@Override
     public void start(Stage primaryStage) {
@@ -47,6 +47,8 @@ public class Main extends Application {
 			{.4, .7, .9,  1, .2}, 
 			{.5, .8, .1, .2,  1}};
         String[]  names = {"Matt", "Luke", "Paul", "Enoch", "Alex"};
+        
+        
         
         intro = new IntroScene(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());   
         intro.begin.setOnAction(new EventHandler<ActionEvent>() {
@@ -97,22 +99,17 @@ public class Main extends Application {
 						System.out.println("");
 					}
 					
-	        		primaryStage.setScene(new ResultsScene(intro.getWidth(), intro.getHeight(), scores, names));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-        		
-        	}
-        });
-        fileChoose.stackOverflowButton.setOnAction(new EventHandler<ActionEvent>() {
-        	@Override
-        	public void handle(ActionEvent event) {
-        		try {
-        			File myFile;
-        			StackOverFlowScene SOFS = new StackOverFlowScene(intro.getWidth(), intro.getHeight());
-	        		primaryStage.setScene(SOFS);
-	        		myFile = new File(SOFS.lastText);
-	        		//fileChoose.data.add(arg0)''
+					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight(), scores, names);
+	        		primaryStage.setScene(results);
+	        		
+	        		results.backButton.setOnAction(new EventHandler<ActionEvent>() {
+	                	
+	                	@Override
+	                	public void handle(ActionEvent event) {
+	                		primaryStage.setScene(fileChoose);
+	                	}
+	                	
+	                });
 	        		
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -120,6 +117,29 @@ public class Main extends Application {
         		
         	}
         });
+        
+        fileChoose.stackOverflowButton.setOnAction(new EventHandler<ActionEvent>() {
+        	
+        	@Override
+        	public void handle(ActionEvent event) {
+
+	        	primaryStage.setScene(pasteCode);
+
+        	}
+        });
+        
+        pasteCode = new StackOverFlowScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight());
+        pasteCode.backButton.setOnAction(new EventHandler<ActionEvent>() {
+        	
+        	@Override 
+        	public void handle(ActionEvent event) {
+        		primaryStage.setScene(fileChoose);
+        	}
+        	
+        });
+        
+        
+        
 
         primaryStage.setScene(intro);
         primaryStage.setMaximized(true);
@@ -135,7 +155,6 @@ public class Main extends Application {
 		button.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 		    button.setEffect(shadow);
 		});
-		
 		
 		//Removing the shadow when the mouse cursor is off
 		button.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {

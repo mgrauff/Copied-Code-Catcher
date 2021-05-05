@@ -39,6 +39,7 @@ public class ResultsScene extends Scene {
 	
 	private HBox root;
 	private VBox leftHalf;
+	public Button backButton;
 	
 	private double[][] scores;
 	private String[] names;
@@ -73,6 +74,8 @@ public class ResultsScene extends Scene {
 		
 		Background myBackground = new Background(new BackgroundFill(Main.BEIGE, null, null));
 		root.setBackground(myBackground);
+		backButton = new Button("Back");
+		Main.setRobinButtonStyle(backButton);
 		
 		if(!validateParams(scores, names)) {
 			root.getChildren().add(errorBox("The dimensions of the provided scores and names do not match"));
@@ -95,6 +98,7 @@ public class ResultsScene extends Scene {
 		leftHalf.getChildren().add(worstScores());
 		leftHalf.getChildren().add(toggleButton());
 		leftHalf.getChildren().add(saveButton());
+		leftHalf.getChildren().add(backButton);
 		
 		root.getChildren().add(leftHalf);
 		root.getChildren().add(resultsGraph(scores));
@@ -305,6 +309,7 @@ public class ResultsScene extends Scene {
 	 */
 	private Button toggleButton() {
 		Button b = new Button("Show All Scores");
+		Main.setRobinButtonStyle(b);
 		b.setOnAction(new EventHandler<ActionEvent>() {	 
             @Override
             public void handle(ActionEvent event) {
@@ -329,6 +334,7 @@ public class ResultsScene extends Scene {
 	
 	private Button saveButton() {
 		Button b = new Button("Save as PNG");
+		Main.setRobinButtonStyle(b);
 		b.setOnAction(new EventHandler<ActionEvent>() {	 
             @Override
             public void handle(ActionEvent event) {
@@ -368,6 +374,21 @@ public class ResultsScene extends Scene {
 				System.out.println("Error saving file");
 				this.root.getChildren().add(errorBox("Error saving file"));
 			}
+		}
+	}
+	
+	public void setScores(double[][] passedScores) {
+		
+		for(int row = 0; row < passedScores.length; row++) {
+			for(int col = 0; col < passedScores[row].length; row++) {
+				this.scores[row][col] = passedScores[row][col];
+			}
+		}	
+	}
+	public void setNames(String[] passedNames) {
+		
+		for(int index = 0; index < passedNames.length; index++) {
+			this.names[index] = passedNames[index];
 		}
 	}
 	
