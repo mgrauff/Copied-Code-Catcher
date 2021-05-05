@@ -7,7 +7,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -85,7 +89,7 @@ public class Unzipper {
 	 * @throws IOException 
 	 * @returns ArrayList of Unzipped files
 	 */
-	public ArrayList<File> unzipTo(String destDir) throws IOException {
+	public ArrayList<File> unzipToOld(String destDir) throws IOException {
 		
 		ArrayList<File> entryListOut = new ArrayList<File>(); //create list for returning files
 		
@@ -127,6 +131,82 @@ public class Unzipper {
 		return entryListOut;
 		
 	}//unzipTo
+	
+	public ArrayList<File> unzipTo(String dest) throws IOException {
+		Files.copy(Paths.get(this.src), Paths.get(dest));
+		ArrayList<File> toReturn = extractFolder(dest);
+		new File(dest).delete();
+		return toReturn;
+	}
+	
+	private ArrayList<File> extractFolder(String zipFile) throws IOException 
+	{
+		ArrayList<File> toDelete = new ArrayList<File>();
+		ArrayList<File> toReturn = new ArrayList<File>();
+		
+//	    System.out.println(zipFile);
+	    int BUFFER = 2048;
+	    File file = new File(zipFile);
+
+	    ZipFile zip = new ZipFile(file);
+	    String newPath = zipFile.substring(0, zipFile.length() - 4);
+
+	    new File(newPath).mkdir();
+	    Enumeration zipFileEntries = zip.entries();
+
+	    // Process each entry
+	    while (zipFileEntries.hasMoreElements())
+	    {
+	        // grab a zip file entry
+	        ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
+	        String currentEntry = entry.getName();
+	        File destFile = new File(newPath, currentEntry);
+	        File destinationParent = destFile.getParentFile();
+
+	        // create the parent directory structure if needed
+	        destinationParent.mkdirs();
+
+	        if (!entry.isDirectory())
+	        {
+	            BufferedInputStream is = new BufferedInputStream(zip
+	            .getInputStream(entry));
+	            int currentByte;
+	            // establish buffer for writing file
+	            byte data[] = new byte[BUFFER];
+
+	            // write the current file to disk
+	            FileOutputStream fos = new FileOutputStream(destFile);
+	            BufferedOutputStream dest = new BufferedOutputStream(fos,
+	            BUFFER);
+
+	            // read and write until last byte is encountered
+	            while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
+	                dest.write(data, 0, currentByte);
+	            }
+	            dest.flush();
+	            dest.close();
+	            is.close();
+	            toReturn.add(destFile);
+	        }
+
+	        if (currentEntry.endsWith(".zip")) 	
+	        {
+	            // found a zip file, try to open
+	            toReturn.addAll(extractFolder(destFile.getAbsolutePath()));
+
+	            toDelete.add(destFile);
+	        }
+	    }
+	    
+	    zip.close();
+	    for(File f : toDelete) {
+	    	toReturn.remove(f);
+	    	f.delete();
+	    }
+    	
+	    return toReturn;
+	}
+	
 	
 	/**
 	 * 

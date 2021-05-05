@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import base.FileProcessor;
 import base.Unzipper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -131,8 +134,24 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		if(event.getSource()== selectFilesButton) {
 			List<File> files = fc.AddFileButtonAction(event);
 			if(files != null) {
+				
+				ArrayList<String> corruptFiles = new ArrayList<String>();
+				
 				for(File f : files) {
-					data.add(f.toString());
+					
+					if(!FileProcessor.isFileCorrupt(f)) {
+						data.add(f.toString());	
+					}
+					else {
+						corruptFiles.add(f.toString());
+					}
+				}
+				
+				if(corruptFiles.size() > 0) {
+					Alert a = new Alert(AlertType.WARNING);
+					a.setHeaderText("We encountered issues with the following files (they may be corrupt or empty):");
+					a.setContentText(corruptFiles.toString());
+					a.show();
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package application;
 
+import base.FileProcessor;
 import base.Unzipper;
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class ChooseFile {
 				try {
 					if(Unzipper.isZipped(f)) {
 						Unzipper u = new Unzipper(f);
-						ArrayList<File> unzippedFiles = u.unzipTo("src/files/");
+						ArrayList<File> unzippedFiles = u.unzipTo("src/files/"+f.getName());
 						for(File unzFile : unzippedFiles) {
 							selectedFiles.add(unzFile);
 							allFiles.add(unzFile);
@@ -75,7 +76,13 @@ public class ChooseFile {
 					e.printStackTrace();
 				}
 			}
-
+			
+			for(File f : allFiles) {
+				if(FileProcessor.isFileCorrupt(f)) {
+					selectedFiles.remove(f);
+				}
+			}
+			
 			return allFiles; //return the files to the user
 		}
 		
