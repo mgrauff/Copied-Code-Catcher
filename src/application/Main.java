@@ -40,17 +40,10 @@ public class Main extends Application {
 	@Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Copied Code Catcher");
-        double[][] scores = 
-           {{ 1, .2, .3, .4, .5},
-			{.2,  1, .6, .7, .8},
-			{.3, .6,  1, .9, .1},
-			{.4, .7, .9,  1, .2}, 
-			{.5, .8, .1, .2,  1}};
-        String[]  names = {"Matt", "Luke", "Paul", "Enoch", "Alex"};
         
         
         
-        intro = new IntroScene(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());   
+        intro = new IntroScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50);   
         intro.begin.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent event) {
@@ -58,7 +51,7 @@ public class Main extends Application {
         	}
         });
         
-        fileChoose = new ChooseFileScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight());
+        fileChoose = new ChooseFileScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50);
         fileChoose.startComparisonButton.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent event) {
@@ -99,7 +92,7 @@ public class Main extends Application {
 						System.out.println("");
 					}
 					
-					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight(), scores, names);
+					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50, scores, names);
 	        		primaryStage.setScene(results);
 	        		
 	        		results.backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -128,7 +121,7 @@ public class Main extends Application {
         	}
         });
         
-        pasteCode = new StackOverFlowScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight());
+        pasteCode = new StackOverFlowScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50);
         pasteCode.backButton.setOnAction(new EventHandler<ActionEvent>() {
         	
         	@Override 
@@ -166,12 +159,14 @@ public class Main extends Application {
 	//Note this is an incredibly dangerous method and can ONLY BE USED ON SRC/FILES
 	private static void clearFilesFolder(File folder) {
 	    File[] files = folder.listFiles();
-	    if(files!=null) { //some JVMs return null for empty dirs
-	        for(File f: files) {
-	            if(f.isDirectory()) {
-	                clearFilesFolder(f);
+	    //Clear through files in folder
+	    if(files!=null) {
+	        for(File file: files) {
+	            if(file.isDirectory()) {
+	            	//recurse
+	                clearFilesFolder(file);
 	            } else {
-	                f.delete();
+	                file.delete();
 	            }
 	        }
 	    }
