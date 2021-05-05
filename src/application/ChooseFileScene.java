@@ -226,11 +226,4 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 
 	}//end handle
 
-	/**
-	 * gets selectedFiles from fc
-	 * @return
-	 */
-	public List<File> selectedFiles() {
-		return fc.selectedFiles;
-	}//selected Files
 }
