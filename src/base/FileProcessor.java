@@ -14,9 +14,7 @@ public class FileProcessor {
         GOT_OPERATOR,
         IN_LINE_COMMENT,
         IN_MULTI_LINE_COMMENT,
-        IN_STRING,
-        GOT_KEYWORD, //not currently used
-        FINISHED //not currently used
+        IN_STRING
     }//end state
     
     /**
@@ -175,11 +173,6 @@ public class FileProcessor {
                 break;
                 //end IN_STRING
 
-                case GOT_KEYWORD:
-                //yet to be implemented
-                break;
-                //end GOT_KEYWORD
-
                 case IN_LINE_COMMENT:
                 //read until a newline character
                 currChar = sourceScanner.next().charAt(0);
@@ -195,11 +188,6 @@ public class FileProcessor {
                 }
                 break;
                 //end IN_MULTI_LINE_COMMENT
-                
-                case FINISHED:
-                //yet to be implemented
-                break;
-                //end FINISHED
 
             }//end switch
 

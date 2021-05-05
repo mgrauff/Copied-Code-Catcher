@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -153,7 +152,6 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				ObservableList<String> myFiles = fileList.getSelectionModel().getSelectedItems();
 				
 				
-				System.out.println(selectedIndeces.toString());
 				fc.removeFileButton(event, selectedIndeces);
 				//fileList.getItems().removeAll(myFiles);
 				for(int index: selectedIndeces) {
