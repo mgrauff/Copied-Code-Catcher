@@ -95,7 +95,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		GridPane.setConstraints(addDirectoryButton, 3, 0);
 
 		//removeFileButton
-		removeFileButton = new Button("Remove File(s)");
+		removeFileButton = new Button("Remove File");
 		removeFileButton.setDisable(true);
 		removeFileButton.setOnAction(this);
 		Main.setRobinButtonStyle(removeFileButton);
@@ -113,7 +113,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		filesHolder = new String[fc.selectedFiles.size()];
 		fileList.setItems(data); //populate the fileList
 		fileList.setEditable(false);//we don't want the user messing with the list
-		fileList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		fileList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		//Only have the remove file button active when something is selected
 		fileList.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -152,76 +152,76 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 			List<File> files = fc.AddFileButtonAction(event);
 			if(files != null) {
 
-				for(int i = 0; i < files.size(); i++) {
-					//String fileName = files.get(i).getName();
-					String fileName = files.get(i).getAbsolutePath();
-					System.out.println(filesHolder.length);
-					for(int j = 0; j < filesHolder.length; j++) {
-						System.out.println(filesHolder[i]);
-						data.add(filesHolder[i]);
+//				for(int i = 0; i < files.size(); i++) {
+//					//String fileName = files.get(i).getName();
+//					String fileName = files.get(i).getAbsolutePath();
+//					//					System.out.println(filesHolder.length);
+//					//					for(int j = 0; j < filesHolder.length; j++) {
+//					//						System.out.println(filesHolder[i]);
+//					//						data.add(filesHolder[i]);
+//					//					}
+//					//fileName = fileName.substring(1, fileName.length()-1);
+//					data.add(fileName);
+//				}
+
+
+				ArrayList<String> corruptFiles = new ArrayList<String>();
+
+				for(File f : files) {
+
+					if(!FileProcessor.isFileCorrupt(f)) {
+						data.add(f.toString());	
 					}
-					//fileName = fileName.substring(1, fileName.length()-1);
-					//data.add(fileName);
-
-
-					ArrayList<String> corruptFiles = new ArrayList<String>();
-
-					for(File f : files) {
-
-						if(!FileProcessor.isFileCorrupt(f)) {
-							data.add(f.toString());	
-						}
-						else {
-							corruptFiles.add(f.toString());
-						}
+					else {
+						corruptFiles.add(f.toString());
 					}
+				}
 
-					if(corruptFiles.size() > 0) {
-						Alert a = new Alert(AlertType.WARNING);
-						a.setHeaderText("We encountered issues with the following files (they may be corrupt or empty):");
-						a.setContentText(corruptFiles.toString());
-						a.show();
-
-					}
+				if(corruptFiles.size() > 0) {
+					Alert a = new Alert(AlertType.WARNING);
+					a.setHeaderText("We encountered issues with the following files (they may be corrupt or empty):");
+					a.setContentText(corruptFiles.toString());
+					a.show();
 
 				}
+
 			}
+		}
 
-			if(event.getSource() == addDirectoryButton) {
-				try{
-					ArrayList<File> allFiles = fc.fileDirectory(event);
-					for(File name: allFiles) {
-						//data.add(name.getName() + "\n");
-						//data.add(name.toString() + "\n");
-					}
-				} catch (Exception e) {}
-			}
-
-			if(event.getSource() == removeFileButton) {
-				try {
-					ObservableList<Integer> selectedIndeces = fileList.getSelectionModel().getSelectedIndices();
-					ObservableList<String> myFiles = fileList.getSelectionModel().getSelectedItems();
-
-
-
-					fc.removeFileButton(event, selectedIndeces);
-					System.out.println(selectedIndeces.toString());
-					System.out.println(myFiles.toString());
-					//				fileList.getItems().removeAll(myFiles);
-					//				for(int index: selectedIndeces) {
-					//					fileList.getItems().remove(index);
-					//				}
-					//								for(String i: myFiles) {
-					//									System.out.println("Removed fileName: " + i);
-					//									fileList.getItems().remove(i);
-					//								}
-					fileList.getItems().removeAll(myFiles);
-					//data.removeAll(myFiles);
-					fileList.getSelectionModel().clearSelection();
-				} catch (Exception e) {
-					e.printStackTrace();
+		if(event.getSource() == addDirectoryButton) {
+			try{
+				ArrayList<File> allFiles = fc.fileDirectory(event);
+				for(File name: allFiles) {
+					//data.add(name.getName() + "\n");
+					//data.add(name.toString() + "\n");
 				}
+			} catch (Exception e) {}
+		}
+
+		if(event.getSource() == removeFileButton) {
+			try {
+				ObservableList<Integer> selectedIndeces = fileList.getSelectionModel().getSelectedIndices();
+				ObservableList<String> myFiles = fileList.getSelectionModel().getSelectedItems();
+				ObservableList<Integer> copy = FXCollections.observableArrayList(selectedIndeces);
+
+				fileList.getItems().removeAll(myFiles);
+				fc.removeFileButton(event, copy);
+				
+				//				fileList.getItems().removeAll(myFiles);
+				//				for(int index: selectedIndeces) {
+				//					fileList.getItems().remove(index);
+				//				}
+				//								for(String i: myFiles) {
+				//									System.out.println("Removed fileName: " + i);
+				//									fileList.getItems().remove(i);
+				//								}
+				
+				//data.removeAll(myFiles);
+				fileList.getSelectionModel().clearSelection();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+
 		}
 
 	}//end handle
