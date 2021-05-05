@@ -129,9 +129,12 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		if(event.getSource()== selectFilesButton) {
 			List<File> files = fc.AddFileButtonAction(event);
 			if(files != null) {
-				String fileName = files.toString();
-				fileName = fileName.substring(1, fileName.length()-1);
-				data.add(fileName);
+				for(int i = 0; i < files.size(); i++) {
+					String fileName = files.get(i).getAbsolutePath();
+					fileName = fileName.substring(1, fileName.length()-1);
+					data.add(fileName);
+				}
+				
 			}
 		}
 		
@@ -148,11 +151,18 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 			try {
 				ObservableList<Integer> selectedIndeces = fileList.getSelectionModel().getSelectedIndices();
 				ObservableList<String> myFiles = fileList.getSelectionModel().getSelectedItems();
-				fc.removeFileButton(event, myFiles);
-				for(int index: selectedIndeces) {
-					fileList.getItems().remove(index);
-				}
-			} catch (Exception e) {}
+				
+				
+				fc.removeFileButton(event, selectedIndeces);
+				//fileList.getItems().removeAll(myFiles);
+//				for(int index: selectedIndeces) {
+//					fileList.getItems().remove(index);
+//				}
+				data.removeAll(myFiles);
+				fileList.getSelectionModel().clearSelection();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}//end handle
