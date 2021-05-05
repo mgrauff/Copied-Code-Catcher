@@ -136,7 +136,7 @@ public class ResultsScene extends Scene {
 					percentGreen++;
 				} else if (scores[row][col] <= RED_THRESHOLD) {
 					percentYellow++;
-				} else if (scores[row][col] < 1) {
+				} else if (scores[row][col] <= 1) {
 					percentRed++;
 				}
 			}//end for col

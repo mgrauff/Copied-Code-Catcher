@@ -193,7 +193,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				ArrayList<File> allFiles = fc.fileDirectory(event);
 				for(File name: allFiles) {
 					//data.add(name.getName() + "\n");
-					//data.add(name.toString() + "\n");
+					data.add(name.toString() + "\n");
 				}
 			} catch (Exception e) {}
 		}
