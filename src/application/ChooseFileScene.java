@@ -120,7 +120,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	    		removeFileButton, 
 	    		stackOverflowButton,
 	    		startComparisonButton);
-	    ncf.setSpacing(20);
+	    ncf.setSpacing(20); 
 		ncf.setPadding(new Insets(20, 50, 50, 60));
 		grid.getChildren().addAll(ncf);
 	}
