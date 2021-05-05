@@ -27,6 +27,7 @@ public class Main extends Application {
 	IntroScene intro;
 	ChooseFileScene fileChoose;
 	StackOverFlowScene pasteCode;
+	static String directory = "src/files/";
 	//ResultsScene results;
 	final public static Color BEIGE = Color.web("0xf3f4ed");
 	final public static String BEIGE_COLOR = "f3f4ed";
@@ -172,8 +173,14 @@ public class Main extends Application {
 	    }
 	}
 	
+	
+    @Override
+    public void stop() {
+    	//Clear files folder on exit
+    	clearFilesFolder(new File(directory));
+    }
+	
 	public static void main(String[] args) {
-		String directory = "src/files/";
 		clearFilesFolder(new File(directory));
 		launch(args);
 	}
