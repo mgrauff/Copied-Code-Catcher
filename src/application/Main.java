@@ -162,7 +162,25 @@ public class Main extends Application {
 		});
 	}
 	
+	//This method is used to clear our files folder in src
+	//Note this is an incredibly dangerous method and can ONLY BE USED ON SRC/FILES
+	private static void clearFilesFolder(File folder) {
+	    File[] files = folder.listFiles();
+	    if(files!=null) { //some JVMs return null for empty dirs
+	        for(File f: files) {
+	            if(f.isDirectory()) {
+	                clearFilesFolder(f);
+	            } else {
+	                f.delete();
+	            }
+	        }
+	    }
+	}
+	
 	public static void main(String[] args) {
+		String directory = "src/files/";
+		clearFilesFolder(new File(directory));
 		launch(args);
 	}
+	
 }

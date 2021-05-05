@@ -1,5 +1,6 @@
 package base;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -12,7 +13,7 @@ import java.io.InputStreamReader;
 
 public class TxtWriter {
 	 private String fileName;
-	 
+	 private String pathName = "src/files/";
 	 
 	 /**
 	  * 
@@ -22,6 +23,7 @@ public class TxtWriter {
 	 public TxtWriter(String fileName, int fileNumber) {
 		 //Create filename in format of: fileName#.txt
 		 String fileCombo =fileName.concat( String.valueOf(fileNumber)).concat(".txt") ;
+		 fileCombo = pathName.concat(fileCombo);
 		 this.fileName = fileCombo;
 	 }
  
@@ -44,5 +46,7 @@ public class TxtWriter {
 			 e.printStackTrace();
 		 }
 		 scnr.close();
+		 
+		 
 	 }
 }
