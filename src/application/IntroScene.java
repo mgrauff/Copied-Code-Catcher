@@ -53,10 +53,10 @@ public class IntroScene extends Scene {
 		Main.setRobinButtonStyle(begin);
 		begin.setScaleX(4.0);
 		begin.setScaleY(3.0);
-		System.out.println(width);
-		System.out.println(height);
-		begin.setLayoutX(width/6.4);
-		begin.setLayoutY(height/3.6);
+//		begin.setLayoutX(width/6.4);
+//		begin.setLayoutY(height/3.6);
+		begin.setLayoutX(600.0);
+		begin.setLayoutY(600.0);
 		begin.setTextFill(Main.DARK_GREY);
 		begin.setAlignment(Pos.BOTTOM_CENTER);
 		

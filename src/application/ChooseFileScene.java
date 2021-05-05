@@ -1,7 +1,6 @@
 package application;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	Button removeFileButton; //button for removing files from the fileList
 	Button startComparisonButton; //Start comparing the current filelist.
 	Button stackOverflowButton;
-	ListView<String> fileList; //text area displaying all files in the ChooseFile object's selectedFile list
+	static ListView<String> fileList; //text area displaying all files in the ChooseFile object's selectedFile list
 	ObservableList<String> data = FXCollections.observableArrayList(); //stores the items in fileList
 	ChooseFile fc = new ChooseFile(); //ChooseFile object
 
@@ -123,7 +122,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	    		removeFileButton, 
 	    		stackOverflowButton,
 	    		startComparisonButton);
-	    ncf.setSpacing(20); 
+	    ncf.setSpacing(20);
 		ncf.setPadding(new Insets(20, 50, 50, 60));
 		grid.getChildren().addAll(ncf);
 	}
@@ -153,6 +152,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 					a.setContentText(corruptFiles.toString());
 					a.show();
 				}
+				
 			}
 		}
 		
@@ -170,11 +170,20 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				ObservableList<Integer> selectedIndeces = fileList.getSelectionModel().getSelectedIndices();
 				ObservableList<String> myFiles = fileList.getSelectionModel().getSelectedItems();
 				
-				fc.removeFileButton(event, myFiles);
+				
+				fc.removeFileButton(event, selectedIndeces);
+				//fileList.getItems().removeAll(myFiles);
 				for(int index: selectedIndeces) {
 					fileList.getItems().remove(index);
 				}
-			} catch (Exception e) {}
+//				for(String i: myFiles) {
+//					fileList.getItems().remove(i);
+//				}
+				//data.removeAll(myFiles);
+				fileList.getSelectionModel().clearSelection();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}//end handle
@@ -186,8 +195,4 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	public List<File> selectedFiles() {
 		return fc.selectedFiles;
 	}//selected Files
-	
-	public static void main(String[] args) {
-		Main.main(args);
-	}
 }

@@ -31,8 +31,9 @@ public class TxtWriter {
 	  * Will write text to file
 	  * @param text - text to be written to file
 	  */
-	 public void writeFile(String text)   {
+	 public String writeFile(String text)   {
 		 //Scan through text line by line
+		 boolean error = false;
 		 Scanner scnr = new Scanner(text);
 		 try {
 			 PrintWriter writer = new PrintWriter(fileName, "UTF-8");
@@ -41,12 +42,18 @@ public class TxtWriter {
 				 writer.println(text);
 			 }
 			 writer.close();
+			 
 		 }
 		 catch (IOException e) {
 			 e.printStackTrace();
+			 error = true;
 		 }
 		 scnr.close();
+		 if(error) {
+			 return "";
+		 }
 		 
 		 
+		 return fileName;
 	 }
 }

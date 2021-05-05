@@ -12,25 +12,25 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 public class ChooseFile {
-	
+
 	Unzipper uz;
 	String fileToUnzipPath;
 	String unzipToThisFilePath;
-	List<File> selectedFiles;
+	static List<File> selectedFiles;
 
 	public ChooseFile() {
-		
+
 		unzipToThisFilePath = null;
 		selectedFiles = new ArrayList<File>();
 		fileToUnzipPath = null;
-		
+
 	}
-	
+
 	public ArrayList<File> fileDirectory(ActionEvent event) {
 		ArrayList<File> projectList = new ArrayList<File>();
 		DirectoryChooser dc = new DirectoryChooser();
 		File directory = dc.showDialog(null);
-		
+
 		if(directory != null) {
 			File[] files = directory.listFiles();
 			if(directory.isDirectory()) {
@@ -42,10 +42,10 @@ public class ChooseFile {
 				}
 			}
 		}
-		
+
 		return projectList;
 	}
-	
+
 	/**
 	 * AddFileButtonAction handles the user clicking the Add File(s) button 
 	 * @param event: the user clicked the Add file(s) button
@@ -85,28 +85,16 @@ public class ChooseFile {
 			
 			return allFiles; //return the files to the user
 		}
-		
+
 		return null; //don't return anything if nothing was selected
 	}//end AddFileButtonAction
-	
-	public void removeFileButton(ActionEvent event, ObservableList<String> myFiles) {
-		ArrayList<File> removedFiles = new ArrayList<File>();
-		
-		for(String s : myFiles) {
-			for(int i = 0; i < selectedFiles.size(); i++) {
-				File f = selectedFiles.get(i);
-				if(f.getPath() == s) {
-					removedFiles.add(f);
-				}
+
+	public void removeFileButton(ActionEvent event, ObservableList<Integer> myFiles) {
+		if(myFiles.size() > 0) {
+			for(int fileNum: myFiles) {
+				selectedFiles.remove(fileNum);
 			}
 		}
-		
-		for(File f : removedFiles) {
-			selectedFiles.remove(f);
-		}
-//		for(String fileName: myFiles) {
-//			selectedFiles.remove(fileName);
-//		}
 	}
-	
+
 }

@@ -27,6 +27,7 @@ public class Main extends Application {
 	IntroScene intro;
 	ChooseFileScene fileChoose;
 	StackOverFlowScene pasteCode;
+	static String directory = "src/files/";
 	//ResultsScene results;
 	final public static Color BEIGE = Color.web("0xf3f4ed");
 	final public static String BEIGE_COLOR = "f3f4ed";
@@ -40,13 +41,6 @@ public class Main extends Application {
 	@Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Copied Code Catcher");
-        double[][] scores = 
-           {{ 1, .2, .3, .4, .5},
-			{.2,  1, .6, .7, .8},
-			{.3, .6,  1, .9, .1},
-			{.4, .7, .9,  1, .2}, 
-			{.5, .8, .1, .2,  1}};
-        String[]  names = {"Matt", "Luke", "Paul", "Enoch", "Alex"};
         
         
         
@@ -166,19 +160,27 @@ public class Main extends Application {
 	//Note this is an incredibly dangerous method and can ONLY BE USED ON SRC/FILES
 	private static void clearFilesFolder(File folder) {
 	    File[] files = folder.listFiles();
-	    if(files!=null) { //some JVMs return null for empty dirs
-	        for(File f: files) {
-	            if(f.isDirectory()) {
-	                clearFilesFolder(f);
+	    //Clear through files in folder
+	    if(files!=null) {
+	        for(File file: files) {
+	            if(file.isDirectory()) {
+	            	//recurse
+	                clearFilesFolder(file);
 	            } else {
-	                f.delete();
+	                file.delete();
 	            }
 	        }
 	    }
 	}
 	
+	
+    @Override
+    public void stop() {
+    	//Clear files folder on exit
+    	clearFilesFolder(new File(directory));
+    }
+	
 	public static void main(String[] args) {
-		String directory = "src/files/";
 		clearFilesFolder(new File(directory));
 		launch(args);
 	}
