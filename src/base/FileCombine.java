@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileCombine {
-	ArrayList<File> filesToCombine; //the files to combine into 1
-	String outFileName; //the name that the outputfile should be called
+//	ArrayList<File> filesToCombine; //the files to combine into 1
+//	String outFileName; //the name that the outputfile should be called
+	String directory = "src/files/";
 	
-	public FileCombine(ArrayList<File> filesToCombine, String outFileName) {
-		this.filesToCombine = filesToCombine;
-		this.outFileName = outFileName;
+	public FileCombine() {
 		
 	}
 	
@@ -22,7 +21,41 @@ public class FileCombine {
 	 * will combine the files fed to output file named outfilename
 	 * saves files as txt
 	 */
-	public void combineFiles() {
+	public void combineFiles(File f, String outFileName) {
+		try {
+			PrintWriter writer = new PrintWriter(outFileName, "UTF-8");
+
+			//Handle if the file is corrupt
+			if(isFileCorrupt(f)) {
+				System.out.println("FILE " + f.getName() + " Was corrupt");
+				//We'll want to handle this better
+			}
+			else {
+				//We scan through file and print to output as we go
+				Scanner scnr = new Scanner(f);
+				while(scnr.hasNextLine()) {
+					writer.println(scnr.nextLine());
+				}
+				
+				scnr.close();
+			}
+		
+		
+			writer.close();
+		}
+		catch (Exception e) {
+			//TODO: We'll want to handle this better. Perhaps just an error box pop-up, but we'll need something.
+			System.err.println(e);
+		}
+	}
+	
+	
+	
+	/**
+	 * will combine the files fed to output file named outfilename
+	 * saves files as txt
+	 */
+	public void combineFiles(ArrayList<File> filesToCombine, String outFileName) {
 		try {
 			PrintWriter writer = new PrintWriter(outFileName, "UTF-8");
 			//For each file, write it to the output file
