@@ -1,11 +1,16 @@
 package application;
 
+import base.FileCombine;
 import base.FileProcessor;
+import base.TxtWriter;
 import base.Unzipper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.stage.DirectoryChooser;
@@ -74,10 +79,49 @@ public class ChooseFile {
 					if(Unzipper.isZipped(f)) { //check if zipped
 						Unzipper u = new Unzipper(f); //Unzip if so
 						ArrayList<File> unzippedFiles = u.unzipTo("src/files/"+f.getName());
-						for(File unzFile : unzippedFiles) {
-							selectedFiles.add(unzFile); //Add to selectedFiles and to return array
-							allFiles.add(unzFile);
+						HashMap<String, ArrayList<File>> map = new HashMap<String,ArrayList<File>>();
+						for(String name: u.names) {
+							name = name.substring(0, name.length()-1);
+							map.put(name, null);
 						}
+						
+						ArrayList<File> al;
+						for(File unzFile : unzippedFiles) {
+							//ONLY LOOK AT JAVA FILES
+							if(unzFile.getName().endsWith(".java")) {
+								for(String name: u.names) {
+									name = name.substring(0,name.length()-1);
+									if(unzFile.getPath().contains(name)) {
+										if(map.get(name) == null) {
+											al = new ArrayList<File>();
+											al.add(unzFile);
+											map.put(name, al);
+										}
+										else {
+											al = map.get(name);
+											al.add(unzFile);
+											map.put(name,al);
+										}
+									}
+								}
+								
+
+							}
+							
+							
+						}
+						for(String name: map.keySet()) {
+							al = map.get(name);
+							FileCombine fileCombine = new FileCombine();
+							String out = "src/files/" + name + ".txt";
+							File outFile = fileCombine.combineFiles(al, out);
+							selectedFiles.add(outFile); //Add to selectedFiles and to return array
+							
+							
+							allFiles.add(outFile);
+						}
+						
+						
 					}
 					else {//else not zipped
 						selectedFiles.add(f);//Add to selectedFiles and to return array

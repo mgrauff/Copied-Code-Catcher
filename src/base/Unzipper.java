@@ -12,13 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class Unzipper {
 	boolean error = false; //IF error exists in zipped folder
-	
+	public ArrayList<String> names = new ArrayList<String>();
 	public static boolean isZipped(File f) throws IOException {
 		boolean isZipped = false;
 
@@ -134,12 +135,12 @@ public class Unzipper {
 	
 	public ArrayList<File> unzipTo(String dest) throws IOException {
 		Files.copy(Paths.get(this.src), Paths.get(dest));
-		ArrayList<File> toReturn = extractFolder(dest);
+		ArrayList<File> toReturn = extractFolder(dest,0);
 		new File(dest).delete();
 		return toReturn;
 	}
 	
-	private ArrayList<File> extractFolder(String zipFile) throws IOException 
+	private ArrayList<File> extractFolder(String zipFile, int depth) throws IOException 
 	{
 		ArrayList<File> toDelete = new ArrayList<File>();
 		ArrayList<File> toReturn = new ArrayList<File>();
@@ -165,7 +166,6 @@ public class Unzipper {
 
 	        // create the parent directory structure if needed
 	        destinationParent.mkdirs();
-
 	        if (!entry.isDirectory())
 	        {
 	            BufferedInputStream is = new BufferedInputStream(zip
@@ -188,11 +188,16 @@ public class Unzipper {
 	            is.close();
 	            toReturn.add(destFile);
 	        }
+	        else if(entry.isDirectory() && depth == 0) {
+	        	names.add(entry.getName());
+	        }
+	        	
+	        
 
 	        if (currentEntry.endsWith(".zip")) 	
 	        {
 	            // found a zip file, try to open
-	            toReturn.addAll(extractFolder(destFile.getAbsolutePath()));
+	            toReturn.addAll(extractFolder(destFile.getAbsolutePath(),depth + 1));
 
 	            toDelete.add(destFile);
 	        }
