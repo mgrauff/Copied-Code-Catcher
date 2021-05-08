@@ -244,11 +244,12 @@ public class ResultsScene extends Scene {
 				col = Color.RED;
 			}
 			else if(maxScore > YELLOW_SD) {
-				col = Color.YELLOW;
+				col = Color.ORANGE;
 			}
 			
 			//set text of entire row to indicator color
-			currColumn = String.format("%-80s%s%s", names[i], df.format(scoreToDisplay), names[maxScoreIndex]);
+			currColumn = String.format("%-35.30s %-10s %35.30s ", names[i], df.format(scoreToDisplay), names[maxScoreIndex]);
+			System.out.println(currColumn);
 			Text cell = new Text(currColumn);
 			Font font = Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12);
 			cell.setFill(col);
