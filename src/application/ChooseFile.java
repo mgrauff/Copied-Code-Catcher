@@ -108,8 +108,8 @@ public class ChooseFile {
 	
 	
 	/**
-	 * AddFileButtonAction handles the user clicking the Add File(s) button 
-	 * @param event: the user clicked the Add file(s) button
+	 * AddMyGCCButtonAction handles the user clicking the add MyGCC zip(s) button 
+	 * @param event: the user clicked the MYGCC zip(s) button
 	 * @return the list of files selected by the user
 	 */
 	public List<File> AddMyGCCButton(ActionEvent event) {
@@ -125,17 +125,20 @@ public class ChooseFile {
 						Unzipper u = new Unzipper(f); //Unzip if so
 						ArrayList<File> unzippedFiles = u.unzipTo("src/files/"+f.getName());
 						HashMap<String, ArrayList<File>> map = new HashMap<String,ArrayList<File>>();
+						//Get the names of students inside folder
 						for(String name: u.names) {
 							name = name.substring(0, name.length()-1);
 							map.put(name, null);
 						}
 						
 						ArrayList<File> al;
+					
 						for(File unzFile : unzippedFiles) {
 							//ONLY LOOK AT JAVA FILES
 							if(unzFile.getName().endsWith(".java")) {
 								for(String name: u.names) {
 									name = name.substring(0,name.length()-1);
+									//if the path contains the student name, it belongs to that student
 									if(unzFile.getPath().contains(name)) {
 										if(map.get(name) == null) {
 											al = new ArrayList<File>();
@@ -158,6 +161,7 @@ public class ChooseFile {
 						for(String name: map.keySet()) {
 							al = map.get(name);
 							FileCombine fileCombine = new FileCombine();
+							//We need to combine the files belonging to the student
 							String out = "src/files/" + name + count + ".txt";
 							count ++;
 							File outFile = fileCombine.combineFiles(al, out);
