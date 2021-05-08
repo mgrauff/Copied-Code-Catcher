@@ -23,7 +23,6 @@ public class TextMain {
 	public static void main(String[] args) throws IOException {
 
 
-
 		String filePath; //Where all the files are coming from
 		ArrayList<FileProcessor> files = new ArrayList<FileProcessor>(); //ArrayList for our files
 
@@ -120,7 +119,7 @@ public class TextMain {
 
 		}
 
-	}
+	}//end Main
 
 	/**
 	 * saveOutput

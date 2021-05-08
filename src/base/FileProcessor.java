@@ -158,8 +158,13 @@ public class FileProcessor {
 						if(operatorEndings.contains("" + currChar)) {
 							/*keep track of the total operator if the
                                 current char is part of an operator ending*/
-							totalOperator = totalOperator + currChar; 
-							operatorMap.put(totalOperator, operatorMap.get(totalOperator) + 1);
+							totalOperator = totalOperator + currChar;
+							if(operatorMap.containsKey(totalOperator)) {
+								operatorMap.put(totalOperator, operatorMap.get(totalOperator) + 1);
+							} else {
+								operatorMap.put("" + prevChar, operatorMap.get("" + prevChar) + 1);	
+							}
+							//operatorMap.put(totalOperator, operatorMap.get(totalOperator) + 1);
 							control = state.LOOKING;
 						} else {
 							operatorMap.put(totalOperator, operatorMap.get(totalOperator) + 1);
