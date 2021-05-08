@@ -134,7 +134,7 @@ public class Main extends Application {
 							
 							DecimalFormat df = new DecimalFormat("0.000");
 							
-							System.out.print(df.format(zScores[i][j]) + "\t");
+							//System.out.print(df.format(zScores[i][j]) + "\t");
 							
 						}						
 						System.out.println("");
