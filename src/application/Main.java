@@ -99,6 +99,9 @@ public class Main extends Application {
 					
 					
 					//CALCULATE STD DEVIATION
+					//The one group who used standard deviation inspired us
+					//This code is NOT COPIED, but the idea comes from them
+					//I'm not sure which group that is
 					double SD = 0.0;
 					double sum=0.0;
 					double sqDist;
