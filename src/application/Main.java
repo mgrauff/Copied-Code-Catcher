@@ -59,7 +59,6 @@ public class Main extends Application {
         		try {
         			List<File> selectedFiles = fileChoose.selectedFiles();
 					Operators op = new Operators();
-					System.out.println(op.operatorList);
 					FileProcessor[] fpAry= new FileProcessor[selectedFiles.size()];
 					String[] names = new String[selectedFiles.size()];
 					double[][] scores = new double[selectedFiles.size()][selectedFiles.size()];
@@ -94,7 +93,7 @@ public class Main extends Application {
 							}
 						}
 					}
-					int numSamples = (size*size)-1;
+					int numSamples = (size*size)-size;
 					avg = avg/ (1.0*numSamples);
 					System.out.println("AVERAGE SCORE: " + avg);
 					
@@ -138,7 +137,7 @@ public class Main extends Application {
 						System.out.println("");
 					}
 					
-					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50, scores, names);
+					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50, scores,zScores, names, SD);
 	        		primaryStage.setScene(results);
 	        		
 	        		results.backButton.setOnAction(new EventHandler<ActionEvent>() {
