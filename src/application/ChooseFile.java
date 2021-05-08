@@ -23,7 +23,7 @@ public class ChooseFile {
 	String fileToUnzipPath;	//Path to file that will be unzipped
 	String unzipToThisFilePath; //Path to where the file should be unzipped to
 	static List<File> selectedFiles; //List of files that are currently selected
-
+	int count =0;
 	/**
 	 * Default constructor
 	 */
@@ -113,7 +113,8 @@ public class ChooseFile {
 						for(String name: map.keySet()) {
 							al = map.get(name);
 							FileCombine fileCombine = new FileCombine();
-							String out = "src/files/" + name + ".txt";
+							String out = "src/files/" + name + count + ".txt";
+							count ++;
 							File outFile = fileCombine.combineFiles(al, out);
 							selectedFiles.add(outFile); //Add to selectedFiles and to return array
 							

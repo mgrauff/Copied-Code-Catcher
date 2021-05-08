@@ -248,6 +248,10 @@ public class FileProcessor {
      * @return boolean value
      */
 	public static boolean isFileCorrupt(File file) {
+		if(file == null) {
+			return true;
+		}
+		
 		if(!file.canRead()) {
 			System.out.println("File was unreadable");
 			return true;

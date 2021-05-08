@@ -173,7 +173,8 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 						data.add(f.toString());	
 					}
 					else {
-						corruptFiles.add(f.toString());
+						
+						//corruptFiles.add(f.toString());
 					}
 				}
 
