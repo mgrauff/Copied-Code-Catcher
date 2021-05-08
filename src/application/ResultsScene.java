@@ -36,12 +36,16 @@ public class ResultsScene extends Scene {
 
 	final static double YELLOW_THRESHOLD = 0.6;
 	final static double RED_THRESHOLD = 0.8;
+	final static double RED_SD = 1.5;
+	final static double YELLOW_SD = 1;
 	
 	private HBox root;
 	private VBox leftHalf;
 	public Button backButton;
 	
 	private double[][] scores;
+	private double[][]zScores;
+	private double SD;
 	private String[] names;
 	
 	private boolean showAllScores;
@@ -53,8 +57,8 @@ public class ResultsScene extends Scene {
 	 * @param scores - 2D array of similarity scores. Width and height must be equal
 	 * @param names - array of names to match to scores. Length must equal size of scores
 	 */
-	public ResultsScene(double width, double height, double[][] scores, String[] names) {
-		this(new HBox(), width, height, scores, names);
+	public ResultsScene(double width, double height, double[][] scores, double[][] zScores, String[] names, double stdDev) {
+		this(new HBox(), width, height, scores,zScores, names, stdDev);
 	}
 	/**
 	 * Internal constructor used to keep reference to root node
@@ -64,11 +68,13 @@ public class ResultsScene extends Scene {
 	 * @param scores
 	 * @param names
 	 */
-	private ResultsScene(HBox root, double width, double height, double[][] scores, String[] names) {
+	private ResultsScene(HBox root, double width, double height, double[][] scores, double[][]zScores, String[] names, double SD) {
 		super(root, width, height);
 		
 		this.root = root;
 		this.scores = scores;
+		this.zScores = zScores;
+		this.SD = SD;
 		this.names = names;
 		this.showAllScores = false;
 		
@@ -130,14 +136,14 @@ public class ResultsScene extends Scene {
 		yAxis.setLabel("Percent Plagiarized");
 		
 		//Get the number of comparison scores for each category
-		for(int row = 0; row < scores.length; row++) {
-			for(int col = 0; col < scores[row].length; col++) {
-				if(scores[row][col] <= YELLOW_THRESHOLD) {
-					percentGreen++;
-				} else if (scores[row][col] <= RED_THRESHOLD) {
-					percentYellow++;
-				} else if (scores[row][col] <= 1) {
+		for(int row = 0; row < zScores.length; row++) {
+			for(int col = 0; col < zScores[row].length; col++) {
+				if(zScores[row][col] >= RED_SD) {
 					percentRed++;
+				} else if (zScores[row][col] >= YELLOW_SD) {
+					percentYellow++;
+				} else if (zScores[row][col] < YELLOW_SD) {
+					percentGreen++;
 				}
 			}//end for col
 		}//end for row
@@ -289,10 +295,10 @@ public class ResultsScene extends Scene {
 				if(r == c) {
 					col = Color.BLACK;
 				}
-				else if(scores[r][c] > RED_THRESHOLD) {
+				else if(zScores[r][c] >= RED_SD) {
 					col = Color.RED;
 				}
-				else if(scores[r][c] > YELLOW_THRESHOLD) {
+				else if(zScores[r][c] >= YELLOW_SD) {
 					col = Color.YELLOW;
 				}
 				
