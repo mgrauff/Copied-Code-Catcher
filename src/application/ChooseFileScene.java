@@ -89,7 +89,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		Main.setRobinButtonStyle(selectFilesButton);
 		//GridPane.setConstraints(selectFilesButton, 1, 0);
 		
-		myGCCButton = new Button("Add myGCC Zip(s)");
+		myGCCButton = new Button("Add myGCC Zip(S)");
 		myGCCButton.setOnAction(this);
 		Main.setRobinButtonStyle(myGCCButton);
 		
@@ -142,11 +142,12 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				fileListLabel, 
 				fileList, 
 				selectFilesButton, 
+				myGCCButton,
 				addDirectoryButton, 
 				removeFileButton, 
 				stackOverflowButton,
-				startComparisonButton,
-				myGCCButton);
+				startComparisonButton
+				);
 		ncf.setSpacing(20);
 		ncf.setPadding(new Insets(20, 50, 50, 60));
 		grid.getChildren().addAll(ncf);
