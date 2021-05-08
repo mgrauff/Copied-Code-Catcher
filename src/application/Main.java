@@ -219,6 +219,7 @@ public class Main extends Application {
 	            if(file.isDirectory()) {
 	            	//recurse
 	                clearFilesFolder(file);
+	                file.delete();
 	            } else {
 	                file.delete();
 	            }
