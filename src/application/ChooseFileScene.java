@@ -48,6 +48,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	Button removeFileButton; //button for removing files from the fileList
 	Button startComparisonButton; //Start comparing the current filelist.
 	Button stackOverflowButton;
+	Button myGCCButton;
 	String[] filesHolder; 
 	static ListView<String> fileList; //text area displaying all files in the ChooseFile object's selectedFile list
 	ObservableList<String> data = FXCollections.observableArrayList(); //stores the items in fileList
@@ -87,6 +88,11 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		selectFilesButton.setOnAction(this);
 		Main.setRobinButtonStyle(selectFilesButton);
 		//GridPane.setConstraints(selectFilesButton, 1, 0);
+		
+		myGCCButton = new Button("Add myGCC Zip(s)");
+		myGCCButton.setOnAction(this);
+		Main.setRobinButtonStyle(myGCCButton);
+		
 
 		//addDirectoryButton
 		addDirectoryButton = new Button("Add Directory");
@@ -139,7 +145,8 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				addDirectoryButton, 
 				removeFileButton, 
 				stackOverflowButton,
-				startComparisonButton);
+				startComparisonButton,
+				myGCCButton);
 		ncf.setSpacing(20);
 		ncf.setPadding(new Insets(20, 50, 50, 60));
 		grid.getChildren().addAll(ncf);
@@ -150,6 +157,47 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 
 		if(event.getSource()== selectFilesButton) {
 			List<File> files = fc.AddFileButtonAction(event);
+			if(files != null) {
+
+//				for(int i = 0; i < files.size(); i++) {
+//					//String fileName = files.get(i).getName();
+//					String fileName = files.get(i).getAbsolutePath();
+//					//					System.out.println(filesHolder.length);
+//					//					for(int j = 0; j < filesHolder.length; j++) {
+//					//						System.out.println(filesHolder[i]);
+//					//						data.add(filesHolder[i]);
+//					//					}
+//					//fileName = fileName.substring(1, fileName.length()-1);
+//					data.add(fileName);
+//				}
+
+
+				ArrayList<String> corruptFiles = new ArrayList<String>();
+
+				for(File f : files) {
+
+					if(!FileProcessor.isFileCorrupt(f)) {
+						data.add(f.toString());	
+					}
+					else {
+						
+						//corruptFiles.add(f.toString());
+					}
+				}
+
+				if(corruptFiles.size() > 0) {
+					Alert a = new Alert(AlertType.WARNING);
+					a.setHeaderText("We encountered issues with the following files (they may be corrupt or empty):");
+					a.setContentText(corruptFiles.toString());
+					a.show();
+
+				}
+
+			}
+		}
+		
+		if(event.getSource() == myGCCButton) {
+			List<File> files = fc.AddMyGCCButton(event);
 			if(files != null) {
 
 //				for(int i = 0; i < files.size(); i++) {

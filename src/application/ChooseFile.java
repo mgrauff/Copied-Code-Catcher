@@ -79,6 +79,51 @@ public class ChooseFile {
 					if(Unzipper.isZipped(f)) { //check if zipped
 						Unzipper u = new Unzipper(f); //Unzip if so
 						ArrayList<File> unzippedFiles = u.unzipTo("src/files/"+f.getName());
+						for(File unzFile : unzippedFiles) {
+							selectedFiles.add(unzFile); //Add to selectedFiles and to return array
+							allFiles.add(unzFile);
+						}
+					}
+					else {//else not zipped
+						selectedFiles.add(f);//Add to selectedFiles and to return array
+						allFiles.add(f);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			for(File f : allFiles) {
+				if(FileProcessor.isFileCorrupt(f)) {
+					selectedFiles.remove(f);
+				}
+			}
+			
+			return allFiles; //return the files to the user
+		}
+
+		return null; //don't return anything if nothing was selected
+	}//end AddFileButtonAction
+
+	
+	
+	/**
+	 * AddFileButtonAction handles the user clicking the Add File(s) button 
+	 * @param event: the user clicked the Add file(s) button
+	 * @return the list of files selected by the user
+	 */
+	public List<File> AddMyGCCButton(ActionEvent event) {
+		FileChooser fc = new FileChooser(); //For getting files
+		List<File> files = fc.showOpenMultipleDialog(null);
+		
+		if(selectedFiles != null && files != null) { 
+			ArrayList<File> allFiles = new ArrayList<File>(); //Return array
+			
+			for(File f : files) {
+				try {
+					if(Unzipper.isZipped(f)) { //check if zipped
+						Unzipper u = new Unzipper(f); //Unzip if so
+						ArrayList<File> unzippedFiles = u.unzipTo("src/files/"+f.getName());
 						HashMap<String, ArrayList<File>> map = new HashMap<String,ArrayList<File>>();
 						for(String name: u.names) {
 							name = name.substring(0, name.length()-1);
@@ -144,7 +189,6 @@ public class ChooseFile {
 
 		return null; //don't return anything if nothing was selected
 	}//end AddFileButtonAction
-	
 	/**
 	 * Removes file from selected
 	 * @param event Clicking the button
