@@ -18,6 +18,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -37,7 +38,7 @@ public class ResultsScene extends Scene {
 	final static double YELLOW_THRESHOLD = 0.6;
 	final static double RED_THRESHOLD = 0.8;
 	
-	private HBox root;
+	private ScrollPane root;
 	private VBox leftHalf;
 	public Button backButton;
 	
@@ -54,7 +55,7 @@ public class ResultsScene extends Scene {
 	 * @param names - array of names to match to scores. Length must equal size of scores
 	 */
 	public ResultsScene(double width, double height, double[][] scores, String[] names) {
-		this(new HBox(), width, height, scores, names);
+		this(new ScrollPane(), width, height, scores, names);
 	}
 	/**
 	 * Internal constructor used to keep reference to root node
@@ -64,7 +65,7 @@ public class ResultsScene extends Scene {
 	 * @param scores
 	 * @param names
 	 */
-	private ResultsScene(HBox root, double width, double height, double[][] scores, String[] names) {
+	private ResultsScene(ScrollPane root, double width, double height, double[][] scores, String[] names) {
 		super(root, width, height);
 		
 		this.root = root;
@@ -77,14 +78,16 @@ public class ResultsScene extends Scene {
 		backButton = new Button("Back");
 		Main.setRobinButtonStyle(backButton);
 		
-		if(!validateParams(scores, names)) {
-			root.getChildren().add(errorBox("The dimensions of the provided scores and names do not match"));
-			System.out.println("ERROR");
-			return;
-		}
+		HBox back = new HBox();
+//		
+//		if(!validateParams(scores, names)) {
+//			root.getChildren().add(errorBox("The dimensions of the provided scores and names do not match"));
+//			System.out.println("ERROR");
+//			return;
+//		}
 		System.out.println("Success");
-		root.setSpacing(50);
-		root.setAlignment(Pos.CENTER);
+		back.setSpacing(50);
+		back.setAlignment(Pos.CENTER);
 		
 		/*
 		 * Left Half of screen contains: 
@@ -100,9 +103,9 @@ public class ResultsScene extends Scene {
 		leftHalf.getChildren().add(saveButton());
 		leftHalf.getChildren().add(backButton);
 		
-		root.getChildren().add(leftHalf);
-		root.getChildren().add(resultsGraph(scores));
-		
+		back.getChildren().add(leftHalf);
+		back.getChildren().add(resultsGraph(scores));
+		root.setContent(back);
 	}
 	
 	/**
@@ -372,7 +375,7 @@ public class ResultsScene extends Scene {
 				ImageIO.write(img, "png", destFile);
 			} catch (IOException e) {
 				System.out.println("Error saving file");
-				this.root.getChildren().add(errorBox("Error saving file"));
+//				this.root.getChildren().add(errorBox("Error saving file"));
 			}
 		}
 	}
