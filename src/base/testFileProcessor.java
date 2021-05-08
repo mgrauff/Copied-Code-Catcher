@@ -1,12 +1,7 @@
 package base;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Scanner;
 
 public class testFileProcessor {
     
@@ -39,7 +34,7 @@ public class testFileProcessor {
 
         if (arg == 1) {
         myFile = new File("src/testFileProcessor.txt");
-        Scanner myScanner = new Scanner(myFile);
+        //Scanner myScanner = new Scanner(myFile);
         //Test 1 Blank file
         //w.write();
         for(String op: f.operators.operatorList) {

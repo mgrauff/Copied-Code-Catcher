@@ -4,19 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import javax.swing.JOptionPane;
-
 import base.FileProcessor;
-import base.Unzipper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -27,19 +21,15 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> {
 
@@ -116,7 +106,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 		GridPane.setConstraints(stackOverflowButton, 4, 0);
 
 		fileList = new ListView<String>();
-		filesHolder = new String[fc.selectedFiles.size()];
+		filesHolder = new String[ChooseFile.selectedFiles.size()];
 		fileList.setItems(data); //populate the fileList
 		fileList.setEditable(false);//we don't want the user messing with the list
 		fileList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -281,6 +271,6 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 	 * @return
 	 */
 	public List<File> selectedFiles() {
-		return fc.selectedFiles;
+		return ChooseFile.selectedFiles;
 	}//selected Files
 }

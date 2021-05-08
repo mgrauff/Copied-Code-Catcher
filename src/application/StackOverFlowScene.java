@@ -47,7 +47,7 @@ public class StackOverFlowScene extends Scene {
 		textInput.setMinHeight(textInputHeight);
 		textInput.setMinWidth(textInputWidth);
 		textInput.setMaxWidth(textInputWidth);
-		double middle = (width/2.0) + (textInput.getWidth() / 2.0);
+		//double middle = (width/2.0) + (textInput.getWidth() / 2.0);
 		//I want textInput to be in the center of the screen
 		textInput.setTranslateX((width/2.0) - textInputWidth/2.0);
 		textInput.setTranslateY((height/8.0));

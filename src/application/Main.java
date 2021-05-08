@@ -1,10 +1,8 @@
 package application;
 	
-import java.awt.Toolkit;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
+//import java.text.DecimalFormat;
 import java.util.List;
 
 import base.Compare;
@@ -18,7 +16,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -132,7 +129,7 @@ public class Main extends Application {
 						for(int j = 0; j < scores[i].length; j++) {
 							
 							
-							DecimalFormat df = new DecimalFormat("0.000");
+							//DecimalFormat df = new DecimalFormat("0.000");
 							
 							//System.out.print(df.format(zScores[i][j]) + "\t");
 							
