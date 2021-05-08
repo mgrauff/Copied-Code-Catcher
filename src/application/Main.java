@@ -59,14 +59,18 @@ public class Main extends Application {
         		try {
         			List<File> selectedFiles = fileChoose.selectedFiles();
 					Operators op = new Operators();
+					System.out.println(op.operatorList);
 					FileProcessor[] fpAry= new FileProcessor[selectedFiles.size()];
 					String[] names = new String[selectedFiles.size()];
 					double[][] scores = new double[selectedFiles.size()][selectedFiles.size()];
+
 					
 					for(int i = 0; i < selectedFiles.size(); i++) {
 						File f = selectedFiles.get(i);
 						fpAry[i] = new FileProcessor(f, op);
 						fpAry[i].read();
+
+						
 						names[i] = f.getName();
 					}
 
@@ -80,6 +84,47 @@ public class Main extends Application {
 						scores[i][i] = 1;
 					}
 					
+					//CALCULATE AVG SCORE
+					double avg = 0;
+					int size = scores.length;
+					for(int i=0; i< size; i++) {
+						for(int j=0; j<size; j++) {
+							if(i!=j) {
+								avg +=scores[i][j];
+							}
+						}
+					}
+					int numSamples = (size*size)-1;
+					avg = avg/ (1.0*numSamples);
+					System.out.println("AVERAGE SCORE: " + avg);
+					
+					
+					//CALCULATE STD DEVIATION
+					double SD = 0.0;
+					double sum=0.0;
+					double sqDist;
+					for(int i=0; i< size; i++) {
+						for(int j=0; j<size; j++) {
+							if(i!=j) {
+								sqDist = Math.pow((scores[i][j] - avg),2);
+								sum+= sqDist;
+							}
+						}
+					}
+					SD = Math.sqrt(sum/(1.0*numSamples));
+					System.out.println("STANDARD DEVIATION: " + SD);
+					
+					double[][] zScores = new double[size][size];
+					for(int i=0; i< size; i++) {
+						for(int j=0; j<size; j++) {
+							if(i!=j) {
+								double Z = (scores[i][j] - avg) / SD;
+								zScores[i][j] = Z;
+							}
+						}
+					}
+					
+					
 					for(int i = 0; i < scores.length; i++) {
 						
 						for(int j = 0; j < scores[i].length; j++) {
@@ -87,7 +132,7 @@ public class Main extends Application {
 							
 							DecimalFormat df = new DecimalFormat("0.000");
 							
-							System.out.print(df.format(scores[i][j]) + "\t");
+							System.out.print(df.format(zScores[i][j]) + "\t");
 							
 						}						
 						System.out.println("");
