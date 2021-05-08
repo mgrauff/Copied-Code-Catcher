@@ -138,11 +138,11 @@ public class ResultsScene extends Scene {
 		//Get the number of comparison scores for each category
 		for(int row = 0; row < zScores.length; row++) {
 			for(int col = 0; col < zScores[row].length; col++) {
-				if(zScores[row][col] >= RED_SD) {
+				if(zScores[row][col] > RED_SD) {
 					percentRed++;
-				} else if (zScores[row][col] >= YELLOW_SD) {
+				} else if (zScores[row][col] > YELLOW_SD) {
 					percentYellow++;
-				} else if (zScores[row][col] < YELLOW_SD) {
+				} else if (zScores[row][col] <= YELLOW_SD) {
 					percentGreen++;
 				}
 			}//end for col
@@ -155,9 +155,9 @@ public class ResultsScene extends Scene {
 		percentRed /= total;
 		
 		//Add the percentages to the chart
-		final XYChart.Data<String, Number> overEighty = new XYChart.Data("Over 80%", percentRed);
-		final XYChart.Data<String, Number> overSixty = new XYChart.Data<>("Over 60%", percentYellow);
-		final XYChart.Data<String, Number> underSixty = new XYChart.Data<>("Under 60%", percentGreen);
+		final XYChart.Data<String, Number> overEighty = new XYChart.Data("Red%", percentRed);
+		final XYChart.Data<String, Number> overSixty = new XYChart.Data<>("Yellow%", percentYellow);
+		final XYChart.Data<String, Number> underSixty = new XYChart.Data<>("Green%", percentGreen);
 		percentRedSeries.getData().add(overEighty);
 		percentYellowSeries.getData().add(overSixty);
 		percentGreenSeries.getData().add(underSixty);
@@ -222,27 +222,28 @@ public class ResultsScene extends Scene {
 			worstScores.add(p1, 1, i+1);
 			worstScores.add(p2, 2, i+1);
 			
-			int maxScoreIndex = (i+1) % scores.length;
+			int maxScoreIndex = (i+1) % zScores.length;
 			
 			//add name of current student to left column of current row
 
 			p0.getChildren().add(new Text(names[i]));
 			
 			//find highest similarity score for current student
-			for(int j = 0; j < scores.length; j++) {
-				if(i != j && scores[i][j] > scores[i][maxScoreIndex]) {
+			for(int j = 0; j < zScores.length; j++) {
+				if(i != j && zScores[i][j] > zScores[i][maxScoreIndex]) {
 					maxScoreIndex = j;
 				}
 			}
 			
-			double maxScore = scores[i][maxScoreIndex];
+			double maxScore = zScores[i][maxScoreIndex];
+			double scoreToDisplay = scores[i][maxScoreIndex];
 			
 			//assign color of grid cell based on what the highest score was
 			Color col = Color.GREEN;
-			if(maxScore > RED_THRESHOLD) {
+			if(maxScore > RED_SD) {
 				col = Color.RED;
 			}
-			else if(maxScore > YELLOW_THRESHOLD) {
+			else if(maxScore > YELLOW_SD) {
 				col = Color.YELLOW;
 			}
 			
@@ -252,7 +253,7 @@ public class ResultsScene extends Scene {
 			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
 			
 			//display worst score in middle column of current row
-			p1.getChildren().add(new Text("" + df.format(maxScore)));
+			p1.getChildren().add(new Text("" + df.format(scoreToDisplay)));
 			
 			//display most similar student's name in right column of current row
 			p2.getChildren().add(new Text(names[maxScoreIndex]));
@@ -295,10 +296,10 @@ public class ResultsScene extends Scene {
 				if(r == c) {
 					col = Color.BLACK;
 				}
-				else if(zScores[r][c] >= RED_SD) {
+				else if(zScores[r][c] > RED_SD) {
 					col = Color.RED;
 				}
-				else if(zScores[r][c] >= YELLOW_SD) {
+				else if(zScores[r][c] > YELLOW_SD) {
 					col = Color.YELLOW;
 				}
 				
