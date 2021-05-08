@@ -55,14 +55,14 @@ public class FileCombine {
 	 * will combine the files fed to output file named outfilename
 	 * saves files as txt
 	 */
-	public void combineFiles(ArrayList<File> filesToCombine, String outFileName) {
+	public File combineFiles(ArrayList<File> filesToCombine, String outFileName) {
 		try {
 			PrintWriter writer = new PrintWriter(outFileName, "UTF-8");
 			//For each file, write it to the output file
 			for(File f: filesToCombine) {
 				
 				//Handle if the file is corrupt
-				if(isFileCorrupt(f)) {
+				if(isFileCorrupt(f) || isInvalid(f)) {
 					System.out.println("FILE " + f.getName() + " Was corrupt");
 					//We'll want to handle this better
 				}
@@ -74,15 +74,21 @@ public class FileCombine {
 					}
 					
 					scnr.close();
+					
+					
 				}
 			}
 			
 			writer.close();
+			File file = new File(outFileName);
+			return file;
 		}
 		catch (Exception e) {
 			//TODO: We'll want to handle this better. Perhaps just an error box pop-up, but we'll need something.
 			System.err.println(e);
+			
 		}
+		return null;
 	}
 	
 	
@@ -115,6 +121,15 @@ public class FileCombine {
 		}
 		
 		
+		
+		return false;
+	}
+	
+	private boolean isInvalid(File file) {
+		if(!file.getName().endsWith(".txt") && !file.getName().endsWith(".java")) {
+			System.out.println("Can't open non txt or java: " + file.getName());
+			return true;
+		}
 		
 		return false;
 	}

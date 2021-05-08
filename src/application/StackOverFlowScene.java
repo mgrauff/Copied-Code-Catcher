@@ -39,15 +39,17 @@ public class StackOverFlowScene extends Scene {
 		//Form
 		TextArea textInput = new TextArea();
 		textInput.setLayoutX(width/2.0);
-
 		
-		textInput.setMaxHeight(600.0);
-		textInput.setMinHeight(500.0);
-		textInput.setMinWidth(500.0);
-		textInput.setMaxWidth(700.0);
-		double middle = (width/2.0) + (textInput.getWidth() / 2.0);
+		double textInputWidth = width/1.5;	
+		double textInputHeight = height/1.7;
+		double buttonWidth = width/16.0;
+		textInput.setMaxHeight(textInputHeight);
+		textInput.setMinHeight(textInputHeight);
+		textInput.setMinWidth(textInputWidth);
+		textInput.setMaxWidth(textInputWidth);
+		//double middle = (width/2.0) + (textInput.getWidth() / 2.0);
 		//I want textInput to be in the center of the screen
-		textInput.setTranslateX(middle);
+		textInput.setTranslateX((width/2.0) - textInputWidth/2.0);
 		textInput.setTranslateY((height/8.0));
 		
 		//Enter Button
@@ -56,7 +58,7 @@ public class StackOverFlowScene extends Scene {
 		Main.setRobinButtonStyle(button);
 		button.setScaleX(2);
 		button.setScaleY(1.6);
-		button.setTranslateX(width/2.0);
+		button.setTranslateX(width/2.0 - buttonWidth/2.0);
 		button.setTranslateY((height/8.0) + 20);
 
 		//Back Button
@@ -64,7 +66,7 @@ public class StackOverFlowScene extends Scene {
 		Main.setRobinButtonStyle(backButton);
 		backButton.setScaleX(2);
 		backButton.setScaleY(1.6);	
-		backButton.setTranslateX(width/2.0);
+		backButton.setTranslateX(width/2.0 - buttonWidth/2.0);
 		backButton.setTranslateY((height/8.0) + 40);
 
 		//Background

@@ -12,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
@@ -25,7 +24,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -37,12 +35,16 @@ public class ResultsScene extends Scene {
 
 	final static double YELLOW_THRESHOLD = 0.6;
 	final static double RED_THRESHOLD = 0.8;
+	final static double RED_SD = 1.5;
+	final static double YELLOW_SD = 1;
 	
 	private ScrollPane root;
 	private VBox leftHalf;
 	public Button backButton;
 	
 	private double[][] scores;
+	private double[][]zScores;
+	private double SD;
 	private String[] names;
 	
 	private boolean showAllScores;
@@ -54,8 +56,8 @@ public class ResultsScene extends Scene {
 	 * @param scores - 2D array of similarity scores. Width and height must be equal
 	 * @param names - array of names to match to scores. Length must equal size of scores
 	 */
-	public ResultsScene(double width, double height, double[][] scores, String[] names) {
-		this(new ScrollPane(), width, height, scores, names);
+	public ResultsScene(double width, double height, double[][] scores, double[][] zScores, String[] names, double stdDev) {
+		this(new ScrollPane(), width, height, scores,zScores, names, stdDev);
 	}
 	/**
 	 * Internal constructor used to keep reference to root node
@@ -65,11 +67,13 @@ public class ResultsScene extends Scene {
 	 * @param scores
 	 * @param names
 	 */
-	private ResultsScene(ScrollPane root, double width, double height, double[][] scores, String[] names) {
+	private ResultsScene(ScrollPane root, double width, double height, double[][] scores, double[][]zScores, String[] names, double SD) {
 		super(root, width, height);
 		
 		this.root = root;
 		this.scores = scores;
+		this.zScores = zScores;
+		this.SD = SD;
 		this.names = names;
 		this.showAllScores = false;
 		
@@ -133,14 +137,14 @@ public class ResultsScene extends Scene {
 		yAxis.setLabel("Percent Plagiarized");
 		
 		//Get the number of comparison scores for each category
-		for(int row = 0; row < scores.length; row++) {
-			for(int col = 0; col < scores[row].length; col++) {
-				if(scores[row][col] <= YELLOW_THRESHOLD) {
-					percentGreen++;
-				} else if (scores[row][col] <= RED_THRESHOLD) {
-					percentYellow++;
-				} else if (scores[row][col] < 1) {
+		for(int row = 0; row < zScores.length; row++) {
+			for(int col = 0; col < zScores[row].length; col++) {
+				if(zScores[row][col] > RED_SD) {
 					percentRed++;
+				} else if (zScores[row][col] > YELLOW_SD) {
+					percentYellow++;
+				} else if (zScores[row][col] <= YELLOW_SD) {
+					percentGreen++;
 				}
 			}//end for col
 		}//end for row
@@ -152,9 +156,9 @@ public class ResultsScene extends Scene {
 		percentRed /= total;
 		
 		//Add the percentages to the chart
-		final XYChart.Data<String, Number> overEighty = new XYChart.Data("Over 80%", percentRed);
-		final XYChart.Data<String, Number> overSixty = new XYChart.Data<>("Over 60%", percentYellow);
-		final XYChart.Data<String, Number> underSixty = new XYChart.Data<>("Under 60%", percentGreen);
+		final XYChart.Data<String, Number> overEighty = new XYChart.Data("Red%", percentRed);
+		final XYChart.Data<String, Number> overSixty = new XYChart.Data<>("Yellow%", percentYellow);
+		final XYChart.Data<String, Number> underSixty = new XYChart.Data<>("Green%", percentGreen);
 		percentRedSeries.getData().add(overEighty);
 		percentYellowSeries.getData().add(overSixty);
 		percentGreenSeries.getData().add(underSixty);
@@ -219,27 +223,28 @@ public class ResultsScene extends Scene {
 			worstScores.add(p1, 1, i+1);
 			worstScores.add(p2, 2, i+1);
 			
-			int maxScoreIndex = (i+1) % scores.length;
+			int maxScoreIndex = (i+1) % zScores.length;
 			
 			//add name of current student to left column of current row
 
 			p0.getChildren().add(new Text(names[i]));
 			
 			//find highest similarity score for current student
-			for(int j = 0; j < scores.length; j++) {
-				if(i != j && scores[i][j] > scores[i][maxScoreIndex]) {
+			for(int j = 0; j < zScores.length; j++) {
+				if(i != j && zScores[i][j] > zScores[i][maxScoreIndex]) {
 					maxScoreIndex = j;
 				}
 			}
 			
-			double maxScore = scores[i][maxScoreIndex];
+			double maxScore = zScores[i][maxScoreIndex];
+			double scoreToDisplay = scores[i][maxScoreIndex];
 			
 			//assign color of grid cell based on what the highest score was
 			Color col = Color.GREEN;
-			if(maxScore > RED_THRESHOLD) {
+			if(maxScore > RED_SD) {
 				col = Color.RED;
 			}
-			else if(maxScore > YELLOW_THRESHOLD) {
+			else if(maxScore > YELLOW_SD) {
 				col = Color.YELLOW;
 			}
 			
@@ -249,7 +254,7 @@ public class ResultsScene extends Scene {
 			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
 			
 			//display worst score in middle column of current row
-			p1.getChildren().add(new Text("" + df.format(maxScore)));
+			p1.getChildren().add(new Text("" + df.format(scoreToDisplay)));
 			
 			//display most similar student's name in right column of current row
 			p2.getChildren().add(new Text(names[maxScoreIndex]));
@@ -292,10 +297,10 @@ public class ResultsScene extends Scene {
 				if(r == c) {
 					col = Color.BLACK;
 				}
-				else if(scores[r][c] > RED_THRESHOLD) {
+				else if(zScores[r][c] > RED_SD) {
 					col = Color.RED;
 				}
-				else if(scores[r][c] > YELLOW_THRESHOLD) {
+				else if(zScores[r][c] > YELLOW_SD) {
 					col = Color.YELLOW;
 				}
 				
@@ -335,13 +340,17 @@ public class ResultsScene extends Scene {
 		return b;
 	}
 	
+	/**
+	 * Function saving the results as a png
+	 * @return Save as PNG button
+	 */
 	private Button saveButton() {
 		Button b = new Button("Save as PNG");
 		Main.setRobinButtonStyle(b);
 		b.setOnAction(new EventHandler<ActionEvent>() {	 
             @Override
             public void handle(ActionEvent event) {
-            	saveImg();
+            	saveImg(); //Calling save image helper function
             }
         });
 		
@@ -359,27 +368,34 @@ public class ResultsScene extends Scene {
 		return s;
 	}
 	
+	/**
+	 * Save image helper function
+	 */
 	public void saveImg() {		
-		FileChooser fc = new FileChooser();
+		FileChooser fc = new FileChooser(); //For choosing destination folder
 		fc.getExtensionFilters().add(new ExtensionFilter("png images", "*.png"));
 		
-		File destFile = fc.showSaveDialog(null);
+		File destFile = fc.showSaveDialog(null); //Destination folder
 		
-		if(destFile != null) {
+		if(destFile != null) { //If it exists send PNG to file
 			WritableImage wi = new WritableImage((int)this.getWidth(), (int)this.getHeight());
 			this.snapshot(wi);	
 			
 			RenderedImage img = SwingFXUtils.fromFXImage(wi, null);
 			
-			try {
+			try { //Write PNG to dest file within try catch block
 				ImageIO.write(img, "png", destFile);
-			} catch (IOException e) {
+			} catch (IOException e) {//Catch any errors
 				System.out.println("Error saving file");
 //				this.root.getChildren().add(errorBox("Error saving file"));
 			}
 		}
 	}
 	
+	/**
+	 * Helper function setting scores
+	 * @param passedScores
+	 */
 	public void setScores(double[][] passedScores) {
 		
 		for(int row = 0; row < passedScores.length; row++) {
@@ -388,6 +404,11 @@ public class ResultsScene extends Scene {
 			}
 		}	
 	}
+	
+	/**
+	 * Helper function setting names
+	 * @param passedNames
+	 */
 	public void setNames(String[] passedNames) {
 		
 		for(int index = 0; index < passedNames.length; index++) {

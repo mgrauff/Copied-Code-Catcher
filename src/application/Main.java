@@ -1,10 +1,8 @@
 package application;
 	
-import java.awt.Toolkit;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
+//import java.text.DecimalFormat;
 import java.util.List;
 
 import base.Compare;
@@ -18,7 +16,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -62,11 +59,14 @@ public class Main extends Application {
 					FileProcessor[] fpAry= new FileProcessor[selectedFiles.size()];
 					String[] names = new String[selectedFiles.size()];
 					double[][] scores = new double[selectedFiles.size()][selectedFiles.size()];
+
 					
 					for(int i = 0; i < selectedFiles.size(); i++) {
 						File f = selectedFiles.get(i);
 						fpAry[i] = new FileProcessor(f, op);
 						fpAry[i].read();
+
+						
 						names[i] = f.getName();
 					}
 
@@ -80,20 +80,64 @@ public class Main extends Application {
 						scores[i][i] = 1;
 					}
 					
+					//CALCULATE AVG SCORE
+					double avg = 0;
+					int size = scores.length;
+					for(int i=0; i< size; i++) {
+						for(int j=0; j<size; j++) {
+							if(i!=j) {
+								avg +=scores[i][j];
+							}
+						}
+					}
+					int numSamples = (size*size)-size;
+					avg = avg/ (1.0*numSamples);
+					System.out.println("AVERAGE SCORE: " + avg);
+					
+					
+					//CALCULATE STD DEVIATION
+					//The one group who used standard deviation inspired us
+					//This code is NOT COPIED, but the idea comes from them
+					//I'm not sure which group that is
+					double SD = 0.0;
+					double sum=0.0;
+					double sqDist;
+					for(int i=0; i< size; i++) {
+						for(int j=0; j<size; j++) {
+							if(i!=j) {
+								sqDist = Math.pow((scores[i][j] - avg),2);
+								sum+= sqDist;
+							}
+						}
+					}
+					SD = Math.sqrt(sum/(1.0*numSamples));
+					System.out.println("STANDARD DEVIATION: " + SD);
+					
+					double[][] zScores = new double[size][size];
+					for(int i=0; i< size; i++) {
+						for(int j=0; j<size; j++) {
+							if(i!=j) {
+								double Z = (scores[i][j] - avg) / SD;
+								zScores[i][j] = Z;
+							}
+						}
+					}
+					
+					
 					for(int i = 0; i < scores.length; i++) {
 						
 						for(int j = 0; j < scores[i].length; j++) {
 							
 							
-							DecimalFormat df = new DecimalFormat("0.000");
+							//DecimalFormat df = new DecimalFormat("0.000");
 							
-							System.out.print(df.format(scores[i][j]) + "\t");
+							//System.out.print(df.format(zScores[i][j]) + "\t");
 							
 						}						
 						System.out.println("");
 					}
 					
-					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50, scores, names);
+					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50, scores,zScores, names, SD);
 	        		primaryStage.setScene(results);
 	        		
 	        		results.backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -141,10 +185,18 @@ public class Main extends Application {
         primaryStage.show();
     }
 	
+	/**
+	 * Takes a button paramater and changes that button according to the style
+	 * choices contained in the function.
+	 * @param button
+	 */
 	public static void setRobinButtonStyle(Button button) {
 		
+		//Set the textFill and background colors
+		button.setStyle("-fx-background-color: #" + Main.GRAYISH_CYAN_COLOR + 
+				"; -fx-border-width: 5px; -fx-text-fill: #" + Main.BEIGE_COLOR + ";");
 		DropShadow shadow = new DropShadow();
-		button.setStyle("-fx-background-color: #" + Main.GRAYISH_CYAN_COLOR + "; -fx-border-width: 5px; -fx-text-fill: #" + Main.BEIGE_COLOR + ";");
+		
 		//Adding the shadow when the mouse cursor is on
 		button.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 		    button.setEffect(shadow);
@@ -154,7 +206,8 @@ public class Main extends Application {
 		button.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 		    button.setEffect(null);
 		});
-	}
+
+	}//end setRobinButtonStyle
 	
 	//This method is used to clear our files folder in src
 	//Note this is an incredibly dangerous method and can ONLY BE USED ON SRC/FILES
@@ -166,6 +219,7 @@ public class Main extends Application {
 	            if(file.isDirectory()) {
 	            	//recurse
 	                clearFilesFolder(file);
+	                file.delete();
 	            } else {
 	                file.delete();
 	            }
