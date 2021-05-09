@@ -72,7 +72,7 @@ public class StackOverFlowScene extends Scene {
 		//Background
 		Background myBackground = new Background(new BackgroundFill(Main.BEIGE, null, null));
 		myBackground = new Background(new BackgroundImage(
-				new Image("file:src/PasteCodeBackground.png"), 
+				new Image("file:src/images/PasteCodeBackground.png"), 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundPosition.DEFAULT, 

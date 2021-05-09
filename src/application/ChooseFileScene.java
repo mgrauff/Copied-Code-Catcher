@@ -63,7 +63,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 				//						BackgroundPosition.DEFAULT, 
 				//						new BackgroundSize(1.0,1.0, true, true, false, false)),
 				new BackgroundImage(
-						new Image("file:src/FileSelectionBackground.png"),
+						new Image("file:src/images/FileSelectionBackground.png"),
 						BackgroundRepeat.NO_REPEAT, 
 						BackgroundRepeat.NO_REPEAT, 
 						BackgroundPosition.DEFAULT, 
@@ -150,19 +150,6 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 			List<File> files = fc.AddFileButtonAction(event);
 			if(files != null) {
 
-//				for(int i = 0; i < files.size(); i++) {
-//					//String fileName = files.get(i).getName();
-//					String fileName = files.get(i).getAbsolutePath();
-//					//					System.out.println(filesHolder.length);
-//					//					for(int j = 0; j < filesHolder.length; j++) {
-//					//						System.out.println(filesHolder[i]);
-//					//						data.add(filesHolder[i]);
-//					//					}
-//					//fileName = fileName.substring(1, fileName.length()-1);
-//					data.add(fileName);
-//				}
-
-
 				ArrayList<String> corruptFiles = new ArrayList<String>();
 
 				for(File f : files) {
@@ -175,7 +162,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 						corruptFiles.add(f.toString());
 					}
 				}
-
+				//Print error message
 				if(corruptFiles.size() > 0) {
 					Alert a = new Alert(AlertType.WARNING);
 					a.setHeaderText("We encountered issues with the following files (they may be corrupt or empty):");
@@ -187,22 +174,10 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 			}
 		}
 		
+		//Different case for myGCC folders
 		if(event.getSource() == myGCCButton) {
 			List<File> files = fc.AddMyGCCButton(event);
 			if(files != null) {
-
-//				for(int i = 0; i < files.size(); i++) {
-//					//String fileName = files.get(i).getName();
-//					String fileName = files.get(i).getAbsolutePath();
-//					//					System.out.println(filesHolder.length);
-//					//					for(int j = 0; j < filesHolder.length; j++) {
-//					//						System.out.println(filesHolder[i]);
-//					//						data.add(filesHolder[i]);
-//					//					}
-//					//fileName = fileName.substring(1, fileName.length()-1);
-//					data.add(fileName);
-//				}
-
 
 				ArrayList<String> corruptFiles = new ArrayList<String>();
 
@@ -212,11 +187,15 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 						data.add(f.toString());	
 					}
 					else {
-						
-						//corruptFiles.add(f.toString());
+						try {
+							corruptFiles.add(f.getName());
+						}
+						catch(Exception e) {
+							
+						}
 					}
 				}
-
+				//Print out error message for corrupted files
 				if(corruptFiles.size() > 0) {
 					Alert a = new Alert(AlertType.WARNING);
 					a.setHeaderText("We encountered issues with the following files (they may be corrupt or empty):");
@@ -246,17 +225,7 @@ public class ChooseFileScene extends Scene implements EventHandler<ActionEvent> 
 
 				fileList.getItems().removeAll(myFiles);
 				fc.removeFileButton(event, copy);
-				
-				//				fileList.getItems().removeAll(myFiles);
-				//				for(int index: selectedIndeces) {
-				//					fileList.getItems().remove(index);
-				//				}
-				//								for(String i: myFiles) {
-				//									System.out.println("Removed fileName: " + i);
-				//									fileList.getItems().remove(i);
-				//								}
-				
-				//data.removeAll(myFiles);
+
 				fileList.getSelectionModel().clearSelection();
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -37,7 +37,7 @@ public class IntroScene extends Scene {
 		
 		//Background customization
 		Background myBackground = new Background(new BackgroundImage(
-				new Image("file:src/Background.png"), 
+				new Image("file:src/images/Background.png"), 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundRepeat.NO_REPEAT, 
 				BackgroundPosition.DEFAULT, 
