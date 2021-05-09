@@ -5,7 +5,7 @@ April 5 2021
 
 Please open project with Eclipse.
 To launch main:
-	application package -> Main.java -> Run
+	application package -> Main.java -> Click Run -> Profit :)
 
 
 We would like to give some credit to the group which mentioned using Standard Deviation.
