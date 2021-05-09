@@ -124,19 +124,6 @@ public class Main extends Application {
 					}
 					
 					
-					for(int i = 0; i < scores.length; i++) {
-						
-						for(int j = 0; j < scores[i].length; j++) {
-							
-							
-							//DecimalFormat df = new DecimalFormat("0.000");
-							
-							//System.out.print(df.format(zScores[i][j]) + "\t");
-							
-						}						
-						System.out.println("");
-					}
-					
 					ResultsScene results = new ResultsScene(Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight()-50, scores,zScores, names, SD);
 	        		primaryStage.setScene(results);
 	        		

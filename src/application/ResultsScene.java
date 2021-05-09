@@ -228,9 +228,6 @@ public class ResultsScene extends Scene {
 			int maxScoreIndex = (i+1) % zScores.length;
 			
 			//add name of current student to left column of current row
-
-			//fileScores.getChildren().add(new Text(names[i]));
-
 			//find highest similarity score for current student
 			for(int j = 0; j < zScores.length; j++) {
 				if(i != j && zScores[i][j] > zScores[i][maxScoreIndex]) {
@@ -258,63 +255,8 @@ public class ResultsScene extends Scene {
 			cell.setFill(col);
 			cell.setFont(font);
 			data.add(cell);
-//			p0.setBackground(new Background(new BackgroundFill(col, null, null)));
-//			p1.setBackground(new Background(new BackgroundFill(col, null, null)));
-//			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
-//			
-//			//display worst score in middle column of current row
-//			p1.getChildren().add(new Text("" + df.format(scoreToDisplay)));
-//			
-//			//display most similar student's name in right column of current row
-//			p2.getChildren().add(new Text(names[maxScoreIndex]));
+
 		}
-		
-//		for(int i = 0; i < scores.length; i++) {
-//			//p0-p3 hold each cell of current row 
-//			HBox p0 = new HBox();	
-//			HBox p1 = new HBox();	
-//			HBox p2 = new HBox();
-//			p0.prefWidth(100);
-//			worstScores.add(p0, 0, i+1);
-//			worstScores.add(p1, 1, i+1);
-//			worstScores.add(p2, 2, i+1);
-//			
-//			int maxScoreIndex = (i+1) % zScores.length;
-//			
-//			//add name of current student to left column of current row
-//
-//			p0.getChildren().add(new Text(names[i]));
-//			
-//			//find highest similarity score for current student
-//			for(int j = 0; j < zScores.length; j++) {
-//				if(i != j && zScores[i][j] > zScores[i][maxScoreIndex]) {
-//					maxScoreIndex = j;
-//				}
-//			}
-//			
-//			double maxScore = zScores[i][maxScoreIndex];
-//			double scoreToDisplay = scores[i][maxScoreIndex];
-//			
-//			//assign color of grid cell based on what the highest score was
-//			Color col = Color.GREEN;
-//			if(maxScore > RED_SD) {
-//				col = Color.RED;
-//			}
-//			else if(maxScore > YELLOW_SD) {
-//				col = Color.YELLOW;
-//			}
-//			
-//			//set background of entire row to indicator color
-//			p0.setBackground(new Background(new BackgroundFill(col, null, null)));
-//			p1.setBackground(new Background(new BackgroundFill(col, null, null)));
-//			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
-//			
-//			//display worst score in middle column of current row
-//			p1.getChildren().add(new Text("" + df.format(scoreToDisplay)));
-//			
-//			//display most similar student's name in right column of current row
-//			p2.getChildren().add(new Text(names[maxScoreIndex]));
-//		}
 		
 		//return worstScores;
 		return fileScores;
