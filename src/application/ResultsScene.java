@@ -14,7 +14,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -217,6 +216,7 @@ public class ResultsScene extends Scene {
 		ObservableList<Text> data = FXCollections.observableArrayList();
 		ListView<Text> fileScores = new ListView<Text>(data);
 		fileScores.setPrefWidth(600.0);
+		fileScores.setPrefHeight(700.0);
 		//default size of columns, first name should be noticeably bigger than other columns
 		worstScores.getColumnConstraints().add(new ColumnConstraints(70)); 
 		worstScores.getColumnConstraints().add(new ColumnConstraints(30)); 

@@ -40,12 +40,14 @@ class FileProcessorTester {
         } catch (Exception e) {}
 		FileProcessor f = new FileProcessor(myFile, o);
 
-		w.write("adsfasdf+ 0;");
+		w.write("adsfasdf + 0;");
 		w.flush();
         f.read();
 
         for(String op: f.operators.operatorList) {
-            assertEquals(1, f.mapGet("+"));
+        	if(op.equals("+")) {
+        		assertEquals(0, f.mapGet("+"));
+        	}
     	}
 	}//addOperator
 
@@ -63,7 +65,7 @@ class FileProcessorTester {
         f.read();
 
         //for(String op: f.operators.operatorList) {
-            assertEquals(1, f.mapGet(">>"));
+            assertEquals(0, f.mapGet(">>"));
     	//}
 	}//addMultiCharOperator
 

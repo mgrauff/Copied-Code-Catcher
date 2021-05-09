@@ -12,6 +12,7 @@ class OperatorsTester {
 	void testOperatorsFileExists() throws FileNotFoundException {
 		try {
 				Operators operators = new Operators();
+				operators.toString();
 				
 		} catch (FileNotFoundException FNFE) {
 			fail("Operators file not found.");

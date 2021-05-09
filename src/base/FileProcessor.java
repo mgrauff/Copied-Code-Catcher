@@ -67,7 +67,7 @@ public class FileProcessor {
 	 * @return a HashSet of chars that are the start 
 	 * of mutlichar operators
 	 */
-	public HashSet multiCharOperators() {
+	public HashSet<Character> multiCharOperators() {
 		HashSet <Character> mCharSet = new HashSet<Character>();
 		for(String op: operators.operatorList) {
 			if(op.length() >= 2)
@@ -80,7 +80,7 @@ public class FileProcessor {
 	 * operatorEndings 
 	 * @return
 	 */
-	public HashSet operatorEndings() {
+	public HashSet<String> operatorEndings() {
 		HashSet <String> laterCharSet = new HashSet<String>();
 		for(String op: operators.operatorList) {
 			if(op.length() >= 2)
