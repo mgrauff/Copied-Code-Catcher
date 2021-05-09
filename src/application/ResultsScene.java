@@ -1,5 +1,6 @@
 package application;
 
+import javafx.scene.text.Font;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
@@ -7,10 +8,13 @@ import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -18,6 +22,7 @@ import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ListView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -27,6 +32,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -204,31 +211,26 @@ public class ResultsScene extends Scene {
 	 * and the name of the student they were most similar to
 	 * @return
 	 */
-	private GridPane worstScores() {
+	private ListView worstScores() {
 		GridPane worstScores = new GridPane();
 		DecimalFormat df = new DecimalFormat("0.000");
-		
+		ObservableList<Text> data = FXCollections.observableArrayList();
+		ListView<Text> fileScores = new ListView<Text>(data);
+		fileScores.setPrefWidth(600.0);
 		//default size of columns, first name should be noticeably bigger than other columns
 		worstScores.getColumnConstraints().add(new ColumnConstraints(70)); 
 		worstScores.getColumnConstraints().add(new ColumnConstraints(30)); 
 		worstScores.setAlignment(Pos.CENTER);
 		
 		for(int i = 0; i < scores.length; i++) {
-			//p0-p3 hold each cell of current row 
-			HBox p0 = new HBox();	
-			HBox p1 = new HBox();	
-			HBox p2 = new HBox();
-			p0.prefWidth(100);
-			worstScores.add(p0, 0, i+1);
-			worstScores.add(p1, 1, i+1);
-			worstScores.add(p2, 2, i+1);
-			
+
+			String currColumn = names[i];
 			int maxScoreIndex = (i+1) % zScores.length;
 			
 			//add name of current student to left column of current row
 
-			p0.getChildren().add(new Text(names[i]));
-			
+			//fileScores.getChildren().add(new Text(names[i]));
+
 			//find highest similarity score for current student
 			for(int j = 0; j < zScores.length; j++) {
 				if(i != j && zScores[i][j] > zScores[i][maxScoreIndex]) {
@@ -245,22 +247,77 @@ public class ResultsScene extends Scene {
 				col = Color.RED;
 			}
 			else if(maxScore > YELLOW_SD) {
-				col = Color.YELLOW;
+				col = Color.ORANGE;
 			}
 			
-			//set background of entire row to indicator color
-			p0.setBackground(new Background(new BackgroundFill(col, null, null)));
-			p1.setBackground(new Background(new BackgroundFill(col, null, null)));
-			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
-			
-			//display worst score in middle column of current row
-			p1.getChildren().add(new Text("" + df.format(scoreToDisplay)));
-			
-			//display most similar student's name in right column of current row
-			p2.getChildren().add(new Text(names[maxScoreIndex]));
+			//set text of entire row to indicator color
+			currColumn = String.format("%-35.30s %-10s %35.30s ", names[i], df.format(scoreToDisplay), names[maxScoreIndex]);
+			System.out.println(currColumn);
+			Text cell = new Text(currColumn);
+			Font font = Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 12);
+			cell.setFill(col);
+			cell.setFont(font);
+			data.add(cell);
+//			p0.setBackground(new Background(new BackgroundFill(col, null, null)));
+//			p1.setBackground(new Background(new BackgroundFill(col, null, null)));
+//			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
+//			
+//			//display worst score in middle column of current row
+//			p1.getChildren().add(new Text("" + df.format(scoreToDisplay)));
+//			
+//			//display most similar student's name in right column of current row
+//			p2.getChildren().add(new Text(names[maxScoreIndex]));
 		}
 		
-		return worstScores;
+//		for(int i = 0; i < scores.length; i++) {
+//			//p0-p3 hold each cell of current row 
+//			HBox p0 = new HBox();	
+//			HBox p1 = new HBox();	
+//			HBox p2 = new HBox();
+//			p0.prefWidth(100);
+//			worstScores.add(p0, 0, i+1);
+//			worstScores.add(p1, 1, i+1);
+//			worstScores.add(p2, 2, i+1);
+//			
+//			int maxScoreIndex = (i+1) % zScores.length;
+//			
+//			//add name of current student to left column of current row
+//
+//			p0.getChildren().add(new Text(names[i]));
+//			
+//			//find highest similarity score for current student
+//			for(int j = 0; j < zScores.length; j++) {
+//				if(i != j && zScores[i][j] > zScores[i][maxScoreIndex]) {
+//					maxScoreIndex = j;
+//				}
+//			}
+//			
+//			double maxScore = zScores[i][maxScoreIndex];
+//			double scoreToDisplay = scores[i][maxScoreIndex];
+//			
+//			//assign color of grid cell based on what the highest score was
+//			Color col = Color.GREEN;
+//			if(maxScore > RED_SD) {
+//				col = Color.RED;
+//			}
+//			else if(maxScore > YELLOW_SD) {
+//				col = Color.YELLOW;
+//			}
+//			
+//			//set background of entire row to indicator color
+//			p0.setBackground(new Background(new BackgroundFill(col, null, null)));
+//			p1.setBackground(new Background(new BackgroundFill(col, null, null)));
+//			p2.setBackground(new Background(new BackgroundFill(col, null, null)));
+//			
+//			//display worst score in middle column of current row
+//			p1.getChildren().add(new Text("" + df.format(scoreToDisplay)));
+//			
+//			//display most similar student's name in right column of current row
+//			p2.getChildren().add(new Text(names[maxScoreIndex]));
+//		}
+		
+		//return worstScores;
+		return fileScores;
 	}
 
 	/**
